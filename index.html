@@ -3,77 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ROI Calculator</title>
+  <title>The Legion Project</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Function to calculate ROI
-    async function calculateROI(event) {
-      event.preventDefault();
-
-      // Get user input for the initial investment
-      const investment = parseFloat(document.getElementById("investment").value);
-
-      // Fixed seed round price
-      const roundPrice = 0.02; // $0.02 per token
-
-      if (isNaN(investment) || investment <= 0) {
-        alert("Please enter a valid investment amount.");
-        return;
-      }
-
-      // Call the backend API to calculate ROI
-      try {
-        const response = await fetch("/calculate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ investment, round_price: roundPrice })
-        });
-
-        const data = await response.json();
-
-        if (data.error) {
-          alert(data.error);
-        } else {
-          // Display the results
-          document.getElementById("results").innerHTML = `
-            <p class="mb-2"><strong>Initial Investment:</strong> $${data.initial_investment.toFixed(2)}</p>
-            <p class="mb-2"><strong>Seed Round Price:</strong> $0.02</p>
-            <p class="mb-2"><strong>Current Token Price:</strong> $${data.current_price.toFixed(4)}</p>
-            <p class="mb-2"><strong>ROI Value:</strong> $${data.roi_value.toFixed(2)}</p>
-          `;
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred while calculating ROI.");
-      }
+  <style>
+    /* Additional custom styles for Legion colors */
+    body {
+      background-color: #000000;
+      color: #FFFFFF;
     }
-  </script>
+    .legion-red {
+      color: #FF0000;
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-white font-sans">
-  <div class="container mx-auto mt-12 px-6 py-8 bg-gray-800 rounded-lg shadow-lg max-w-md">
-    <h1 class="text-2xl font-bold text-center text-green-400 mb-4">ROI Calculator</h1>
-    <p class="text-sm text-center text-gray-400 mb-6">
+<body class="font-sans">
+  <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-md">
+    <!-- Title -->
+    <h1 class="text-3xl font-extrabold text-center legion-red mb-6">The Legion Project</h1>
+
+    <p class="text-sm text-center text-gray-400 mb-8">
       Enter your investment to calculate the ROI based on the current token price and a fixed seed round price of $0.02.
     </p>
 
     <!-- ROI Form -->
     <form onsubmit="calculateROI(event)">
-      <div class="mb-4">
-        <label for="investment" class="block text-green-400 font-semibold">Initial Investment ($):</label>
-        <input type="number" id="investment" class="w-full p-2 bg-gray-700 rounded" placeholder="Enter your investment">
+      <div class="mb-6">
+        <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
+        <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
       </div>
-      <p class="text-sm text-gray-400 mb-4">
-        <strong>Seed Round Price:</strong> $0.02 (fixed)
+
+      <p class="text-sm text-center text-gray-400 mb-6">
+        <strong>Seed Round Price:</strong> <span class="legion-red">$0.02</span> (fixed)
       </p>
-      <button type="submit" class="w-full py-2 bg-green-500 hover:bg-green-400 rounded text-black font-bold">Calculate</button>
+
+      <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 rounded font-bold text-white shadow-md">
+        Calculate
+      </button>
     </form>
 
     <!-- Results Section -->
-    <div id="results" class="mt-6 bg-gray-700 p-4 rounded"></div>
+    <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center">
+      <!-- Results will be dynamically inserted here -->
+    </div>
   </div>
 </body>
-</html>
 
+<script>
+  async function calculateROI(event) {
+    event.preventDefault();
+
+    const investment = parseFloat(document.getElementById("investment").value);
+    const roundPrice = 0.02;
+
+    if (isNaN(investment) || investment <= 0) {
+      alert("Please enter a valid investment amount.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ investment, round_price: roundPrice }),
+      });
+
+      const data = await response.json();
+      if (data.error) {
+        alert(data.error);
+      } else {
+        document.getElementById("results").innerHTML = `
+          <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
+          <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$0.02</span></p>
+          <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
+          <p class="text-2xl font-bold mt-4 legion-red">ROI Value: $${data.roi_value.toFixed(2)}</p>
+        `;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while calculating ROI.");
+    }
+  }
+</script>
+</html>
 
