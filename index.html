@@ -10,32 +10,36 @@
     async function calculateROI(event) {
       event.preventDefault();
 
-      // Get user input values
+      // Get user input for the initial investment
       const investment = parseFloat(document.getElementById("investment").value);
-      const roundPrice = parseFloat(document.getElementById("round_price").value);
 
-      if (isNaN(investment) || isNaN(roundPrice) || investment <= 0 || roundPrice <= 0) {
-        alert("Please enter valid values for investment and round price.");
+      // Fixed seed round price
+      const roundPrice = 0.02; // $0.02 per token
+
+      if (isNaN(investment) || investment <= 0) {
+        alert("Please enter a valid investment amount.");
         return;
       }
 
-      // Call the backend API
+      // Call the backend API to calculate ROI
       try {
         const response = await fetch("/calculate", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ investment, round_price })
+          body: JSON.stringify({ investment, round_price: roundPrice })
         });
 
         const data = await response.json();
+
         if (data.error) {
           alert(data.error);
         } else {
           // Display the results
           document.getElementById("results").innerHTML = `
             <p class="mb-2"><strong>Initial Investment:</strong> $${data.initial_investment.toFixed(2)}</p>
+            <p class="mb-2"><strong>Seed Round Price:</strong> $0.02</p>
             <p class="mb-2"><strong>Current Token Price:</strong> $${data.current_price.toFixed(4)}</p>
             <p class="mb-2"><strong>ROI Value:</strong> $${data.roi_value.toFixed(2)}</p>
           `;
@@ -51,7 +55,7 @@
   <div class="container mx-auto mt-12 px-6 py-8 bg-gray-800 rounded-lg shadow-lg max-w-md">
     <h1 class="text-2xl font-bold text-center text-green-400 mb-4">ROI Calculator</h1>
     <p class="text-sm text-center text-gray-400 mb-6">
-      Enter your investment and round price to calculate the ROI based on the current token price.
+      Enter your investment to calculate the ROI based on the current token price and a fixed seed round price of $0.02.
     </p>
 
     <!-- ROI Form -->
@@ -60,10 +64,9 @@
         <label for="investment" class="block text-green-400 font-semibold">Initial Investment ($):</label>
         <input type="number" id="investment" class="w-full p-2 bg-gray-700 rounded" placeholder="Enter your investment">
       </div>
-      <div class="mb-4">
-        <label for="round_price" class="block text-green-400 font-semibold">Seed Round Price ($):</label>
-        <input type="number" step="0.0001" id="round_price" class="w-full p-2 bg-gray-700 rounded" placeholder="Enter the round price">
-      </div>
+      <p class="text-sm text-gray-400 mb-4">
+        <strong>Seed Round Price:</strong> $0.02 (fixed)
+      </p>
       <button type="submit" class="w-full py-2 bg-green-500 hover:bg-green-400 rounded text-black font-bold">Calculate</button>
     </form>
 
@@ -72,4 +75,5 @@
   </div>
 </body>
 </html>
+
 
