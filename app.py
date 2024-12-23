@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, send_from_directory, request, jsonify
 import requests
 import os
 import logging
@@ -54,15 +54,14 @@ def get_token_price():
 @app.route("/")
 def home():
     """
-    Render the home page with the current token price.
+    Serve the index.html file from the root directory.
     Returns:
-        HTML: Rendered index.html template.
+        HTML: The index.html file content.
     """
     try:
-        token_price = get_token_price()
-        return render_template("index.html", token_price=token_price)
+        return send_from_directory(".", "index.html")
     except Exception as e:
-        logging.error(f"Error rendering home page: {e}")
+        logging.error(f"Error serving index.html: {e}")
         return "An error occurred while loading the page.", 500
 
 
