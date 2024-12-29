@@ -155,7 +155,12 @@
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
       // Display seed price or status
-      if (typeof saleData.seedPrice === "string") {
+      if (sale === "almanak") {
+        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`; // Display full ICO price
+        document.getElementById("calculateButton").disabled = true; // Disable Calculate button
+        document.getElementById("calculateButton").classList.add("bg-gray-500");
+        document.getElementById("calculateButton").classList.remove("bg-red-600");
+      } else if (typeof saleData.seedPrice === "string") {
         document.getElementById("seedPrice").textContent = saleData.seedPrice;
         document.getElementById("calculateButton").disabled = true; // Disable Calculate button
         document.getElementById("calculateButton").classList.add("bg-gray-500");
