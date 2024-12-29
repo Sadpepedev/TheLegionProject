@@ -99,7 +99,7 @@
         <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
       </div>
       <p class="text-sm text-center text-gray-400 mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice" class="legion-red">$0.02</span> (fixed)
+        <strong>Seed Round Price:</strong> <span id="seedPrice" class="legion-red">$0.02</span> 
       </p>
 
       <button id="calculateButton" type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 rounded font-bold text-white shadow-md">
@@ -220,7 +220,7 @@
       if (!saleData.isTradable) {
         document.getElementById("results").innerHTML = `
           <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
-          <p class="text-lg text-gray-400">ROI Value: <span class="text-white">Not Applicable</span></p>
+          <p class="text-lg text-gray-400">Current Value: <span class="text-white">Not Applicable</span></p>
         `;
         return;
       }
@@ -240,7 +240,7 @@
             <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
-            <p class="text-2xl font-bold mt-4 legion-red">ROI Value: $${data.roi_value.toFixed(2)}</p>
+            <p class="text-2xl font-bold mt-4 legion-red">Current Value: $${data.roi_value.toFixed(2)}</p>
           `;
         }
       } catch (error) {
