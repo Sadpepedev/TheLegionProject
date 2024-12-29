@@ -61,7 +61,7 @@
         <strong>Seed Round Price:</strong> <span id="seedPrice" class="legion-red">$0.0435</span> (fixed)
       </p>
 
-      <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 rounded font-bold text-white shadow-md">
+      <button id="calculateButton" type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 rounded font-bold text-white shadow-md">
         Calculate
       </button>
     </form>
@@ -82,13 +82,13 @@
       pulse: {
         title: "Pulse",
         tokenName: "Pulse Token",
-        seedPrice: 0, // $0  not known
+        seedPrice: "Coming Soon", // Not available
         isTradable: false // Not tradable
       },
       silencio: {
         title: "Silencio",
         tokenName: "Silencio Token",
-        seedPrice: 0, // $0 not known
+        seedPrice: "Coming Soon", // Not available
         isTradable: false // Not tradable
       },
       fuel: {
@@ -110,7 +110,19 @@
       // Update UI
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
-      document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(2)}`;
+
+      // Display seed price or "Coming Soon"
+      if (typeof saleData.seedPrice === "string") {
+        document.getElementById("seedPrice").textContent = saleData.seedPrice;
+        document.getElementById("calculateButton").disabled = true; // Disable Calculate button
+        document.getElementById("calculateButton").classList.add("bg-gray-500");
+        document.getElementById("calculateButton").classList.remove("bg-red-600");
+      } else {
+        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(2)}`;
+        document.getElementById("calculateButton").disabled = false; // Enable Calculate button
+        document.getElementById("calculateButton").classList.remove("bg-gray-500");
+        document.getElementById("calculateButton").classList.add("bg-red-600");
+      }
 
       // Highlight Active Tab
       document.querySelectorAll(".sale-tab").forEach(tab => tab.classList.remove("active-tab"));
@@ -131,13 +143,6 @@
           const walletAddress = await signer.getAddress();
 
           document.getElementById("walletAddress").innerHTML = `Wallet Address: <span class="text-white">${walletAddress}</span>`;
-
-          const fuelContract = new ethers.Contract(sales[currentSale].contractAddress, erc20Abi, signer);
-          const balance = await fuelContract.balanceOf(walletAddress);
-          const decimals = await fuelContract.decimals();
-          const formattedBalance = ethers.utils.formatUnits(balance, decimals);
-
-          document.getElementById("fuelBalance").innerHTML = `Balance: <span class="text-white">${formattedBalance}</span>`;
         } catch (error) {
           console.error("Error connecting wallet:", error);
           alert("Failed to connect wallet. Please try again.");
@@ -158,15 +163,6 @@
 
       if (isNaN(investment) || investment <= 0) {
         alert("Please enter a valid investment amount.");
-        return;
-      }
-
-      // Handle non-tradable tokens
-      if (!saleData.isTradable) {
-        document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
-          <p class="text-lg text-gray-400">ROI Value: <span class="text-white">Not Applicable</span></p>
-        `;
         return;
       }
 
@@ -193,10 +189,6 @@
         alert("An error occurred while calculating ROI.");
       }
     }
-  </script>
-</body>
-</html>
-
   </script>
 </body>
 </html>
