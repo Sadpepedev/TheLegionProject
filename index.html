@@ -23,11 +23,18 @@
 <body class="font-sans">
   <!-- Top Bar Navigation -->
   <nav class="bg-gray-900 text-white shadow-md">
-    <div class="container mx-auto flex justify-around py-4">
-      <button class="sale-tab active-tab" onclick="switchSale('almanak')">Almanak</button>
-      <button class="sale-tab" onclick="switchSale('pulse')">Pulse</button>
-      <button class="sale-tab" onclick="switchSale('silencio')">Silencio</button>
-      <button class="sale-tab" onclick="switchSale('fuel')">Fuel</button>
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+      <!-- Navigation Tabs -->
+      <div class="flex space-x-4">
+        <button class="sale-tab active-tab" onclick="switchSale('almanak')">Almanak</button>
+        <button class="sale-tab" onclick="switchSale('pulse')">Pulse</button>
+        <button class="sale-tab" onclick="switchSale('silencio')">Silencio</button>
+        <button class="sale-tab" onclick="switchSale('fuel')">Fuel</button>
+      </div>
+      <!-- Connect Wallet -->
+      <button id="connectWallet" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white shadow-md">
+        Connect Wallet
+      </button>
     </div>
   </nav>
 
@@ -38,13 +45,10 @@
       Enter your investment to calculate the ROI for <span id="tokenName">Almanak Token</span> based on the current token price.
     </p>
 
-    <!-- Wallet Connect Section -->
-    <div class="mb-6">
-      <button id="connectWallet" class="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white shadow-md">
-        Connect Wallet
-      </button>
-      <p id="walletAddress" class="text-sm text-center text-gray-400 mt-4">Wallet Address: <span class="text-white">Not connected</span></p>
-      <p id="fuelBalance" class="text-sm text-center text-gray-400 mt-2">Balance: <span class="text-white">N/A</span></p>
+    <!-- Wallet Address and Balance -->
+    <div class="mb-6 text-center">
+      <p id="walletAddress" class="text-sm text-gray-400 mt-4">Wallet Address: <span class="text-white">Not connected</span></p>
+      <p id="fuelBalance" class="text-sm text-gray-400 mt-2">Balance: <span class="text-white">N/A</span></p>
     </div>
 
     <!-- ROI Form -->
@@ -73,25 +77,25 @@
         title: "Almanak",
         tokenName: "Almanak Token",
         seedPrice: 0.01, // $0.01
-        contractAddress: "0x1234567890abcdef1234567890abcdef12345678" // Dummy address
+        isTradable: false // Not tradable
       },
       pulse: {
         title: "Pulse",
         tokenName: "Pulse Token",
         seedPrice: 0.015, // $0.015
-        contractAddress: "0xabcdef1234567890abcdef1234567890abcdef12" // Dummy address
+        isTradable: false // Not tradable
       },
       silencio: {
         title: "Silencio",
         tokenName: "Silencio Token",
         seedPrice: 0.02, // $0.02
-        contractAddress: "0x7890abcdef1234567890abcdef1234567890abcd" // Dummy address
+        isTradable: false // Not tradable
       },
       fuel: {
         title: "Fuel",
         tokenName: "Fuel Token",
         seedPrice: 0.02, // $0.02
-        contractAddress: "0x675b68aa4d9c2d3bb3f0397048e62e6b7192079c"
+        isTradable: true // Tradable
       }
     };
 
@@ -150,10 +154,19 @@
       event.preventDefault();
 
       const investment = parseFloat(document.getElementById("investment").value);
-      const roundPrice = sales[currentSale].seedPrice;
+      const saleData = sales[currentSale];
 
       if (isNaN(investment) || investment <= 0) {
         alert("Please enter a valid investment amount.");
+        return;
+      }
+
+      // Handle non-tradable tokens
+      if (!saleData.isTradable) {
+        document.getElementById("results").innerHTML = `
+          <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
+          <p class="text-lg text-gray-400">ROI Value: <span class="text-white">Not Applicable</span></p>
+        `;
         return;
       }
 
@@ -161,7 +174,7 @@
         const response = await fetch("/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment, round_price: roundPrice }),
+          body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
         });
 
         const data = await response.json();
@@ -170,7 +183,7 @@
         } else {
           document.getElementById("results").innerHTML = `
             <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
-            <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${roundPrice.toFixed(2)}</span></p>
+            <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
             <p class="text-2xl font-bold mt-4 legion-red">ROI Value: $${data.roi_value.toFixed(2)}</p>
           `;
@@ -180,6 +193,10 @@
         alert("An error occurred while calculating ROI.");
       }
     }
+  </script>
+</body>
+</html>
+
   </script>
 </body>
 </html>
