@@ -18,6 +18,27 @@
       border-bottom: 2px solid #FF0000;
       font-weight: bold;
     }
+    .status-live {
+      background-color: #4CAF50; /* Green */
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .status-soon {
+      background-color: #FF9800; /* Orange */
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .status-ico {
+      background-color: #3F51B5; /* Blue */
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body class="font-sans">
@@ -25,11 +46,25 @@
   <nav class="bg-gray-900 text-white shadow-md">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
       <!-- Navigation Tabs -->
-      <div class="flex space-x-4">
-        <button class="sale-tab active-tab" onclick="switchSale('almanak')">Almanak</button>
-        <button class="sale-tab" onclick="switchSale('pulse')">Pulse</button>
-        <button class="sale-tab" onclick="switchSale('silencio')">Silencio</button>
-        <button class="sale-tab" onclick="switchSale('fuel')">Fuel</button>
+      <div class="flex space-x-6">
+        <button class="sale-tab active-tab" onclick="switchSale('fuel')">
+          Fuel <span class="status-live">Live</span>
+        </button>
+        <button class="sale-tab" onclick="switchSale('almanak')">
+          Almanak <span class="status-soon">Trading Soon</span>
+        </button>
+        <button class="sale-tab" onclick="switchSale('pulse')">
+          Pulse <span class="status-soon">Trading Soon</span>
+        </button>
+        <button class="sale-tab" onclick="switchSale('silencio')">
+          Silencio <span class="status-soon">Trading Soon</span>
+        </button>
+        <button class="sale-tab" onclick="switchSale('enclave')">
+          Enclave <span class="status-ico">ICO Soon</span>
+        </button>
+        <button class="sale-tab" onclick="switchSale('corn')">
+          Corn <span class="status-ico">ICO Soon</span>
+        </button>
       </div>
       <!-- Connect Wallet -->
       <button id="connectWallet" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white shadow-md">
@@ -40,9 +75,9 @@
 
   <!-- Main Content -->
   <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl">
-    <h1 id="saleTitle" class="text-3xl font-extrabold text-center legion-red mb-6">Almanak</h1>
+    <h1 id="saleTitle" class="text-3xl font-extrabold text-center legion-red mb-6">Fuel</h1>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your investment to calculate the ROI for <span id="tokenName">Almanak Token</span> based on the current token price.
+      Enter your investment to calculate the ROI for <span id="tokenName">Fuel Token</span> based on the current token price.
     </p>
 
     <!-- Wallet Address and Balance -->
@@ -58,7 +93,7 @@
         <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
       </div>
       <p class="text-sm text-center text-gray-400 mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice" class="legion-red">$0.0435</span> (fixed)
+        <strong>Seed Round Price:</strong> <span id="seedPrice" class="legion-red">$0.02</span> (fixed)
       </p>
 
       <button id="calculateButton" type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 rounded font-bold text-white shadow-md">
@@ -73,34 +108,46 @@
   <script>
     // Sale Data
     const sales = {
-      almanak: {
-        title: "Almanak",
-        tokenName: "Almanak Token",
-        seedPrice: 0.0435, // $0.0435
-        isTradable: false // Not tradable
-      },
-      pulse: {
-        title: "Pulse",
-        tokenName: "Pulse Token",
-        seedPrice: "Coming Soon", // Not available
-        isTradable: false // Not tradable
-      },
-      silencio: {
-        title: "Silencio",
-        tokenName: "Silencio Token",
-        seedPrice: "Coming Soon", // Not available
-        isTradable: false // Not tradable
-      },
       fuel: {
         title: "Fuel",
         tokenName: "Fuel Token",
         seedPrice: 0.02, // $0.02
         isTradable: true // Tradable
+      },
+      almanak: {
+        title: "Almanak",
+        tokenName: "Almanak Token",
+        seedPrice: 0.0435, // $0.0435
+        isTradable: false // Trading Soon
+      },
+      pulse: {
+        title: "Pulse",
+        tokenName: "Pulse Token",
+        seedPrice: "Coming Soon", // Not available
+        isTradable: false // Trading Soon
+      },
+      silencio: {
+        title: "Silencio",
+        tokenName: "Silencio Token",
+        seedPrice: "Coming Soon", // Not available
+        isTradable: false // Trading Soon
+      },
+      enclave: {
+        title: "Enclave",
+        tokenName: "Enclave Token",
+        seedPrice: "ICO Soon", // Not available
+        isTradable: false // ICO Soon
+      },
+      corn: {
+        title: "Corn",
+        tokenName: "Corn Token",
+        seedPrice: "ICO Soon", // Not available
+        isTradable: false // ICO Soon
       }
     };
 
     // Current Sale
-    let currentSale = "almanak";
+    let currentSale = "fuel";
 
     // Switch Sale Function
     function switchSale(sale) {
@@ -111,7 +158,7 @@
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
-      // Display seed price or "Coming Soon"
+      // Display seed price or status
       if (typeof saleData.seedPrice === "string") {
         document.getElementById("seedPrice").textContent = saleData.seedPrice;
         document.getElementById("calculateButton").disabled = true; // Disable Calculate button
@@ -132,6 +179,27 @@
       document.getElementById("results").innerHTML = ""; // Clear results
       document.getElementById("investment").value = ""; // Clear investment input
     }
+
+    // Connect Wallet Functionality
+    async function connectWallet() {
+      if (typeof window.ethereum !== "undefined") {
+        try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const accounts = await provider.send("eth_requestAccounts", []);
+          const signer = provider.getSigner();
+          const walletAddress = await signer.getAddress();
+
+          document.getElementById("walletAddress").innerHTML = `Wallet Address: <span class="text-white">${walletAddress}</span>`;
+        } catch (error) {
+          console.error("Error connecting wallet:", error);
+          alert("Failed to connect wallet. Please try again.");
+        }
+      } else {
+        alert("MetaMask or a Web3-compatible browser is required.");
+      }
+    }
+
+    document.getElementById("connectWallet").addEventListener("click", connectWallet);
 
     // ROI Calculation Function
     async function calculateROI(event) {
