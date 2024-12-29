@@ -111,9 +111,13 @@
       // Highlight Active Tab
       document.querySelectorAll(".sale-tab").forEach(tab => tab.classList.remove("active-tab"));
       document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
+
+      // Clear Results and Form Inputs
+      document.getElementById("results").innerHTML = ""; // Clear results
+      document.getElementById("investment").value = ""; // Clear investment input
     }
 
-    // Connect Wallet Functionality (unchanged)
+    // Connect Wallet Functionality
     async function connectWallet() {
       if (typeof window.ethereum !== "undefined") {
         try {
@@ -124,7 +128,6 @@
 
           document.getElementById("walletAddress").innerHTML = `Wallet Address: <span class="text-white">${walletAddress}</span>`;
 
-          // Fetch balance (if required)
           const fuelContract = new ethers.Contract(sales[currentSale].contractAddress, erc20Abi, signer);
           const balance = await fuelContract.balanceOf(walletAddress);
           const decimals = await fuelContract.decimals();
@@ -140,10 +143,9 @@
       }
     }
 
-    // Attach Wallet Connect
     document.getElementById("connectWallet").addEventListener("click", connectWallet);
 
-    // ROI Calculation Function (unchanged)
+    // ROI Calculation Function
     async function calculateROI(event) {
       event.preventDefault();
 
@@ -181,4 +183,5 @@
   </script>
 </body>
 </html>
+
 
