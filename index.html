@@ -11,11 +11,8 @@
       background-color: #000000;
       color: #FFFFFF;
     }
-    .legion-red {
-      color: #FF0000;
-    }
-    .active-tab {
-      border-bottom: 2px solid #FF0000;
+     .active-tab {
+      border-bottom: 2px solid var(--primary-color, #FF0000);
       font-weight: bold;
     }
     .status-live {
@@ -135,7 +132,8 @@
         title: "Fuel",
         tokenName: "Fuel Token",
         seedPrice: 0.02, // $0.02
-        isTradable: true // Tradable
+        isTradable: true, // Tradable
+        color: #32CD32
       },
       almanak: {
         title: "Almanak",
