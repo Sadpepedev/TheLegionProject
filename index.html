@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Legion Project</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
   <style>
-    /* Additional custom styles for Legion colors */
     body {
       background-color: #000000;
       color: #FFFFFF;
@@ -14,26 +14,47 @@
     .legion-red {
       color: #FF0000;
     }
+    .active-tab {
+      border-bottom: 2px solid #FF0000;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body class="font-sans">
-  <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-md">
-    <!-- Title -->
-    <h1 class="text-3xl font-extrabold text-center legion-red mb-6">The Legion Project</h1>
+  <!-- Top Bar Navigation -->
+  <nav class="bg-gray-900 text-white shadow-md">
+    <div class="container mx-auto flex justify-around py-4">
+      <button class="sale-tab active-tab" onclick="switchSale('almanak')">Almanak</button>
+      <button class="sale-tab" onclick="switchSale('pulse')">Pulse</button>
+      <button class="sale-tab" onclick="switchSale('silencio')">Silencio</button>
+      <button class="sale-tab" onclick="switchSale('fuel')">Fuel</button>
+    </div>
+  </nav>
 
+  <!-- Main Content -->
+  <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl">
+    <h1 id="saleTitle" class="text-3xl font-extrabold text-center legion-red mb-6">Almanak</h1>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your investment to calculate the ROI based on the current token price and a fixed seed round price of $0.02.
+      Enter your investment to calculate the ROI for <span id="tokenName">Almanak Token</span> based on the current token price.
     </p>
 
-    <!-- Form portion -->
+    <!-- Wallet Connect Section -->
+    <div class="mb-6">
+      <button id="connectWallet" class="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white shadow-md">
+        Connect Wallet
+      </button>
+      <p id="walletAddress" class="text-sm text-center text-gray-400 mt-4">Wallet Address: <span class="text-white">Not connected</span></p>
+      <p id="fuelBalance" class="text-sm text-center text-gray-400 mt-2">Balance: <span class="text-white">N/A</span></p>
+    </div>
+
+    <!-- ROI Form -->
     <form onsubmit="calculateROI(event)">
       <div class="mb-6">
         <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
         <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
       </div>
-
       <p class="text-sm text-center text-gray-400 mb-6">
-        <strong>Seed Round Price:</strong> <span class="legion-red">$0.02</span> (fixed)
+        <strong>Seed Round Price:</strong> <span id="seedPrice" class="legion-red">$0.01</span> (fixed)
       </p>
 
       <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 rounded font-bold text-white shadow-md">
@@ -41,48 +62,123 @@
       </button>
     </form>
 
-    <!-- Results -->
-    <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center">
-      <!-- Results will be dynamic based on api i dont know where the api is pulling from -->
-    </div>
+    <!-- Results Section -->
+    <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
   </div>
-</body>
 
-<script>
-  async function calculateROI(event) {
-    event.preventDefault();
-
-    const investment = parseFloat(document.getElementById("investment").value);
-    const roundPrice = 0.02;
-
-    if (isNaN(investment) || investment <= 0) {
-      alert("Please enter a valid investment amount.");
-      return;
-    }
-
-    try {
-      const response = await fetch("/calculate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ investment, round_price: roundPrice }),
-      });
-
-      const data = await response.json();
-      if (data.error) {
-        alert(data.error);
-      } else {
-        document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
-          <p class="text-lg text-gray-400">Fuel Seed Round Price: <span class="text-white">$0.02</span></p>
-          <p class="text-lg text-gray-400">Current Fuel Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
-          <p class="text-2xl font-bold mt-4 legion-red">Current Value: $${data.roi_value.toFixed(2)}</p>
-        `;
+  <script>
+    // Sale Data
+    const sales = {
+      almanak: {
+        title: "Almanak",
+        tokenName: "Almanak Token",
+        seedPrice: 0.01, // $0.01
+        contractAddress: "0x1234567890abcdef1234567890abcdef12345678" // Dummy address
+      },
+      pulse: {
+        title: "Pulse",
+        tokenName: "Pulse Token",
+        seedPrice: 0.015, // $0.015
+        contractAddress: "0xabcdef1234567890abcdef1234567890abcdef12" // Dummy address
+      },
+      silencio: {
+        title: "Silencio",
+        tokenName: "Silencio Token",
+        seedPrice: 0.02, // $0.02
+        contractAddress: "0x7890abcdef1234567890abcdef1234567890abcd" // Dummy address
+      },
+      fuel: {
+        title: "Fuel",
+        tokenName: "Fuel Token",
+        seedPrice: 0.02, // $0.02
+        contractAddress: "0x675b68aa4d9c2d3bb3f0397048e62e6b7192079c"
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred while calculating ROI.");
+    };
+
+    // Current Sale
+    let currentSale = "almanak";
+
+    // Switch Sale Function
+    function switchSale(sale) {
+      currentSale = sale;
+      const saleData = sales[sale];
+
+      // Update UI
+      document.getElementById("saleTitle").textContent = saleData.title;
+      document.getElementById("tokenName").textContent = saleData.tokenName;
+      document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(2)}`;
+
+      // Highlight Active Tab
+      document.querySelectorAll(".sale-tab").forEach(tab => tab.classList.remove("active-tab"));
+      document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
     }
-  }
-</script>
+
+    // Connect Wallet Functionality (unchanged)
+    async function connectWallet() {
+      if (typeof window.ethereum !== "undefined") {
+        try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const accounts = await provider.send("eth_requestAccounts", []);
+          const signer = provider.getSigner();
+          const walletAddress = await signer.getAddress();
+
+          document.getElementById("walletAddress").innerHTML = `Wallet Address: <span class="text-white">${walletAddress}</span>`;
+
+          // Fetch balance (if required)
+          const fuelContract = new ethers.Contract(sales[currentSale].contractAddress, erc20Abi, signer);
+          const balance = await fuelContract.balanceOf(walletAddress);
+          const decimals = await fuelContract.decimals();
+          const formattedBalance = ethers.utils.formatUnits(balance, decimals);
+
+          document.getElementById("fuelBalance").innerHTML = `Balance: <span class="text-white">${formattedBalance}</span>`;
+        } catch (error) {
+          console.error("Error connecting wallet:", error);
+          alert("Failed to connect wallet. Please try again.");
+        }
+      } else {
+        alert("MetaMask or a Web3-compatible browser is required.");
+      }
+    }
+
+    // Attach Wallet Connect
+    document.getElementById("connectWallet").addEventListener("click", connectWallet);
+
+    // ROI Calculation Function (unchanged)
+    async function calculateROI(event) {
+      event.preventDefault();
+
+      const investment = parseFloat(document.getElementById("investment").value);
+      const roundPrice = sales[currentSale].seedPrice;
+
+      if (isNaN(investment) || investment <= 0) {
+        alert("Please enter a valid investment amount.");
+        return;
+      }
+
+      try {
+        const response = await fetch("/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ investment, round_price: roundPrice }),
+        });
+
+        const data = await response.json();
+        if (data.error) {
+          alert(data.error);
+        } else {
+          document.getElementById("results").innerHTML = `
+            <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
+            <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${roundPrice.toFixed(2)}</span></p>
+            <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
+            <p class="text-2xl font-bold mt-4 legion-red">ROI Value: $${data.roi_value.toFixed(2)}</p>
+          `;
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while calculating ROI.");
+      }
+    }
+  </script>
+</body>
 </html>
 
