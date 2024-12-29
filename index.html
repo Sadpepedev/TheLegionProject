@@ -133,27 +133,6 @@
       document.getElementById("investment").value = ""; // Clear investment input
     }
 
-    // Connect Wallet Functionality
-    async function connectWallet() {
-      if (typeof window.ethereum !== "undefined") {
-        try {
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const accounts = await provider.send("eth_requestAccounts", []);
-          const signer = provider.getSigner();
-          const walletAddress = await signer.getAddress();
-
-          document.getElementById("walletAddress").innerHTML = `Wallet Address: <span class="text-white">${walletAddress}</span>`;
-        } catch (error) {
-          console.error("Error connecting wallet:", error);
-          alert("Failed to connect wallet. Please try again.");
-        }
-      } else {
-        alert("MetaMask or a Web3-compatible browser is required.");
-      }
-    }
-
-    document.getElementById("connectWallet").addEventListener("click", connectWallet);
-
     // ROI Calculation Function
     async function calculateROI(event) {
       event.preventDefault();
@@ -163,6 +142,15 @@
 
       if (isNaN(investment) || investment <= 0) {
         alert("Please enter a valid investment amount.");
+        return;
+      }
+
+      // Handle non-tradable tokens
+      if (!saleData.isTradable) {
+        document.getElementById("results").innerHTML = `
+          <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
+          <p class="text-lg text-gray-400">ROI Value: <span class="text-white">Not Applicable</span></p>
+        `;
         return;
       }
 
