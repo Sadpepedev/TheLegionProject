@@ -18,6 +18,27 @@
       border-bottom: 2px solid #FF0000;
       font-weight: bold;
     }
+    .status-live {
+      background-color: #4CAF50; /* Green */
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .status-soon {
+      background-color: #FF9800; /* Orange */
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .status-ico {
+      background-color: #3F51B5; /* Blue */
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body class="font-sans">
@@ -45,7 +66,7 @@
           Corn <span class="status-ico">ICO Soon</span>
         </button>
       </div>
-      <!-- Wallet Connect (Temporarily Hidden) -->
+      <!-- Connect Wallet (Hidden) -->
       <div class="hidden">
         <button id="connectWallet" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white shadow-md">
           Connect Wallet
