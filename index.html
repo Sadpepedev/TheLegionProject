@@ -48,9 +48,9 @@
 <body class="font-sans">
   <!-- Top Bar Navigation -->
   <nav class="bg-gray-900 text-white shadow-md">
-    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center py-4 px-6">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
       <!-- Hamburger Menu for Mobile -->
-      <div class="block lg:hidden mb-4 lg:mb-0">
+      <div class="block lg:hidden">
         <button id="mobileMenuToggle" class="text-white focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -59,7 +59,7 @@
       </div>
 
       <!-- Navigation Tabs -->
-      <div id="navTabs" class="hidden lg:flex space-x-6 flex-col lg:flex-row lg:items-center">
+      <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
         <button class="sale-tab" onclick="switchSale('fuel')">
           Fuel <span class="status-live">Live</span>
         </button>
@@ -118,6 +118,14 @@
   </footer>
 
   <script>
+    const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+    const navTabs = document.getElementById("navTabs");
+
+    // Toggle hamburger menu for mobile
+    mobileMenuToggle.addEventListener("click", () => {
+      navTabs.classList.toggle("hidden");
+    });
+
     const sales = {
       fuel: {
         title: "Fuel",
