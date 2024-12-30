@@ -43,11 +43,11 @@
 </head>
 <body class="font-sans">
   <!-- Top Bar Navigation -->
-<nav class="bg-gray-900 text-white shadow-md">
-  <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center py-4 px-6">
-    <!-- Hamburger Menu for Mobile -->
-    <div class="block lg:hidden mb-4 lg:mb-0">
-      <button id="mobileMenuToggle" class="text-white focus:outline-none">
+  <nav class="bg-gray-900 text-white shadow-md">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center py-4 px-6">
+      <!-- Hamburger Menu for Mobile -->
+      <div class="block lg:hidden mb-4 lg:mb-0">
+        <button id="mobileMenuToggle" class="text-white focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -55,7 +55,7 @@
       </div>
 
       <!-- Navigation Tabs -->
-      <div id="navTabs" class="hidden lg:flex space-x-6 flex-col lg:flex-row lg:items-center">
+      <div id="navTabs" class="flex space-x-6">
         <button class="sale-tab active-tab" onclick="switchSale('fuel')">
           Fuel <span class="status-live">Live</span>
         </button>
@@ -73,13 +73,6 @@
         </button>
         <button class="sale-tab" onclick="switchSale('corn')">
           Corn <span class="status-ico">ICO Soon</span>
-        </button>
-      </div>
-
-      <!-- Connect Wallet (Hidden) -->
-      <div class="hidden">
-        <button id="connectWallet" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white shadow-md">
-          Connect Wallet
         </button>
       </div>
     </div>
@@ -111,65 +104,62 @@
     <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
   </div>
 
-    <!-- Footer -->
+  <!-- Footer -->
   <footer class="mt-10 text-center text-gray-500">
     Built by <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">Sadpepe.exe</a>
   </footer>
 
-    <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
+  <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
     <p>Price data provided by <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">CoinGecko</a>.</p>
   </footer>
 
   <script>
-    // Mobile Menu Toggle Logic
-    const mobileMenuToggle = document.getElementById("mobileMenuToggle");
-    const navTabs = document.getElementById("navTabs");
-
-    mobileMenuToggle.addEventListener("click", () => {
-      navTabs.classList.toggle("hidden");
-    });
-
-    // Sale Data
+    // Sale Data with Updated Colors
     const sales = {
       fuel: {
         title: "Fuel",
         tokenName: "Fuel Token",
-        seedPrice: 0.02, // $0.02
-        isTradable: true // Tradable
+        seedPrice: 0.02,
+        isTradable: true,
+        fontColor: "#32CD32" // Lime Green
       },
       almanak: {
         title: "Almanak",
         tokenName: "Almanak Token",
-        seedPrice: 0.0435, // $0.0435
-        isTradable: false // Trading Soon
+        seedPrice: 0.0435,
+        isTradable: false,
+        fontColor: "#FFFFFF" // White
       },
       pulse: {
         title: "Pulse",
         tokenName: "Pulse Token",
-        seedPrice: "Coming Soon", // Not available
-        isTradable: false // Trading Soon
+        seedPrice: "Coming Soon",
+        isTradable: false,
+        fontColor: "#336699" // Lighter Navy Blue
       },
       silencio: {
         title: "Silencio",
         tokenName: "Silencio Token",
-        seedPrice: "Coming Soon", // Not available
-        isTradable: false // Trading Soon
+        seedPrice: "Coming Soon",
+        isTradable: false,
+        fontColor: "#87CEFA" // Light Blue
       },
       enclave: {
         title: "Enclave",
         tokenName: "Enclave Token",
-        seedPrice: "ICO Soon", // Not available
-        isTradable: false // ICO Soon
+        seedPrice: "ICO Soon",
+        isTradable: false,
+        fontColor: "#E0F7FA" // Light Cyan
       },
       corn: {
         title: "Corn",
         tokenName: "Corn Token",
-        seedPrice: "ICO Soon", // Not available
-        isTradable: false // ICO Soon
+        seedPrice: "ICO Soon",
+        isTradable: false,
+        fontColor: "#FFA500" // Orange
       }
     };
 
-    // Current Sale
     let currentSale = "fuel";
 
     // Switch Sale Function
@@ -177,24 +167,19 @@
       currentSale = sale;
       const saleData = sales[sale];
 
-      // Update UI
+      // Update Content
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
-      // Display seed price or status
-      if (sale === "almanak") {
-        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`; // Display full ICO price
-        document.getElementById("calculateButton").disabled = true; // Disable Calculate button
-        document.getElementById("calculateButton").classList.add("bg-gray-500");
-        document.getElementById("calculateButton").classList.remove("bg-red-600");
-      } else if (typeof saleData.seedPrice === "string") {
+      // Display Seed Price
+      if (typeof saleData.seedPrice === "string") {
         document.getElementById("seedPrice").textContent = saleData.seedPrice;
-        document.getElementById("calculateButton").disabled = true; // Disable Calculate button
+        document.getElementById("calculateButton").disabled = true;
         document.getElementById("calculateButton").classList.add("bg-gray-500");
         document.getElementById("calculateButton").classList.remove("bg-red-600");
       } else {
         document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(2)}`;
-        document.getElementById("calculateButton").disabled = false; // Enable Calculate button
+        document.getElementById("calculateButton").disabled = false;
         document.getElementById("calculateButton").classList.remove("bg-gray-500");
         document.getElementById("calculateButton").classList.add("bg-red-600");
       }
@@ -203,9 +188,14 @@
       document.querySelectorAll(".sale-tab").forEach(tab => tab.classList.remove("active-tab"));
       document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
 
+      // Update Font Color for Tabs and Button
+      const fontColor = saleData.fontColor;
+      document.getElementById("saleTitle").style.color = fontColor;
+      document.getElementById("calculateButton").style.color = fontColor;
+
       // Clear Results and Form Inputs
       document.getElementById("results").innerHTML = ""; // Clear results
-      document.getElementById("investment").value = ""; // Clear investment input
+      document.getElementById("investment").value = ""; // Clear input
     }
 
     // ROI Calculation Function
@@ -255,4 +245,3 @@
   </script>
 </body>
 </html>
-
