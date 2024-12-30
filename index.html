@@ -40,6 +40,9 @@
       background-color: #4A5568; /* Gray */
       cursor: not-allowed;
     }
+    #results {
+      display: none; /* Hide results initially */
+    }
   </style>
 </head>
 <body class="font-sans">
@@ -115,14 +118,13 @@
   </footer>
 
   <script>
-    // Sale Data with Colors
     const sales = {
       fuel: {
         title: "Fuel",
         tokenName: "Fuel Token",
         seedPrice: 0.02,
         isTradable: true,
-        fontColor: "#32CD32", // Lime Green
+        fontColor: "#32CD32",
         buttonColor: "#32CD32",
       },
       almanak: {
@@ -131,14 +133,14 @@
         seedPrice: 0.0435,
         isTradable: false,
         fontColor: "#FFFFFF",
-        buttonColor: "#4A5568", // Greyed out
+        buttonColor: "#4A5568",
       },
       pulse: {
         title: "Pulse",
         tokenName: "Pulse Token",
         seedPrice: "Coming Soon",
         isTradable: false,
-        fontColor: "#0000FF", // Blue
+        fontColor: "#0000FF",
         buttonColor: "#1E90FF",
       },
       silencio: {
@@ -146,7 +148,7 @@
         tokenName: "Silencio Token",
         seedPrice: "Coming Soon",
         isTradable: false,
-        fontColor: "#87CEEB", // Light Blue
+        fontColor: "#87CEEB",
         buttonColor: "#4682B4",
       },
       enclave: {
@@ -154,15 +156,15 @@
         tokenName: "Enclave Token",
         seedPrice: "ICO Soon",
         isTradable: false,
-        fontColor: "#FFFFFF", // White
-        buttonColor: "#ADD8E6", // Light Blue
+        fontColor: "#FFFFFF",
+        buttonColor: "#ADD8E6",
       },
       corn: {
         title: "Corn",
         tokenName: "Corn Token",
         seedPrice: "ICO Soon",
         isTradable: false,
-        fontColor: "#FFA500", // Orange
+        fontColor: "#FFA500",
         buttonColor: "#FF8C00",
       }
     };
@@ -198,7 +200,7 @@
       document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
       document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
 
-      document.getElementById("results").innerHTML = "";
+      document.getElementById("results").style.display = "none"; // Hide results on tab switch
       document.getElementById("investment").value = "";
     }
 
@@ -214,6 +216,7 @@
       }
 
       if (!saleData.isTradable) {
+        document.getElementById("results").style.display = "block";
         document.getElementById("results").innerHTML = `
           <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
           <p class="text-lg text-gray-400">Current Value: <span class="text-white">Not Applicable</span></p>
@@ -232,6 +235,7 @@
         if (data.error) {
           alert(data.error);
         } else {
+          document.getElementById("results").style.display = "block"; // Show results on calculation
           document.getElementById("results").innerHTML = `
             <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
