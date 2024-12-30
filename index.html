@@ -11,9 +11,6 @@
       background-color: #000000;
       color: #FFFFFF;
     }
-    .legion-red {
-      color: #FF0000;
-    }
     .active-tab {
       border-bottom: 2px solid #FF0000;
       font-weight: bold;
@@ -39,15 +36,19 @@
       border-radius: 4px;
       font-size: 12px;
     }
+    .disabled-button {
+      background-color: #4A5568; /* Gray */
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body class="font-sans">
   <!-- Top Bar Navigation -->
-<nav class="bg-gray-900 text-white shadow-md">
-  <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center py-4 px-6">
-    <!-- Hamburger Menu for Mobile -->
-    <div class="block lg:hidden mb-4 lg:mb-0">
-      <button id="mobileMenuToggle" class="text-white focus:outline-none">
+  <nav class="bg-gray-900 text-white shadow-md">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center py-4 px-6">
+      <!-- Hamburger Menu for Mobile -->
+      <div class="block lg:hidden mb-4 lg:mb-0">
+        <button id="mobileMenuToggle" class="text-white focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -56,7 +57,7 @@
 
       <!-- Navigation Tabs -->
       <div id="navTabs" class="hidden lg:flex space-x-6 flex-col lg:flex-row lg:items-center">
-        <button class="sale-tab active-tab" onclick="switchSale('fuel')">
+        <button class="sale-tab" onclick="switchSale('fuel')">
           Fuel <span class="status-live">Live</span>
         </button>
         <button class="sale-tab" onclick="switchSale('almanak')">
@@ -75,19 +76,12 @@
           Corn <span class="status-ico">ICO Soon</span>
         </button>
       </div>
-
-      <!-- Connect Wallet (Hidden) -->
-      <div class="hidden">
-        <button id="connectWallet" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white shadow-md">
-          Connect Wallet
-        </button>
-      </div>
     </div>
   </nav>
 
   <!-- Main Content -->
   <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl">
-    <h1 id="saleTitle" class="text-3xl font-extrabold text-center legion-red mb-6">Fuel</h1>
+    <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6">Fuel</h1>
     <p class="text-sm text-center text-gray-400 mb-8">
       Enter your initial ICO investment to calculate your current ROI for <span id="tokenName">Fuel Token</span>
     </p>
@@ -98,11 +92,11 @@
         <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
         <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
       </div>
-      <p class="text-sm text-center text-gray-400 mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice" class="legion-red">$0.02</span> 
+      <p class="text-sm text-center mb-6">
+        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span> 
       </p>
 
-      <button id="calculateButton" type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 rounded font-bold text-white shadow-md">
+      <button id="calculateButton" type="submit" class="w-full py-3 rounded font-bold text-white shadow-md">
         Calculate
       </button>
     </form>
@@ -111,104 +105,103 @@
     <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
   </div>
 
-    <!-- Footer -->
+  <!-- Footer -->
   <footer class="mt-10 text-center text-gray-500">
     Built by <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">Sadpepe.exe</a>
   </footer>
 
-    <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
+  <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
     <p>Price data provided by <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">CoinGecko</a>.</p>
   </footer>
 
   <script>
-    // Mobile Menu Toggle Logic
-    const mobileMenuToggle = document.getElementById("mobileMenuToggle");
-    const navTabs = document.getElementById("navTabs");
-
-    mobileMenuToggle.addEventListener("click", () => {
-      navTabs.classList.toggle("hidden");
-    });
-
-    // Sale Data
+    // Sale Data with Colors
     const sales = {
       fuel: {
         title: "Fuel",
         tokenName: "Fuel Token",
-        seedPrice: 0.02, // $0.02
-        isTradable: true // Tradable
+        seedPrice: 0.02,
+        isTradable: true,
+        fontColor: "#32CD32", // Lime Green
+        buttonColor: "#32CD32",
       },
       almanak: {
         title: "Almanak",
         tokenName: "Almanak Token",
-        seedPrice: 0.0435, // $0.0435
-        isTradable: false // Trading Soon
+        seedPrice: 0.0435,
+        isTradable: false,
+        fontColor: "#FFFFFF",
+        buttonColor: "#4A5568", // Greyed out
       },
       pulse: {
         title: "Pulse",
         tokenName: "Pulse Token",
-        seedPrice: "Coming Soon", // Not available
-        isTradable: false // Trading Soon
+        seedPrice: "Coming Soon",
+        isTradable: false,
+        fontColor: "#0000FF", // Blue
+        buttonColor: "#1E90FF",
       },
       silencio: {
         title: "Silencio",
         tokenName: "Silencio Token",
-        seedPrice: "Coming Soon", // Not available
-        isTradable: false // Trading Soon
+        seedPrice: "Coming Soon",
+        isTradable: false,
+        fontColor: "#87CEEB", // Light Blue
+        buttonColor: "#4682B4",
       },
       enclave: {
         title: "Enclave",
         tokenName: "Enclave Token",
-        seedPrice: "ICO Soon", // Not available
-        isTradable: false // ICO Soon
+        seedPrice: "ICO Soon",
+        isTradable: false,
+        fontColor: "#FFFFFF", // White
+        buttonColor: "#ADD8E6", // Light Blue
       },
       corn: {
         title: "Corn",
         tokenName: "Corn Token",
-        seedPrice: "ICO Soon", // Not available
-        isTradable: false // ICO Soon
+        seedPrice: "ICO Soon",
+        isTradable: false,
+        fontColor: "#FFA500", // Orange
+        buttonColor: "#FF8C00",
       }
     };
 
-    // Current Sale
     let currentSale = "fuel";
 
-    // Switch Sale Function
     function switchSale(sale) {
       currentSale = sale;
       const saleData = sales[sale];
 
-      // Update UI
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
-      // Display seed price or status
-      if (sale === "almanak") {
-        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`; // Display full ICO price
-        document.getElementById("calculateButton").disabled = true; // Disable Calculate button
-        document.getElementById("calculateButton").classList.add("bg-gray-500");
-        document.getElementById("calculateButton").classList.remove("bg-red-600");
-      } else if (typeof saleData.seedPrice === "string") {
-        document.getElementById("seedPrice").textContent = saleData.seedPrice;
-        document.getElementById("calculateButton").disabled = true; // Disable Calculate button
-        document.getElementById("calculateButton").classList.add("bg-gray-500");
-        document.getElementById("calculateButton").classList.remove("bg-red-600");
+      document.getElementById("seedPrice").textContent =
+        typeof saleData.seedPrice === "string"
+          ? saleData.seedPrice
+          : `$${saleData.seedPrice.toFixed(4)}`;
+
+      const calculateButton = document.getElementById("calculateButton");
+      if (!saleData.isTradable) {
+        calculateButton.disabled = true;
+        calculateButton.classList.add("disabled-button");
+        calculateButton.classList.remove("bg-red-600");
       } else {
-        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(2)}`;
-        document.getElementById("calculateButton").disabled = false; // Enable Calculate button
-        document.getElementById("calculateButton").classList.remove("bg-gray-500");
-        document.getElementById("calculateButton").classList.add("bg-red-600");
+        calculateButton.disabled = false;
+        calculateButton.classList.remove("disabled-button");
+        calculateButton.classList.add("bg-red-600");
       }
 
-      // Highlight Active Tab
-      document.querySelectorAll(".sale-tab").forEach(tab => tab.classList.remove("active-tab"));
+      document.getElementById("saleTitle").style.color = saleData.fontColor;
+      calculateButton.style.backgroundColor = saleData.buttonColor;
+
+      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
       document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
 
-      // Clear Results and Form Inputs
-      document.getElementById("results").innerHTML = ""; // Clear results
-      document.getElementById("investment").value = ""; // Clear investment input
+      document.getElementById("results").innerHTML = "";
+      document.getElementById("investment").value = "";
     }
 
-    // ROI Calculation Function
     async function calculateROI(event) {
       event.preventDefault();
 
@@ -220,7 +213,6 @@
         return;
       }
 
-      // Handle non-tradable tokens
       if (!saleData.isTradable) {
         document.getElementById("results").innerHTML = `
           <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
@@ -244,7 +236,7 @@
             <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
-            <p class="text-2xl font-bold mt-4 legion-red">Current Value: $${data.roi_value.toFixed(2)}</p>
+            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">Current Value: $${data.roi_value.toFixed(2)}</p>
           `;
         }
       } catch (error) {
@@ -252,7 +244,8 @@
         alert("An error occurred while calculating ROI.");
       }
     }
+
+    switchSale(currentSale);
   </script>
 </body>
 </html>
-
