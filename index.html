@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>The Legion Project</title>
+  <title>Track Legion ICO Performance</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Ethers.js -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
   
-  <!-- Futuristic Font (Orbitron) -->
+  <!--  Font  -->
   <link 
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" 
     rel="stylesheet"
   >
   
   <style>
-    /* 1) Global "Web3" styling with a gradient background */
+    
     body {
       background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       color: #FFFFFF;
@@ -25,14 +25,14 @@
       min-height: 100vh;
     }
 
-    /* 2) Active tab with a glowing bottom border */
+    /*  Active tab  */
     .active-tab {
       border-bottom: 2px solid #18FFF7; 
       font-weight: bold;
       transition: all 0.2s ease-in-out;
     }
 
-    /* 3) Some custom status labels with a slight glow */
+    /*  status labels */
     .status-live {
       background-color: #4CAF50; /* Green */
       color: white;
@@ -58,27 +58,27 @@
       box-shadow: 0 0 5px rgba(63, 81, 181, 0.6);
     }
 
-    /* 4) Disabled button styling */
+    /*  Disabled  */
     .disabled-button {
       background-color: #4A5568; /* Gray */
       cursor: not-allowed;
       opacity: 0.5;
     }
 
-    /* 5) Hide results initially */
+    /*  Hide results  */
     #results {
       display: none;
     }
 
-    /* 6) Fancy hover transitions for nav buttons */
+    /* nav buttons */
     .sale-tab {
       transition: color 0.2s ease-in-out;
     }
     .sale-tab:hover {
-      color: #18FFF7; /* Glow color on hover */
+      color: #18FFF7; /*  on hover */
     }
 
-    /* 7) "Connect Wallet" in a neon style */
+    /* "Connect Wallet" */
     .neon-button {
       border: 1px solid #18FFF7;
       position: relative;
@@ -145,7 +145,7 @@
 
       <!-- Right Section: Connect Wallet -->
       <div class="mt-4 lg:mt-0">
-        <!-- "Connect Wallet" but it's "Coming Soon" -->
+        <!-- "Connect Wallet"  -->
         <button
           class="neon-button py-2 px-4 text-white rounded"
           onclick="alert('Coming Soon!')"
@@ -166,14 +166,14 @@
       Token Overview
     </h2>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Below are all tokens and their ROI from ICO price (in %):
+      Below are all Legion ICOs and their current ROI (in %):
     </p>
 
-    <!-- Modern list instead of table -->
+    <!--  list  -->
     <div id="overviewList" class="space-y-4"></div>
   </div>
 
-  <!-- MAIN TOKEN SALE CONTAINER -->
+  <!-- SALE CONTAINER -->
   <div 
     id="mainSaleContainer"
     class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
@@ -183,7 +183,7 @@
       Fuel
     </h1>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your initial ICO investment to calculate your current ROI for 
+      Enter your initial approval amount or connect your wallet to calculate your current value for 
       <span id="tokenName">Fuel Token</span>
     </p>
 
@@ -239,7 +239,7 @@
   </footer>
 
   <script>
-    // Toggle mobile menu
+    // mobile menu
     const mobileMenuToggle = document.getElementById("mobileMenuToggle");
     const navTabs = document.getElementById("navTabs");
     mobileMenuToggle.addEventListener("click", () => {
@@ -298,11 +298,11 @@
       }
     };
 
-    // Default page => Overview
+    // Overview
     let currentSale = 'overview';
 
-    // Cache config
-    const CACHE_TTL = 60000; // 60s for demonstration
+    // Cache c
+    const CACHE_TTL = 120000; // 
     let cachedFuelData = null;
     let cachedFuelTimestamp = null;
 
@@ -311,7 +311,7 @@
       currentSale = sale;
 
       if (sale === 'overview') {
-        // Mark "overview" as active
+        
         document
           .querySelectorAll(".sale-tab")
           .forEach((tab) => tab.classList.remove("active-tab"));
@@ -319,15 +319,14 @@
           .querySelector(`[onclick="switchSale('overview')"]`)
           .classList.add("active-tab");
 
-        // Hide main sale, show overview
+        //  show overview
         document.getElementById("mainSaleContainer").style.display = "none";
         document.getElementById("overviewSection").style.display = "block";
 
-        // Build the overview
         showOverview();
         return;
       } else {
-        // If not overview, hide that container, show main sale
+        // show main sale
         document.getElementById("overviewSection").style.display = "none";
         document.getElementById("mainSaleContainer").style.display = "block";
       }
@@ -344,7 +343,7 @@
         .querySelector(`[onclick="switchSale('${sale}')"]`)
         .classList.add("active-tab");
 
-      // Update headings, etc.
+      // Update headings
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
@@ -438,7 +437,7 @@
       // 1) Fuel FIRST
       const fuelData = sales['fuel'];
       if (fuelData && fuelData.isTradable) {
-        // Check if we have cached data & it's still fresh
+        // Check cache
         if (
           cachedFuelData &&
           cachedFuelTimestamp &&
@@ -448,7 +447,7 @@
           console.log("Using cached Fuel data");
           displayFuelROI(cachedFuelData);
         } else {
-          // Otherwise, fetch new data
+          //  fetch new data
           console.log("Fetching new Fuel data");
           fetch("/calculate", {
             method: "POST",
@@ -473,7 +472,6 @@
         addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
       }
 
-      // 2) The rest
       const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
       otherTokens.forEach((tokenKey) => {
         const tokenData = sales[tokenKey];
@@ -483,7 +481,7 @@
       });
     }
 
-    // Called by showOverview() after we confirm Fuel data is valid
+    // Called by showOverview()
     function displayFuelROI(data) {
       const fuelData = sales['fuel'];
       // ROI% Calculation => ((current_price - seedPrice)/seedPrice) * 100
@@ -493,18 +491,15 @@
       addOverviewItem(fuelData.title, `${pctGain.toFixed(2)}%`, roiClass);
     }
 
-    // Create a modern "card-like" row
     function addOverviewItem(tokenName, roiText, colorClass) {
       const overviewList = document.getElementById("overviewList");
       const row = document.createElement('div');
       row.className = "flex justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
 
-      // Left side: token name
       const nameEl = document.createElement('span');
       nameEl.className = "font-semibold";
       nameEl.textContent = tokenName;
 
-      // Right side: ROI text with color
       const roiEl = document.createElement('span');
       roiEl.className = colorClass;
       roiEl.textContent = roiText;
@@ -514,7 +509,6 @@
       overviewList.appendChild(row);
     }
 
-    // Start on "overview"
     switchSale(currentSale);
   </script>
 </body>
