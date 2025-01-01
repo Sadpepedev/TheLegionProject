@@ -60,52 +60,58 @@
 
       <!-- Navigation Tabs -->
       <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
-        <button class="sale-tab" onclick="switchSale('fuel')">
-          Fuel <span class="status-live">Live</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('almanak')">
-          Almanak <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('pulse')">
-          Pulse <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('silencio')">
-          Silencio <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('enclave')">
-          Enclave <span class="status-ico">ICO Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('corn')">
-          Corn <span class="status-ico">ICO Soon</span>
-        </button>
+        <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
+        <button class="sale-tab" onclick="switchSale('fuel')">Fuel <span class="status-live">Live</span></button>
+        <button class="sale-tab" onclick="switchSale('almanak')">Almanak <span class="status-soon">Trading Soon</span></button>
+        <button class="sale-tab" onclick="switchSale('pulse')">Pulse <span class="status-soon">Trading Soon</span></button>
+        <button class="sale-tab" onclick="switchSale('silencio')">Silencio <span class="status-soon">Trading Soon</span></button>
+        <button class="sale-tab" onclick="switchSale('enclave')">Enclave <span class="status-ico">ICO Soon</span></button>
+        <button class="sale-tab" onclick="switchSale('corn')">Corn <span class="status-ico">ICO Soon</span></button>
       </div>
     </div>
   </nav>
 
   <!-- Main Content -->
   <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl">
-    <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6">Fuel</h1>
-    <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your initial ICO investment to calculate your current ROI for <span id="tokenName">Fuel Token</span>
-    </p>
+    <!-- Overview Tab -->
+    <div id="overviewTab" class="hidden">
+      <h1 class="text-3xl font-extrabold text-center mb-6">Overview</h1>
+      <table class="w-full text-center table-auto text-gray-300">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Token</th>
+            <th class="px-4 py-2">ROI (%)</th>
+          </tr>
+        </thead>
+        <tbody id="overviewTable"></tbody>
+      </table>
+    </div>
 
-    <!-- ROI Form -->
-    <form onsubmit="calculateROI(event)">
-      <div class="mb-6">
-        <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
-        <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
-      </div>
-      <p class="text-sm text-center mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span> 
+    <!-- Token-Specific Tab -->
+    <div id="tokenTab" class="block">
+      <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6">Fuel</h1>
+      <p class="text-sm text-center text-gray-400 mb-8">
+        Enter your initial ICO investment to calculate your current ROI for <span id="tokenName">Fuel Token</span>
       </p>
 
-      <button id="calculateButton" type="submit" class="w-full py-3 rounded font-bold text-white shadow-md">
-        Calculate
-      </button>
-    </form>
+      <!-- ROI Form -->
+      <form onsubmit="calculateROI(event)">
+        <div class="mb-6">
+          <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
+          <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
+        </div>
+        <p class="text-sm text-center mb-6">
+          <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span> 
+        </p>
 
-    <!-- Results Section -->
-    <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
+        <button id="calculateButton" type="submit" class="w-full py-3 rounded font-bold text-white shadow-md">
+          Calculate
+        </button>
+      </form>
+
+      <!-- Results Section -->
+      <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -177,87 +183,63 @@
       }
     };
 
-    let currentSale = "fuel";
+    let currentSale = "overview";
 
-    function switchSale(sale) {
-      currentSale = sale;
-      const saleData = sales[sale];
-
-      document.getElementById("saleTitle").textContent = saleData.title;
-      document.getElementById("tokenName").textContent = saleData.tokenName;
-
-      document.getElementById("seedPrice").textContent =
-        typeof saleData.seedPrice === "string"
-          ? saleData.seedPrice
-          : `$${saleData.seedPrice.toFixed(4)}`;
-
-      const calculateButton = document.getElementById("calculateButton");
-      if (!saleData.isTradable) {
-        calculateButton.disabled = true;
-        calculateButton.classList.add("disabled-button");
-        calculateButton.classList.remove("bg-red-600");
-      } else {
-        calculateButton.disabled = false;
-        calculateButton.classList.remove("disabled-button");
-        calculateButton.classList.add("bg-red-600");
-      }
-
-      document.getElementById("saleTitle").style.color = saleData.fontColor;
-      calculateButton.style.backgroundColor = saleData.buttonColor;
-
-      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
-      document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
-
-      document.getElementById("results").style.display = "none"; // Hide results on tab switch
-      document.getElementById("investment").value = "";
-    }
-
-    async function calculateROI(event) {
-      event.preventDefault();
-
-      const investment = parseFloat(document.getElementById("investment").value);
-      const saleData = sales[currentSale];
-
-      if (isNaN(investment) || investment <= 0) {
-        alert("Please enter a valid investment amount.");
-        return;
-      }
-
-      if (!saleData.isTradable) {
-        document.getElementById("results").style.display = "block";
-        document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
-          <p class="text-lg text-gray-400">Current Value: <span class="text-white">Not Applicable</span></p>
-        `;
-        return;
-      }
-
+    async function fetchROI(token, seedPrice) {
       try {
         const response = await fetch("/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
+          body: JSON.stringify({ round_price: seedPrice }),
         });
 
         const data = await response.json();
-        if (data.error) {
-          alert(data.error);
-        } else {
-          document.getElementById("results").style.display = "block"; // Show results on calculation
-          document.getElementById("results").innerHTML = `
-            <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
-            <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
-            <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
-            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">Current Value: $${data.roi_value.toFixed(2)}</p>
-          `;
-        }
+        if (data.error) return "Error";
+        const roi = ((data.current_price / seedPrice - 1) * 100).toFixed(2);
+        return `${roi}%`;
       } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred while calculating ROI.");
+        console.error("Error fetching ROI:", error);
+        return "Error";
       }
     }
 
-    switchSale(currentSale);
+    async function populateOverview() {
+      const tableBody = document.getElementById("overviewTable");
+      tableBody.innerHTML = ""; 
+
+      for (const key in sales) {
+        const sale = sales[key];
+        const row = document.createElement("tr");
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = sale.title;
+        row.appendChild(nameCell);
+
+        const roiCell = document.createElement("td");
+        roiCell.textContent = sale.isTradable ? await fetchROI(sale.title, sale.seedPrice) : "Coming Soon";
+        row.appendChild(roiCell);
+
+        tableBody.appendChild(row);
+      }
+    }
+
+    function switchSale(sale) {
+      currentSale = sale;
+      if (sale === "overview") {
+        document.getElementById("overviewTab").classList.remove("hidden");
+        document.getElementById("tokenTab").classList.add("hidden");
+        populateOverview();
+      } else {
+        document.getElementById("overviewTab").classList.add("hidden");
+        document.getElementById("tokenTab").classList.remove("hidden");
+        const saleData = sales[sale];
+        document.getElementById("saleTitle").textContent = saleData.title;
+        document.getElementById("seedPrice").textContent = typeof saleData.seedPrice === "string" ? saleData.seedPrice : `$${saleData.seedPrice}`;
+      }
+    }
+
+    switchSale("overview");
   </script>
 </body>
 </html>
+
