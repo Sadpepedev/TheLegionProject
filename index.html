@@ -250,6 +250,13 @@
     // Default page => Overview
     let currentSale = 'overview';
 
+    // ======================
+    //  CACHING CONFIG
+    // ======================
+    const CACHE_TTL = 60000; // 60 seconds
+    let cachedFuelData = null;
+    let cachedFuelTimestamp = null;
+
     // Switch pages
     function switchSale(sale) {
       currentSale = sale;
@@ -361,9 +368,6 @@
               Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
             </p>
             <p class="text-lg text-gray-400">
-              Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span>
-            </p>
-            <p class="text-lg text-gray-400">
               Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
             </p>
             <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
@@ -385,33 +389,37 @@
       // 1) Fuel FIRST
       const fuelData = sales['fuel'];
       if (fuelData && fuelData.isTradable) {
-        // If Fuel is live, fetch from your API with a $100 example
-        fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (!data.error) {
-              /*
-                ROI% Calculation: 
-                e.g., ((current_price - seedPrice) / seedPrice) * 100
-              */
-              const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
-
-              // Decide color class
-              let roiClass = 'text-green-400';
-              if (pctGain < 0) roiClass = 'text-red-500';
-
-              addOverviewItem(fuelData.title, `${pctGain.toFixed(2)}%`, roiClass);
-            } else {
-              addOverviewItem(fuelData.title, 'Error', 'text-red-500');
-            }
+        // Check if we have cached data & it's still fresh
+        if (
+          cachedFuelData &&
+          cachedFuelTimestamp &&
+          Date.now() - cachedFuelTimestamp < CACHE_TTL
+        ) {
+          // Use cached data
+          console.log("Using cached Fuel data");
+          displayFuelROI(cachedFuelData);
+        } else {
+          // Otherwise, fetch new data
+          console.log("Fetching new Fuel data");
+          fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
           })
-          .catch(() => {
-            addOverviewItem(fuelData.title, 'Error', 'text-red-500');
-          });
+            .then((res) => res.json())
+            .then((data) => {
+              if (!data.error) {
+                cachedFuelData = data;                // store in cache
+                cachedFuelTimestamp = Date.now();     // update timestamp
+                displayFuelROI(data);
+              } else {
+                addOverviewItem(fuelData.title, 'Error', 'text-red-500');
+              }
+            })
+            .catch(() => {
+              addOverviewItem(fuelData.title, 'Error', 'text-red-500');
+            });
+        }
       } else {
         addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
       }
@@ -424,6 +432,16 @@
         // Always "Coming Soon"
         addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
       });
+    }
+
+    // Called by showOverview() after we confirm Fuel data is valid
+    function displayFuelROI(data) {
+      const fuelData = sales['fuel'];
+      // ROI% Calculation => ((current_price - seedPrice)/seedPrice) * 100
+      const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
+      let roiClass = 'text-green-400';
+      if (pctGain < 0) roiClass = 'text-red-500';
+      addOverviewItem(fuelData.title, `${pctGain.toFixed(2)}%`, roiClass);
     }
 
     // Create a modern "card-like" row
