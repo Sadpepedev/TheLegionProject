@@ -356,12 +356,13 @@
           alert(data.error);
         } else {
           document.getElementById("results").style.display = "block";
+          /* 
+             Removed the "Seed Round Price" line here,
+             so we only show these three lines instead:
+          */
           document.getElementById("results").innerHTML = `
             <p class="text-lg text-gray-400">
               Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
-            </p>
-            <p class="text-lg text-gray-400">
-              Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span>
             </p>
             <p class="text-lg text-gray-400">
               Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
@@ -452,3 +453,4 @@
   </script>
 </body>
 </html>
+
