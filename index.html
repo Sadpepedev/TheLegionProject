@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>The Legion Project</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
@@ -45,6 +45,7 @@
     }
   </style>
 </head>
+
 <body class="font-sans">
   <!-- Top Bar Navigation -->
   <nav class="bg-gray-900 text-white shadow-md">
@@ -52,14 +53,28 @@
       <!-- Hamburger Menu for Mobile -->
       <div class="block lg:hidden">
         <button id="mobileMenuToggle" class="text-white focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            class="h-6 w-6" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              stroke-width="2" 
+              d="M4 6h16M4 12h16M4 18h16" 
+            />
           </svg>
         </button>
       </div>
 
       <!-- Navigation Tabs -->
       <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
+        <!-- Overview first -->
+        <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
+
         <button class="sale-tab" onclick="switchSale('fuel')">
           Fuel <span class="status-live">Live</span>
         </button>
@@ -82,24 +97,57 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl">
+  <!-- OVERVIEW SECTION -->
+  <div
+    id="overviewSection"
+    class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl"
+    style="display: none;"
+  >
+    <h2 class="text-3xl font-extrabold text-center mb-6">Token Overview</h2>
+    <p class="text-sm text-center text-gray-400 mb-8">
+      Below are all tokens and their ROI from ICO price (in %):
+    </p>
+
+    <!-- Modern list instead of table -->
+    <div id="overviewList" class="space-y-4"></div>
+  </div>
+
+  <!-- MAIN TOKEN SALE CONTAINER -->
+  <div 
+    id="mainSaleContainer"
+    class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl"
+  >
     <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6">Fuel</h1>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your initial ICO investment to calculate your current ROI for <span id="tokenName">Fuel Token</span>
+      Enter your initial ICO investment to calculate your current ROI for 
+      <span id="tokenName">Fuel Token</span>
     </p>
 
     <!-- ROI Form -->
     <form onsubmit="calculateROI(event)">
       <div class="mb-6">
-        <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
-        <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
+        <label 
+          for="investment" 
+          class="block text-gray-200 text-center font-semibold"
+        >
+          Initial Investment ($):
+        </label>
+        <input 
+          type="number" 
+          id="investment" 
+          class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" 
+          placeholder="Enter your investment"
+        >
       </div>
       <p class="text-sm text-center mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span> 
+        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span>
       </p>
 
-      <button id="calculateButton" type="submit" class="w-full py-3 rounded font-bold text-white shadow-md">
+      <button 
+        id="calculateButton" 
+        type="submit" 
+        class="w-full py-3 rounded font-bold text-white shadow-md"
+      >
         Calculate
       </button>
     </form>
@@ -108,24 +156,32 @@
     <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
   </div>
 
-  <!-- Footer -->
+  <!-- FOOTERS -->
   <footer class="mt-10 text-center text-gray-500">
-    Built by <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">Sadpepe.exe</a>
+    Built by 
+    <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">
+      Sadpepe.exe
+    </a>
   </footer>
 
   <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
-    <p>Price data provided by <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">CoinGecko</a>.</p>
+    <p>
+      Price data provided by 
+      <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">
+        CoinGecko
+      </a>.
+    </p>
   </footer>
 
   <script>
+    // Toggle mobile menu
     const mobileMenuToggle = document.getElementById("mobileMenuToggle");
     const navTabs = document.getElementById("navTabs");
-
-    // Toggle hamburger menu for mobile
     mobileMenuToggle.addEventListener("click", () => {
       navTabs.classList.toggle("hidden");
     });
 
+    // All tokens
     const sales = {
       fuel: {
         title: "Fuel",
@@ -177,20 +233,59 @@
       }
     };
 
-    let currentSale = "fuel";
+    // Default page => Overview
+    let currentSale = 'overview';
 
+    // Switch pages
     function switchSale(sale) {
       currentSale = sale;
-      const saleData = sales[sale];
 
+      if (sale === 'overview') {
+        // Mark "overview" as active
+        document
+          .querySelectorAll(".sale-tab")
+          .forEach((tab) => tab.classList.remove("active-tab"));
+        document
+          .querySelector(`[onclick="switchSale('overview')"]`)
+          .classList.add("active-tab");
+
+        // Hide main sale, show overview
+        document.getElementById("mainSaleContainer").style.display = "none";
+        document.getElementById("overviewSection").style.display = "block";
+
+        // Build the overview
+        showOverview();
+        return;
+      } else {
+        // If not overview, hide that container, show main sale
+        document.getElementById("overviewSection").style.display = "none";
+        document.getElementById("mainSaleContainer").style.display = "block";
+      }
+
+      // Normal token logic
+      const saleData = sales[sale];
+      if (!saleData) return;
+
+      // Highlight correct tab
+      document
+        .querySelectorAll(".sale-tab")
+        .forEach((tab) => tab.classList.remove("active-tab"));
+      document
+        .querySelector(`[onclick="switchSale('${sale}')"]`)
+        .classList.add("active-tab");
+
+      // Update headings, etc.
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
-      document.getElementById("seedPrice").textContent =
-        typeof saleData.seedPrice === "string"
-          ? saleData.seedPrice
-          : `$${saleData.seedPrice.toFixed(4)}`;
+      // Display seed price
+      if (typeof saleData.seedPrice === "string") {
+        document.getElementById("seedPrice").textContent = saleData.seedPrice;
+      } else {
+        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`;
+      }
 
+      // Enable or disable the Calculate button
       const calculateButton = document.getElementById("calculateButton");
       if (!saleData.isTradable) {
         calculateButton.disabled = true;
@@ -205,13 +300,12 @@
       document.getElementById("saleTitle").style.color = saleData.fontColor;
       calculateButton.style.backgroundColor = saleData.buttonColor;
 
-      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
-      document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
-
-      document.getElementById("results").style.display = "none"; // Hide results on tab switch
+      // Reset results
+      document.getElementById("results").style.display = "none";
       document.getElementById("investment").value = "";
     }
 
+    // ROI calculation
     async function calculateROI(event) {
       event.preventDefault();
 
@@ -223,11 +317,16 @@
         return;
       }
 
+      // If not tradable, show "Not Available"
       if (!saleData.isTradable) {
         document.getElementById("results").style.display = "block";
         document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
-          <p class="text-lg text-gray-400">Current Value: <span class="text-white">Not Applicable</span></p>
+          <p class="text-lg text-gray-400">
+            Current Token Price: <span class="text-white">Not Available</span>
+          </p>
+          <p class="text-lg text-gray-400">
+            Current Value: <span class="text-white">Not Applicable</span>
+          </p>
         `;
         return;
       }
@@ -238,17 +337,24 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
         });
-
         const data = await response.json();
         if (data.error) {
           alert(data.error);
         } else {
-          document.getElementById("results").style.display = "block"; // Show results on calculation
+          document.getElementById("results").style.display = "block";
           document.getElementById("results").innerHTML = `
-            <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
-            <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
-            <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
-            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">Current Value: $${data.roi_value.toFixed(2)}</p>
+            <p class="text-lg text-gray-400">
+              Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
+            </p>
+            <p class="text-lg text-gray-400">
+              Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span>
+            </p>
+            <p class="text-lg text-gray-400">
+              Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
+            </p>
+            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
+              Current Value: $${data.roi_value.toFixed(2)}
+            </p>
           `;
         }
       } catch (error) {
@@ -257,6 +363,69 @@
       }
     }
 
+    // Build the Overview list
+    function showOverview() {
+      const overviewList = document.getElementById("overviewList");
+      overviewList.innerHTML = '';
+
+      // 1) Fuel first
+      const fuelData = sales['fuel'];
+      if (fuelData && fuelData.isTradable) {
+        // If Fuel is live, fetch from your API with a $100 example
+        fetch("/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.error) {
+              // ROI% = (current_price / seedPrice)*100
+              const roiPercent = (data.current_price / fuelData.seedPrice) * 100;
+              addOverviewItem(fuelData.title, `${roiPercent.toFixed(2)}%`);
+            } else {
+              addOverviewItem(fuelData.title, 'Error');
+            }
+          })
+          .catch(() => {
+            addOverviewItem(fuelData.title, 'Error');
+          });
+      } else {
+        addOverviewItem('Fuel', 'Coming Soon');
+      }
+
+      // 2) The rest
+      const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
+      otherTokens.forEach((tokenKey) => {
+        const tokenData = sales[tokenKey];
+        if (!tokenData) return;
+        // Always "Coming Soon" for these
+        addOverviewItem(tokenData.title, 'Coming Soon');
+      });
+    }
+
+    // Create a modern "card-like" row
+    function addOverviewItem(tokenName, roiPercent) {
+      const overviewList = document.getElementById("overviewList");
+      const row = document.createElement('div');
+      row.className = "flex justify-between items-center px-4 py-3 bg-gray-800 rounded";
+
+      // Left side: token name
+      const nameEl = document.createElement('span');
+      nameEl.className = "font-semibold";
+      nameEl.textContent = tokenName;
+
+      // Right side: ROI in percent
+      const roiEl = document.createElement('span');
+      roiEl.className = "text-blue-400"; 
+      roiEl.textContent = roiPercent;
+
+      row.appendChild(nameEl);
+      row.appendChild(roiEl);
+      overviewList.appendChild(row);
+    }
+
+    // Start on "overview"
     switchSale(currentSale);
   </script>
 </body>
