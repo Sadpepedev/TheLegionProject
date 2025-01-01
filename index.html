@@ -1,263 +1,381 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Legion Project</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
-  <style>
-    body {
-      background-color: #000000;
-      color: #FFFFFF;
-    }
-    .active-tab {
-      border-bottom: 2px solid #FF0000;
-      font-weight: bold;
-    }
-    .status-live {
-      background-color: #4CAF50; /* Green */
-      color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-    .status-soon {
-      background-color: #FF9800; /* Orange */
-      color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-    .status-ico {
-      background-color: #3F51B5; /* Blue */
-      color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-    .disabled-button {
-      background-color: #4A5568; /* Gray */
-      cursor: not-allowed;
-    }
-    #results {
-      display: none; /* Hide results initially */
-    }
-  </style>
-</head>
-<body class="font-sans">
-  <!-- Top Bar Navigation -->
-  <nav class="bg-gray-900 text-white shadow-md">
-    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
-      <!-- Hamburger Menu for Mobile -->
-      <div class="block lg:hidden">
-        <button id="mobileMenuToggle" class="text-white focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
+ 1 <!DOCTYPE html>
+ 2 <html lang="en">
+ 3 <head>
+ 4   <meta charset="UTF-8">
+ 5   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 6   <title>The Legion Project</title>
+ 7   <script src="https://cdn.tailwindcss.com"></script>
+ 8   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+ 9   <style>
+10     body {
+11       background-color: #000000;
+12       color: #FFFFFF;
+13     }
+14     .active-tab {
+15       border-bottom: 2px solid #FF0000;
+16       font-weight: bold;
+17     }
+18     .status-live {
+19       background-color: #4CAF50; /* Green */
+20       color: white;
+21       padding: 2px 6px;
+22       border-radius: 4px;
+23       font-size: 12px;
+24     }
+25     .status-soon {
+26       background-color: #FF9800; /* Orange */
+27       color: white;
+28       padding: 2px 6px;
+29       border-radius: 4px;
+30       font-size: 12px;
+31     }
+32     .status-ico {
+33       background-color: #3F51B5; /* Blue */
+34       color: white;
+35       padding: 2px 6px;
+36       border-radius: 4px;
+37       font-size: 12px;
+38     }
+39     .disabled-button {
+40       background-color: #4A5568; /* Gray */
+41       cursor: not-allowed;
+42     }
+43     #results {
+44       display: none; /* Hide results initially */
+45     }
+46   </style>
+47 </head>
+48 <body class="font-sans">
+49   <!-- Top Bar Navigation -->
+50   <nav class="bg-gray-900 text-white shadow-md">
+51     <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
+52       <!-- Hamburger Menu for Mobile -->
+53       <div class="block lg:hidden">
+54         <button id="mobileMenuToggle" class="text-white focus:outline-none">
+55           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+56             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+57           </svg>
+58         </button>
+59       </div>
 
-      <!-- Navigation Tabs -->
-      <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
-        <button class="sale-tab" onclick="switchSale('fuel')">
-          Fuel <span class="status-live">Live</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('almanak')">
-          Almanak <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('pulse')">
-          Pulse <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('silencio')">
-          Silencio <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('enclave')">
-          Enclave <span class="status-ico">ICO Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('corn')">
-          Corn <span class="status-ico">ICO Soon</span>
-        </button>
-      </div>
-    </div>
-  </nav>
+60       <!-- Navigation Tabs -->
+61       <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
+62         <button class="sale-tab" onclick="switchSale('fuel')">
+63           Fuel <span class="status-live">Live</span>
+64         </button>
+65         <button class="sale-tab" onclick="switchSale('almanak')">
+66           Almanak <span class="status-soon">Trading Soon</span>
+67         </button>
+68         <button class="sale-tab" onclick="switchSale('pulse')">
+69           Pulse <span class="status-soon">Trading Soon</span>
+70         </button>
+71         <button class="sale-tab" onclick="switchSale('silencio')">
+72           Silencio <span class="status-soon">Trading Soon</span>
+73         </button>
+74         <button class="sale-tab" onclick="switchSale('enclave')">
+75           Enclave <span class="status-ico">ICO Soon</span>
+76         </button>
+77         <button class="sale-tab" onclick="switchSale('corn')">
+78           Corn <span class="status-ico">ICO Soon</span>
+79         </button>
+80       </div>
+81     </div>
+82   </nav>
 
-  <!-- Main Content -->
-  <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl">
-    <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6">Fuel</h1>
-    <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your initial ICO investment to calculate your current ROI for <span id="tokenName">Fuel Token</span>
-    </p>
+83   <!-- Main Content -->
+84   <div class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl">
+85     <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6">Fuel</h1>
+86     <p class="text-sm text-center text-gray-400 mb-8">
+87       Enter your initial ICO investment to calculate your current ROI for <span id="tokenName">Fuel Token</span>
+88     </p>
 
-    <!-- ROI Form -->
-    <form onsubmit="calculateROI(event)">
-      <div class="mb-6">
-        <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
-        <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
-      </div>
-      <p class="text-sm text-center mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span> 
-      </p>
+89     <!-- ROI Form -->
+90     <form onsubmit="calculateROI(event)">
+91       <div class="mb-6">
+92         <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
+93         <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
+94       </div>
+95       <p class="text-sm text-center mb-6">
+96         <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span>
+97       </p>
 
-      <button id="calculateButton" type="submit" class="w-full py-3 rounded font-bold text-white shadow-md">
-        Calculate
-      </button>
-    </form>
+98       <button id="calculateButton" type="submit" class="w-full py-3 rounded font-bold text-white shadow-md">
+99         Calculate
+100       </button>
+101     </form>
 
-    <!-- Results Section -->
-    <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
-  </div>
+102     <!-- Results Section -->
+103     <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
+104   </div>
 
-  <!-- Footer -->
-  <footer class="mt-10 text-center text-gray-500">
-    Built by <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">Sadpepe.exe</a>
-  </footer>
+105   <!-- Footer -->
+106   <footer class="mt-10 text-center text-gray-500">
+107     Built by <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">Sadpepe.exe</a>
+108   </footer>
 
-  <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
-    <p>Price data provided by <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">CoinGecko</a>.</p>
-  </footer>
+109   <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
+110     <p>Price data provided by <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">CoinGecko</a>.</p>
+111   </footer>
 
-  <script>
-    const mobileMenuToggle = document.getElementById("mobileMenuToggle");
-    const navTabs = document.getElementById("navTabs");
+112   <script>
+113     const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+114     const navTabs = document.getElementById("navTabs");
 
-    // Toggle hamburger menu for mobile
-    mobileMenuToggle.addEventListener("click", () => {
-      navTabs.classList.toggle("hidden");
-    });
+115     // Toggle hamburger menu for mobile
+116     mobileMenuToggle.addEventListener("click", () => {
+117       navTabs.classList.toggle("hidden");
+118     });
 
-    const sales = {
-      fuel: {
-        title: "Fuel",
-        tokenName: "Fuel Token",
-        seedPrice: 0.02,
-        isTradable: true,
-        fontColor: "#32CD32",
-        buttonColor: "#32CD32",
-      },
-      almanak: {
-        title: "Almanak",
-        tokenName: "Almanak Token",
-        seedPrice: 0.0435,
-        isTradable: false,
-        fontColor: "#FFFFFF",
-        buttonColor: "#4A5568",
-      },
-      pulse: {
-        title: "Pulse",
-        tokenName: "Pulse Token",
-        seedPrice: "Coming Soon",
-        isTradable: false,
-        fontColor: "#0000FF",
-        buttonColor: "#1E90FF",
-      },
-      silencio: {
-        title: "Silencio",
-        tokenName: "Silencio Token",
-        seedPrice: "Coming Soon",
-        isTradable: false,
-        fontColor: "#87CEEB",
-        buttonColor: "#4682B4",
-      },
-      enclave: {
-        title: "Enclave",
-        tokenName: "Enclave Token",
-        seedPrice: "ICO Soon",
-        isTradable: false,
-        fontColor: "#FFFFFF",
-        buttonColor: "#ADD8E6",
-      },
-      corn: {
-        title: "Corn",
-        tokenName: "Corn Token",
-        seedPrice: "ICO Soon",
-        isTradable: false,
-        fontColor: "#FFA500",
-        buttonColor: "#FF8C00",
-      }
-    };
+119     const sales = {
+120       fuel: {
+121         title: "Fuel",
+122         tokenName: "Fuel Token",
+123         seedPrice: 0.02,
+124         isTradable: true,
+125         fontColor: "#32CD32",
+126         buttonColor: "#32CD32",
+127       },
+128       almanak: {
+129         title: "Almanak",
+130         tokenName: "Almanak Token",
+131         seedPrice: 0.0435,
+132         isTradable: false,
+133         fontColor: "#FFFFFF",
+134         buttonColor: "#4A5568",
+135       },
+136       pulse: {
+137         title: "Pulse",
+138         tokenName: "Pulse Token",
+139         seedPrice: "Coming Soon",
+140         isTradable: false,
+141         fontColor: "#0000FF",
+142         buttonColor: "#1E90FF",
+143       },
+144       silencio: {
+145         title: "Silencio",
+146         tokenName: "Silencio Token",
+147         seedPrice: "Coming Soon",
+148         isTradable: false,
+149         fontColor: "#87CEEB",
+150         buttonColor: "#4682B4",
+151       },
+152       enclave: {
+153         title: "Enclave",
+154         tokenName: "Enclave Token",
+155         seedPrice: "ICO Soon",
+156         isTradable: false,
+157         fontColor: "#FFFFFF",
+158         buttonColor: "#ADD8E6",
+159       },
+160       corn: {
+161         title: "Corn",
+162         tokenName: "Corn Token",
+163         seedPrice: "ICO Soon",
+164         isTradable: false,
+165         fontColor: "#FFA500",
+166         buttonColor: "#FF8C00",
+167       }
+168     };
 
-    let currentSale = "fuel";
+169     let currentSale = "fuel";
 
-    function switchSale(sale) {
-      currentSale = sale;
-      const saleData = sales[sale];
+170     function switchSale(sale) {
+171       currentSale = sale;
+172       const saleData = sales[sale];
 
-      document.getElementById("saleTitle").textContent = saleData.title;
-      document.getElementById("tokenName").textContent = saleData.tokenName;
+173       document.getElementById("saleTitle").textContent = saleData.title;
+174       document.getElementById("tokenName").textContent = saleData.tokenName;
 
-      document.getElementById("seedPrice").textContent =
-        typeof saleData.seedPrice === "string"
-          ? saleData.seedPrice
-          : `$${saleData.seedPrice.toFixed(4)}`;
+175       document.getElementById("seedPrice").textContent =
+176         typeof saleData.seedPrice === "string"
+177           ? saleData.seedPrice
+178           : `$${saleData.seedPrice.toFixed(4)}`;
 
-      const calculateButton = document.getElementById("calculateButton");
-      if (!saleData.isTradable) {
-        calculateButton.disabled = true;
-        calculateButton.classList.add("disabled-button");
-        calculateButton.classList.remove("bg-red-600");
-      } else {
-        calculateButton.disabled = false;
-        calculateButton.classList.remove("disabled-button");
-        calculateButton.classList.add("bg-red-600");
-      }
+179       const calculateButton = document.getElementById("calculateButton");
+180       if (!saleData.isTradable) {
+181         calculateButton.disabled = true;
+182         calculateButton.classList.add("disabled-button");
+183         calculateButton.classList.remove("bg-red-600");
+184       } else {
+185         calculateButton.disabled = false;
+186         calculateButton.classList.remove("disabled-button");
+187         calculateButton.classList.add("bg-red-600");
+188       }
 
-      document.getElementById("saleTitle").style.color = saleData.fontColor;
-      calculateButton.style.backgroundColor = saleData.buttonColor;
+189       document.getElementById("saleTitle").style.color = saleData.fontColor;
+190       calculateButton.style.backgroundColor = saleData.buttonColor;
 
-      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
-      document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
+191       document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
+192       document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
 
-      document.getElementById("results").style.display = "none"; // Hide results on tab switch
-      document.getElementById("investment").value = "";
-    }
+193       document.getElementById("results").style.display = "none"; // Hide results on tab switch
+194       document.getElementById("investment").value = "";
+195     }
 
-    async function calculateROI(event) {
-      event.preventDefault();
+196     async function calculateROI(event) {
+197       event.preventDefault();
 
-      const investment = parseFloat(document.getElementById("investment").value);
-      const saleData = sales[currentSale];
+198       const investment = parseFloat(document.getElementById("investment").value);
+199       const saleData = sales[currentSale];
 
-      if (isNaN(investment) || investment <= 0) {
-        alert("Please enter a valid investment amount.");
-        return;
-      }
+200       if (isNaN(investment) || investment <= 0) {
+201         alert("Please enter a valid investment amount.");
+202         return;
+203       }
 
-      if (!saleData.isTradable) {
-        document.getElementById("results").style.display = "block";
-        document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
-          <p class="text-lg text-gray-400">Current Value: <span class="text-white">Not Applicable</span></p>
-        `;
-        return;
-      }
+204       if (!saleData.isTradable) {
+205         document.getElementById("results").style.display = "block";
+206         document.getElementById("results").innerHTML = `
+207           <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">Not Available</span></p>
+208           <p class="text-lg text-gray-400">Current Value: <span class="text-white">Not Applicable</span></p>
+209         `;
+210         return;
+211       }
 
-      try {
-        const response = await fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
-        });
+212       try {
+213         const response = await fetch("/calculate", {
+214           method: "POST",
+215           headers: { "Content-Type": "application/json" },
+216           body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
+217         });
 
-        const data = await response.json();
-        if (data.error) {
-          alert(data.error);
-        } else {
-          document.getElementById("results").style.display = "block"; // Show results on calculation
-          document.getElementById("results").innerHTML = `
-            <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
-            <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
-            <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
-            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">Current Value: $${data.roi_value.toFixed(2)}</p>
-          `;
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred while calculating ROI.");
-      }
-    }
+218         const data = await response.json();
+219         if (data.error) {
+220           alert(data.error);
+221         } else {
+222           document.getElementById("results").style.display = "block"; // Show results on calculation
+223           document.getElementById("results").innerHTML = `
+224             <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
+225             <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
+226             <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
+227             <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">Current Value: $${data.roi_value.toFixed(2)}</p>
+228           `;
+229         }
+230       } catch (error) {
+231         console.error("Error:", error);
+232         alert("An error occurred while calculating ROI.");
+233       }
+234     }
 
-    switchSale(currentSale);
-  </script>
-</body>
-</html>
+235     switchSale(currentSale);
+236   </script>
+237   <!-- End of original script -->
+238 
+239   <!-- =========== NEW LINES BELOW, INSERTED BEFORE THE CLOSING BODY TAG =========== -->
+240   <script>
+241   window.addEventListener('DOMContentLoaded', function() {
+242     // Grab the navTabs container
+243     const navTabsContainer = document.getElementById("navTabs");
+244     if (navTabsContainer) {
+245       // Create the new "Overview" tab button
+246       const overviewButton = document.createElement('button');
+247       overviewButton.className = 'sale-tab';
+248       overviewButton.textContent = 'Overview';
+249       overviewButton.setAttribute('onclick', "switchSale('overview')");
+250       // Append it to the navTabs
+251       navTabsContainer.appendChild(overviewButton);
+252     }
+253   });
+254   </script>
+255 
+256   <!-- Overview Section (initially hidden) -->
+257   <div id="overviewSection" class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl hidden">
+258     <h2 class="text-3xl font-extrabold text-center mb-6">Token Overview</h2>
+259     <p class="text-sm text-center text-gray-400 mb-8">Below are all tokens and their current ROI:</p>
+260     <div class="overflow-x-auto">
+261       <table class="min-w-full border border-gray-700">
+262         <thead>
+263           <tr class="bg-gray-800">
+264             <th class="px-4 py-2 text-left">Token</th>
+265             <th class="px-4 py-2 text-left">Current ROI</th>
+266           </tr>
+267         </thead>
+268         <tbody id="overviewTableBody"></tbody>
+269       </table>
+270     </div>
+271   </div>
+272 
+273   <script>
+274     // Preserve the original switchSale function reference
+275     const originalSwitchSale = switchSale;
+276 
+277     // Override switchSale to handle "overview" tab
+278     switchSale = function(sale) {
+279       if (sale === 'overview') {
+280         // Mark the new tab as active
+281         document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
+282         document.querySelector(`[onclick="switchSale('overview')"]`).classList.add("active-tab");
+283         
+284         // Hide the main ROI container
+285         const mainContainer = document.querySelector('.container.mx-auto.mt-12.px-6.py-8.bg-gray-900.rounded-lg.shadow-lg.max-w-2xl');
+286         if (mainContainer) {
+287           mainContainer.style.display = 'none';
+288         }
+289 
+290         // Show the overview section
+291         document.getElementById("overviewSection").classList.remove("hidden");
+292 
+293         // Populate the overview table
+294         showOverview();
+295       } else {
+296         // If not "overview," hide the overview and restore original container
+297         document.getElementById("overviewSection").classList.add("hidden");
+298         const mainContainer = document.querySelector('.container.mx-auto.mt-12.px-6.py-8.bg-gray-900.rounded-lg.shadow-lg.max-w-2xl');
+299         if (mainContainer) {
+300           mainContainer.style.display = 'block';
+301         }
+302         // Call the original function
+303         originalSwitchSale(sale);
+304       }
+305     };
+306 
+307     // Build the "overview" table
+308     function showOverview() {
+309       const tableBody = document.getElementById("overviewTableBody");
+310       tableBody.innerHTML = '';
+311 
+312       // Loop through all tokens
+313       Object.keys(sales).forEach((tokenKey) => {
+314         const tokenData = sales[tokenKey];
+315         if (!tokenData) return;
+316 
+317         // Only 'fuel' is live and will hit the existing API
+318         if (tokenKey === 'fuel') {
+319           fetch("/calculate", {
+320             method: "POST",
+321             headers: { "Content-Type": "application/json" },
+322             body: JSON.stringify({ investment: 100, round_price: tokenData.seedPrice }),
+323           })
+324           .then(response => response.json())
+325           .then(data => {
+326             if (!data.error) {
+327               addOverviewRow(tokenData.title, `$${data.roi_value.toFixed(2)}`);
+328             } else {
+329               addOverviewRow(tokenData.title, 'Error');
+330             }
+331           })
+332           .catch(() => {
+333             addOverviewRow(tokenData.title, 'Error');
+334           });
+335         } else {
+336           // Show "Coming Soon" for all other tokens
+337           addOverviewRow(tokenData.title, 'Coming Soon');
+338         }
+339       });
+340     }
+341 
+342     // Helper to add a row to the table
+343     function addOverviewRow(tokenName, roiValue) {
+344       const tableBody = document.getElementById("overviewTableBody");
+345       const row = document.createElement('tr');
+346       row.innerHTML = `
+347         <td class="border border-gray-700 px-4 py-2">${tokenName}</td>
+348         <td class="border border-gray-700 px-4 py-2">${roiValue}</td>
+349       `;
+350       tableBody.appendChild(row);
+351     }
+352   </script>
+353   <!-- =========== END OF NEW LINES =========== -->
+354 
+355 </body>
+356 </html>
