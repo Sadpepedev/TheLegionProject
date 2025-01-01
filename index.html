@@ -52,8 +52,12 @@
       <!-- Hamburger Menu for Mobile -->
       <div class="block lg:hidden">
         <button id="mobileMenuToggle" class="text-white focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
@@ -93,13 +97,20 @@
     <form onsubmit="calculateROI(event)">
       <div class="mb-6">
         <label for="investment" class="block text-gray-200 text-center font-semibold">Initial Investment ($):</label>
-        <input type="number" id="investment" class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" placeholder="Enter your investment">
+        <input 
+          type="number" 
+          id="investment" 
+          class="w-full p-3 bg-gray-800 rounded text-center text-gray-200" 
+          placeholder="Enter your investment">
       </div>
       <p class="text-sm text-center mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span> 
+        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span>
       </p>
 
-      <button id="calculateButton" type="submit" class="w-full py-3 rounded font-bold text-white shadow-md">
+      <button 
+        id="calculateButton" 
+        type="submit" 
+        class="w-full py-3 rounded font-bold text-white shadow-md">
         Calculate
       </button>
     </form>
@@ -110,11 +121,16 @@
 
   <!-- Footer -->
   <footer class="mt-10 text-center text-gray-500">
-    Built by <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">Sadpepe.exe</a>
+    Built by <a href="https://x.com/Dustybeerbong" target="_blank" 
+               class="text-blue-400 hover:underline">Sadpepe.exe</a>
   </footer>
 
   <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
-    <p>Price data provided by <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">CoinGecko</a>.</p>
+    <p>Price data provided by 
+      <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">
+        CoinGecko
+      </a>.
+    </p>
   </footer>
 
   <script>
@@ -205,8 +221,12 @@
       document.getElementById("saleTitle").style.color = saleData.fontColor;
       calculateButton.style.backgroundColor = saleData.buttonColor;
 
-      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
-      document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
+      document
+        .querySelectorAll(".sale-tab")
+        .forEach((tab) => tab.classList.remove("active-tab"));
+      document
+        .querySelector(`[onclick="switchSale('${sale}')"]`)
+        .classList.add("active-tab");
 
       document.getElementById("results").style.display = "none"; // Hide results on tab switch
       document.getElementById("investment").value = "";
@@ -248,7 +268,9 @@
             <p class="text-lg text-gray-400">Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Seed Round Price: <span class="text-white">$${saleData.seedPrice.toFixed(2)}</span></p>
             <p class="text-lg text-gray-400">Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span></p>
-            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">Current Value: $${data.roi_value.toFixed(2)}</p>
+            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
+              Current Value: $${data.roi_value.toFixed(2)}
+            </p>
           `;
         }
       } catch (error) {
@@ -258,6 +280,137 @@
     }
 
     switchSale(currentSale);
+  </script>
+
+  <!-- =========== NEW LINES BELOW =========== -->
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // Grab the navTabs container
+      const navTabsContainer = document.getElementById("navTabs");
+      if (navTabsContainer) {
+        // Create the new "Overview" tab button
+        const overviewButton = document.createElement('button');
+        overviewButton.className = 'sale-tab';
+        overviewButton.textContent = 'Overview';
+        overviewButton.setAttribute('onclick', "switchSale('overview')");
+        // Append it to the navTabs
+        navTabsContainer.appendChild(overviewButton);
+      }
+    });
+  </script>
+
+  <!-- Overview Section (initially hidden) -->
+  <div
+    id="overviewSection"
+    class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl hidden"
+  >
+    <h2 class="text-3xl font-extrabold text-center mb-6">Token Overview</h2>
+    <p class="text-sm text-center text-gray-400 mb-8">
+      Below are all tokens and their current ROI:
+    </p>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-700">
+        <thead>
+          <tr class="bg-gray-800">
+            <th class="px-4 py-2 text-left">Token</th>
+            <th class="px-4 py-2 text-left">Current ROI</th>
+          </tr>
+        </thead>
+        <tbody id="overviewTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Preserve the original switchSale reference
+    const originalSwitchSale = switchSale;
+
+    // Override switchSale to handle "overview" tab
+    switchSale = function(sale) {
+      if (sale === 'overview') {
+        // Mark the new tab as active
+        document
+          .querySelectorAll(".sale-tab")
+          .forEach((tab) => tab.classList.remove("active-tab"));
+        document
+          .querySelector(`[onclick="switchSale('overview')"]`)
+          .classList.add("active-tab");
+
+        // Hide the main ROI container
+        const mainContainer = document.querySelector(
+          '.container.mx-auto.mt-12.px-6.py-8.bg-gray-900.rounded-lg.shadow-lg.max-w-2xl'
+        );
+        if (mainContainer) {
+          mainContainer.style.display = 'none';
+        }
+
+        // Show the overview section
+        document.getElementById("overviewSection").classList.remove("hidden");
+
+        // Populate the overview table
+        showOverview();
+      } else {
+        // If not "overview," hide the overview and restore original container
+        document.getElementById("overviewSection").classList.add("hidden");
+        const mainContainer = document.querySelector(
+          '.container.mx-auto.mt-12.px-6.py-8.bg-gray-900.rounded-lg.shadow-lg.max-w-2xl'
+        );
+        if (mainContainer) {
+          mainContainer.style.display = 'block';
+        }
+
+        // Call the original function
+        originalSwitchSale(sale);
+      }
+    };
+
+    // Build the "overview" table
+    function showOverview() {
+      const tableBody = document.getElementById("overviewTableBody");
+      tableBody.innerHTML = '';
+
+      // Loop through all tokens
+      Object.keys(sales).forEach((tokenKey) => {
+        const tokenData = sales[tokenKey];
+        if (!tokenData) return;
+
+        // Only 'fuel' is live and will hit the existing API
+        if (tokenKey === 'fuel') {
+          // Use a mock $100 investment for demonstration
+          fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ investment: 100, round_price: tokenData.seedPrice }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (!data.error) {
+              addOverviewRow(tokenData.title, `$${data.roi_value.toFixed(2)}`);
+            } else {
+              addOverviewRow(tokenData.title, 'Error');
+            }
+          })
+          .catch(() => {
+            addOverviewRow(tokenData.title, 'Error');
+          });
+        } else {
+          // Show "Coming Soon" for all other tokens
+          addOverviewRow(tokenData.title, 'Coming Soon');
+        }
+      });
+    }
+
+    // Helper function to add a row to the overview table
+    function addOverviewRow(tokenName, roiValue) {
+      const tableBody = document.getElementById("overviewTableBody");
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="border border-gray-700 px-4 py-2">${tokenName}</td>
+        <td class="border border-gray-700 px-4 py-2">${roiValue}</td>
+      `;
+      tableBody.appendChild(row);
+    }
   </script>
 </body>
 </html>
