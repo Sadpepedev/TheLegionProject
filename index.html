@@ -301,8 +301,8 @@
     // Overview
     let currentSale = 'overview';
 
-    // Cache c
-    const CACHE_TTL = 120000; // 
+    // Cache
+    const CACHE_TTL = 120000; 
     let cachedFuelData = null;
     let cachedFuelTimestamp = null;
 
@@ -311,7 +311,6 @@
       currentSale = sale;
 
       if (sale === 'overview') {
-        
         document
           .querySelectorAll(".sale-tab")
           .forEach((tab) => tab.classList.remove("active-tab"));
@@ -319,7 +318,7 @@
           .querySelector(`[onclick="switchSale('overview')"]`)
           .classList.add("active-tab");
 
-        //  show overview
+        // show overview
         document.getElementById("mainSaleContainer").style.display = "none";
         document.getElementById("overviewSection").style.display = "block";
 
@@ -429,68 +428,78 @@
       }
     }
 
-    // Build the Overview list
+    // =============== Fuel Placement Fix ===============
+    // We'll wait for Fuel to be appended, then add other tokens
     function showOverview() {
       const overviewList = document.getElementById("overviewList");
       overviewList.innerHTML = '';
 
-      // 1) Fuel FIRST
-      const fuelData = sales['fuel'];
-      if (fuelData && fuelData.isTradable) {
-        // Check cache
-        if (
-          cachedFuelData &&
-          cachedFuelTimestamp &&
-          Date.now() - cachedFuelTimestamp < CACHE_TTL
-        ) {
-          // Use cached data
-          console.log("Using cached Fuel data");
-          displayFuelROI(cachedFuelData);
-        } else {
-          //  fetch new data
-          console.log("Fetching new Fuel data");
-          fetch("/calculate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (!data.error) {
-                cachedFuelData = data;                // store in cache
-                cachedFuelTimestamp = Date.now();     // update timestamp
-                displayFuelROI(data);
-              } else {
-                addOverviewItem(fuelData.title, 'Error', 'text-red-500');
-              }
-            })
-            .catch(() => {
-              addOverviewItem(fuelData.title, 'Error', 'text-red-500');
-            });
-        }
-      } else {
-        addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
-      }
-
-      const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
-      otherTokens.forEach((tokenKey) => {
-        const tokenData = sales[tokenKey];
-        if (!tokenData) return;
-        // Always "Coming Soon"
-        addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
+      // 1) Fetch/Append Fuel FIRST
+      fetchFuelThen(() => {
+        // 2) Then append the rest
+        const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
+        otherTokens.forEach((tokenKey) => {
+          const tokenData = sales[tokenKey];
+          if (!tokenData) return;
+          addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
+        });
       });
     }
 
-    // Called by showOverview()
+    // Helper that fetches Fuel data, uses cache, etc.
+    // Once Fuel is appended, we call onDone()
+    function fetchFuelThen(onDone) {
+      const fuelData = sales['fuel'];
+      if (!fuelData.isTradable) {
+        addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
+        if (typeof onDone === 'function') onDone();
+        return;
+      }
+
+      // If we have fresh cache, use it
+      if (
+        cachedFuelData &&
+        cachedFuelTimestamp &&
+        Date.now() - cachedFuelTimestamp < CACHE_TTL
+      ) {
+        console.log("Using cached Fuel data");
+        displayFuelROI(cachedFuelData);
+        if (typeof onDone === 'function') onDone();
+      } else {
+        console.log("Fetching new Fuel data");
+        fetch("/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.error) {
+            cachedFuelData = data;
+            cachedFuelTimestamp = Date.now();
+            displayFuelROI(data);
+          } else {
+            addOverviewItem('Fuel', 'Error', 'text-red-500');
+          }
+          if (typeof onDone === 'function') onDone();
+        })
+        .catch(() => {
+          addOverviewItem('Fuel', 'Error', 'text-red-500');
+          if (typeof onDone === 'function') onDone();
+        });
+      }
+    }
+
+    // Show the ROI% for Fuel in the Overview
     function displayFuelROI(data) {
       const fuelData = sales['fuel'];
-      // ROI% Calculation => ((current_price - seedPrice)/seedPrice) * 100
       const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
       let roiClass = 'text-green-400';
       if (pctGain < 0) roiClass = 'text-red-500';
-      addOverviewItem(fuelData.title, `${pctGain.toFixed(2)}%`, roiClass);
+      addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
     }
 
+    // Helper: Append a row to overview
     function addOverviewItem(tokenName, roiText, colorClass) {
       const overviewList = document.getElementById("overviewList");
       const row = document.createElement('div');
@@ -509,6 +518,7 @@
       overviewList.appendChild(row);
     }
 
+    // Start on "overview"
     switchSale(currentSale);
   </script>
 </body>
