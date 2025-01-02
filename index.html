@@ -3,25 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>The Legion Project</title>
+  <title>Track Legion ICO Performance</title>
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Ethers.js -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+  
+  <!--  Font  -->
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" 
+    rel="stylesheet"
+  >
+  
   <style>
+    
     body {
-      background-color: #000000;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       color: #FFFFFF;
-      font-family: sans-serif;
+      font-family: 'Orbitron', sans-serif; /* Use that futuristic vibe */
+      min-height: 100vh;
     }
+
+    /*  Active tab  */
     .active-tab {
-      border-bottom: 2px solid #FF0000;
+      border-bottom: 2px solid #18FFF7; 
       font-weight: bold;
+      transition: all 0.2s ease-in-out;
     }
+
+    /*  status labels */
     .status-live {
       background-color: #4CAF50; /* Green */
       color: white;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 12px;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
     }
     .status-soon {
       background-color: #FF9800; /* Orange */
@@ -29,6 +47,7 @@
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 12px;
+      box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
     }
     .status-ico {
       background-color: #3F51B5; /* Blue */
@@ -36,68 +55,99 @@
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 12px;
+      box-shadow: 0 0 5px rgba(63, 81, 181, 0.6);
     }
+
+    /*  Disabled  */
     .disabled-button {
       background-color: #4A5568; /* Gray */
       cursor: not-allowed;
+      opacity: 0.5;
     }
+
+    /*  Hide results  */
     #results {
       display: none;
+    }
+
+    /* nav buttons */
+    .sale-tab {
+      transition: color 0.2s ease-in-out;
+    }
+    .sale-tab:hover {
+      color: #18FFF7; /*  on hover */
+    }
+
+    /* "Connect Wallet" */
+    .neon-button {
+      border: 1px solid #18FFF7;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .neon-button:hover {
+      color: #18FFF7;
+      box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
     }
   </style>
 </head>
 
-<body class="font-sans">
+<body>
   <!-- Top Bar Navigation -->
-  <nav class="bg-gray-900 text-white shadow-md">
+  <nav class="shadow-md" style="background-color: rgba(0,0,0,0.75);">
     <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
-      <!-- Hamburger Menu for Mobile -->
-      <div class="block lg:hidden mr-4">
-        <button id="mobileMenuToggle" class="text-white focus:outline-none">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6" 
-            fill="none"
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d="M4 6h16M4 12h16M4 18h16" 
-            />
-          </svg>
-        </button>
+      <!-- Left Section: Tabs / Hamburger -->
+      <div class="flex flex-col lg:flex-row items-center">
+        <!-- Hamburger Menu for Mobile -->
+        <div class="block lg:hidden mr-4">
+          <button id="mobileMenuToggle" class="text-white focus:outline-none">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="h-6 w-6" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                stroke-width="2" 
+                d="M4 6h16M4 12h16M4 18h16" 
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
+          <!-- Overview first -->
+          <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
+
+          <button class="sale-tab" onclick="switchSale('fuel')">
+            Fuel <span class="status-live">Live</span>
+          </button>
+          <button class="sale-tab" onclick="switchSale('almanak')">
+            Almanak <span class="status-soon">Trading Soon</span>
+          </button>
+          <button class="sale-tab" onclick="switchSale('pulse')">
+            Pulse <span class="status-soon">Trading Soon</span>
+          </button>
+          <button class="sale-tab" onclick="switchSale('silencio')">
+            Silencio <span class="status-soon">Trading Soon</span>
+          </button>
+          <button class="sale-tab" onclick="switchSale('enclave')">
+            Enclave <span class="status-ico">ICO Soon</span>
+          </button>
+          <button class="sale-tab" onclick="switchSale('corn')">
+            Corn <span class="status-ico">ICO Soon</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Navigation Tabs -->
-      <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
-        <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
-        <button class="sale-tab" onclick="switchSale('fuel')">
-          Fuel <span class="status-live">Live</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('almanak')">
-          Almanak <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('pulse')">
-          Pulse <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('silencio')">
-          Silencio <span class="status-soon">Trading Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('enclave')">
-          Enclave <span class="status-ico">ICO Soon</span>
-        </button>
-        <button class="sale-tab" onclick="switchSale('corn')">
-          Corn <span class="status-ico">ICO Soon</span>
-        </button>
-      </div>
-
-      <!-- Connect Wallet -->
+      <!-- Right Section: Connect Wallet -->
       <div class="mt-4 lg:mt-0">
+        <!-- "Connect Wallet"  -->
         <button
-          class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded disabled-button cursor-pointer"
+          class="neon-button py-2 px-4 text-white rounded"
           onclick="alert('Coming Soon!')"
         >
           Connect Wallet
@@ -106,66 +156,80 @@
     </div>
   </nav>
 
-  <!-- Overview Section -->
+  <!-- OVERVIEW SECTION -->
   <div
     id="overviewSection"
-    class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl"
-    style="display: none;"
+    class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
+    style="display: none; background-color: rgba(0,0,0,0.65);"
   >
-    <h2 class="text-3xl font-extrabold text-center mb-6">Token Overview</h2>
+    <h2 class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
+      Token Overviews
+    </h2>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Below are all tokens and their ROI from ICO price (in %):
+      Below are all Legion ICOs and their current ROI (in %):
     </p>
+
+    <!--  list  -->
     <div id="overviewList" class="space-y-4"></div>
   </div>
 
-  <!-- Main Sale Container -->
+  <!-- SALE CONTAINER -->
   <div 
     id="mainSaleContainer"
-    class="container mx-auto mt-12 px-6 py-8 bg-gray-900 rounded-lg shadow-lg max-w-2xl"
+    class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
+    style="background-color: rgba(0,0,0,0.65);"
   >
-    <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6">Fuel</h1>
+    <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
+      Fuel
+    </h1>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your initial ICO investment to calculate your current ROI for 
+      Enter your initial approval amount or connect your wallet to calculate your current value for 
       <span id="tokenName">Fuel Token</span>
     </p>
+
+    <!-- ROI Form -->
     <form onsubmit="calculateROI(event)">
       <div class="mb-6">
         <label 
-          for="investment"
+          for="investment" 
           class="block text-gray-200 text-center font-semibold"
         >
           Initial Investment ($):
         </label>
         <input 
-          type="number"
-          id="investment"
-          class="w-full p-3 bg-gray-800 rounded text-center text-gray-200"
+          type="number" 
+          id="investment" 
+          class="w-full p-3 bg-gray-800 rounded text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
           placeholder="Enter your investment"
         >
       </div>
       <p class="text-sm text-center mb-6">
         <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span>
       </p>
+
       <button 
-        id="calculateButton"
-        type="submit"
-        class="w-full py-3 rounded font-bold text-white shadow-md"
+        id="calculateButton" 
+        type="submit" 
+        class="w-full py-3 rounded font-bold text-white shadow-md disabled-button"
+        style="background-color: #32CD32;"
       >
         Calculate
       </button>
     </form>
-    <div id="results" class="mt-8 p-6 bg-gray-800 rounded text-center"></div>
+
+    <!-- Results Section -->
+    <div id="results" class="mt-8 p-6 bg-gray-800 bg-opacity-80 rounded text-center"></div>
   </div>
 
-  <!-- Footers -->
+  <!-- FOOTERS -->
   <footer class="mt-10 text-center text-gray-500">
     Built by 
     <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">
       Sadpepe.exe
     </a>
   </footer>
-  <footer class="bg-gray-800 text-gray-400 text-sm text-center py-4 mt-8">
+
+  <footer class="text-gray-400 text-sm text-center py-4 mt-8" style="background-color: rgba(0,0,0,0.75);">
     <p>
       Price data provided by 
       <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">
@@ -175,13 +239,14 @@
   </footer>
 
   <script>
+    // mobile menu
     const mobileMenuToggle = document.getElementById("mobileMenuToggle");
     const navTabs = document.getElementById("navTabs");
     mobileMenuToggle.addEventListener("click", () => {
       navTabs.classList.toggle("hidden");
     });
 
-    // Tokens
+    // All tokens
     const sales = {
       fuel: {
         title: "Fuel",
@@ -233,44 +298,63 @@
       }
     };
 
-    // Default page => overview
+    // Overview
     let currentSale = 'overview';
 
-    // optional caching
+    // Cache c
+    const CACHE_TTL = 120000; // 
     let cachedFuelData = null;
     let cachedFuelTimestamp = null;
-    const CACHE_TTL = 60000; // 60 seconds
 
+    // Switch pages
     function switchSale(sale) {
       currentSale = sale;
 
       if (sale === 'overview') {
-        document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
-        document.querySelector(`[onclick="switchSale('overview')"]`).classList.add("active-tab");
+        
+        document
+          .querySelectorAll(".sale-tab")
+          .forEach((tab) => tab.classList.remove("active-tab"));
+        document
+          .querySelector(`[onclick="switchSale('overview')"]`)
+          .classList.add("active-tab");
+
+        //  show overview
         document.getElementById("mainSaleContainer").style.display = "none";
         document.getElementById("overviewSection").style.display = "block";
+
         showOverview();
         return;
       } else {
+        // show main sale
         document.getElementById("overviewSection").style.display = "none";
         document.getElementById("mainSaleContainer").style.display = "block";
       }
 
+      // Normal token logic
       const saleData = sales[sale];
       if (!saleData) return;
 
-      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
-      document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
+      // Highlight correct tab
+      document
+        .querySelectorAll(".sale-tab")
+        .forEach((tab) => tab.classList.remove("active-tab"));
+      document
+        .querySelector(`[onclick="switchSale('${sale}')"]`)
+        .classList.add("active-tab");
 
+      // Update headings
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
+      // Display seed price
       if (typeof saleData.seedPrice === "string") {
         document.getElementById("seedPrice").textContent = saleData.seedPrice;
       } else {
         document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`;
       }
 
+      // Enable or disable the Calculate button
       const calculateButton = document.getElementById("calculateButton");
       if (!saleData.isTradable) {
         calculateButton.disabled = true;
@@ -285,12 +369,15 @@
       document.getElementById("saleTitle").style.color = saleData.fontColor;
       calculateButton.style.backgroundColor = saleData.buttonColor;
 
+      // Reset results
       document.getElementById("results").style.display = "none";
       document.getElementById("investment").value = "";
     }
 
+    // ROI calculation
     async function calculateROI(event) {
       event.preventDefault();
+
       const investment = parseFloat(document.getElementById("investment").value);
       const saleData = sales[currentSale];
 
@@ -298,6 +385,8 @@
         alert("Please enter a valid investment amount.");
         return;
       }
+
+      // If not tradable, show "Not Available"
       if (!saleData.isTradable) {
         document.getElementById("results").style.display = "block";
         document.getElementById("results").innerHTML = `
@@ -340,75 +429,72 @@
       }
     }
 
-    // ====== The Key Fix: fetch Fuel FIRST, then append other tokens ======
+    // Build the Overview list
     function showOverview() {
       const overviewList = document.getElementById("overviewList");
-      overviewList.innerHTML = '';      
+      overviewList.innerHTML = '';
 
-      // 1) Always fetch & append Fuel FIRST
-      fetchFuelThen(() => {
-        // 2) Then append the other tokens below
-        const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
-        otherTokens.forEach((tokenKey) => {
-          const tokenData = sales[tokenKey];
-          if (!tokenData) return;
-          addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
-        });
+      // 1) Fuel FIRST
+      const fuelData = sales['fuel'];
+      if (fuelData && fuelData.isTradable) {
+        // Check cache
+        if (
+          cachedFuelData &&
+          cachedFuelTimestamp &&
+          Date.now() - cachedFuelTimestamp < CACHE_TTL
+        ) {
+          // Use cached data
+          console.log("Using cached Fuel data");
+          displayFuelROI(cachedFuelData);
+        } else {
+          //  fetch new data
+          console.log("Fetching new Fuel data");
+          fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (!data.error) {
+                cachedFuelData = data;                // store in cache
+                cachedFuelTimestamp = Date.now();     // update timestamp
+                displayFuelROI(data);
+              } else {
+                addOverviewItem(fuelData.title, 'Error', 'text-red-500');
+              }
+            })
+            .catch(() => {
+              addOverviewItem(fuelData.title, 'Error', 'text-red-500');
+            });
+        }
+      } else {
+        addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
+      }
+
+      const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
+      otherTokens.forEach((tokenKey) => {
+        const tokenData = sales[tokenKey];
+        if (!tokenData) return;
+        // Always "Coming Soon"
+        addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
       });
     }
 
-    // We fetch Fuel data (cached or new), then call a callback to append the rest
-    function fetchFuelThen(onDone) {
-      const fuelData = sales['fuel'];
-      if (!fuelData.isTradable) {
-        // If somehow not tradable, just show "Coming Soon"
-        addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
-        if (typeof onDone === 'function') onDone();
-        return;
-      }
-
-      // Check cache first
-      if (cachedFuelData && cachedFuelTimestamp && Date.now() - cachedFuelTimestamp < CACHE_TTL) {
-        console.log('Using cached Fuel data');
-        displayFuelROI(cachedFuelData); 
-        if (typeof onDone === 'function') onDone();
-      } else {
-        console.log('Fetching Fuel data');
-        fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
-        })
-        .then(res => res.json())
-        .then((data) => {
-          if (!data.error) {
-            cachedFuelData = data;
-            cachedFuelTimestamp = Date.now();
-            displayFuelROI(data);
-          } else {
-            addOverviewItem('Fuel', 'Error', 'text-red-500');
-          }
-          if (typeof onDone === 'function') onDone();
-        })
-        .catch(() => {
-          addOverviewItem('Fuel', 'Error', 'text-red-500');
-          if (typeof onDone === 'function') onDone();
-        });
-      }
-    }
-
+    // Called by showOverview()
     function displayFuelROI(data) {
       const fuelData = sales['fuel'];
+      // ROI% Calculation => ((current_price - seedPrice)/seedPrice) * 100
       const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
       let roiClass = 'text-green-400';
       if (pctGain < 0) roiClass = 'text-red-500';
-      addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
+      addOverviewItem(fuelData.title, `${pctGain.toFixed(2)}%`, roiClass);
     }
 
     function addOverviewItem(tokenName, roiText, colorClass) {
       const overviewList = document.getElementById("overviewList");
       const row = document.createElement('div');
-      row.className = "flex justify-between items-center px-4 py-3 bg-gray-800 rounded";
+      row.className = "flex justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
 
       const nameEl = document.createElement('span');
       nameEl.className = "font-semibold";
@@ -423,7 +509,6 @@
       overviewList.appendChild(row);
     }
 
-    // Start on "overview"
     switchSale(currentSale);
   </script>
 </body>
