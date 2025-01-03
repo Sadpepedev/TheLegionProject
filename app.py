@@ -7,7 +7,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util.retry import Retry
 
 # Load environment variables from .env file (if present)
 load_dotenv()
@@ -20,8 +20,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("app.log"),
-        logging.StreamHandler()
+        logging.StreamHandler()  # Logs to stdout
     ]
 )
 
@@ -72,7 +71,7 @@ def get_token_price():
         return cache["price"]
     
     params = {
-        "contract_addresses": TOKEN_CONTRACT_ADDRESS,
+        "contract_addresses": TOKEN_CONTRACT_ADDRESS.lower(),
         "vs_currencies": "usd",
     }
     headers = {"accept": "application/json"}
