@@ -1,4 +1,4 @@
-Flask==2.0.3
+Flask==2.3.3
 requests==2.26.0
 Flask-Limiter
 python-dotenv==0.19.2
