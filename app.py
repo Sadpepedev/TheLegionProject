@@ -24,12 +24,14 @@ logging.basicConfig(
     ]
 )
 
-# Initialize Limiter for rate limiting
+# Initialize Limiter for rate limiting without passing 'app'
 limiter = Limiter(
-    app,
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]
 )
+
+# Associate Limiter with the Flask app
+limiter.init_app(app)
 
 # CoinGecko API endpoint and token details
 COINGECKO_API_URL = "https://api.coingecko.com/api/v3/simple/token_price/ethereum"
