@@ -261,6 +261,18 @@
         CoinGecko
       </a>.
     </p>
+    <br/>
+    <!-- 
+      ===========================
+      Disclaimer (NEWLY ADDED)
+      ===========================
+    -->
+    <p class="mx-4">
+      <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
+      <em>not</em> offer financial or trading advice. This website is purely for informational 
+      purposes to assist in tracking prior ICO performance. Always conduct your own 
+      research before making any investment decisions.
+    </p>
   </footer>
 
   <script>
@@ -453,8 +465,7 @@
       }
     }
 
-    // =============== Fuel Placement Fix ===============
-    // We'll wait for Fuel to be appended, then add other tokens
+   
     function showOverview() {
       const overviewList = document.getElementById("overviewList");
       overviewList.innerHTML = '';
@@ -471,8 +482,7 @@
       });
     }
 
-    // Helper that fetches Fuel data, uses cache, etc.
-    // Once Fuel is appended, we call onDone()
+    // Helper that fetches Fuel data, uses cache
     function fetchFuelThen(onDone) {
       const fuelData = sales['fuel'];
       if (!fuelData.isTradable) {
@@ -481,7 +491,7 @@
         return;
       }
 
-      // If we have fresh cache, use it
+      // cache
       if (
         cachedFuelData &&
         cachedFuelTimestamp &&
@@ -515,7 +525,7 @@
       }
     }
 
-    // Show the ROI% for Fuel in the Overview
+    // ROI% 
     function displayFuelROI(data) {
       const fuelData = sales['fuel'];
       const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
