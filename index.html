@@ -6,11 +6,12 @@
   <title>Track Legion ICO Performance</title>
   
   <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Ethers.js -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
   
-  <!--  Font  -->
+  <!-- Ethers.js v6 UMD Build -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.2/dist/ethers.umd.min.js"></script>
+  
+  <!-- Google Fonts -->
   <link 
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" 
     rel="stylesheet"
@@ -24,14 +25,14 @@
       min-height: 100vh;
     }
 
-    /*  Active tab  */
+    /* Active tab */
     .active-tab {
       border-bottom: 2px solid #18FFF7; 
       font-weight: bold;
       transition: all 0.2s ease-in-out;
     }
 
-    /*  status labels */
+    /* Status labels */
     .status-live {
       background-color: #4CAF50; /* Green */
       color: white;
@@ -57,24 +58,24 @@
       box-shadow: 0 0 5px rgba(63, 81, 181, 0.6);
     }
 
-    /*  Disabled  */
+    /* Disabled */
     .disabled-button {
       background-color: #4A5568; /* Gray */
       cursor: not-allowed;
       opacity: 0.5;
     }
 
-    /*  Hide results  */
+    /* Hide results */
     #results {
       display: none;
     }
 
-    /* nav buttons */
+    /* Nav buttons */
     .sale-tab {
       transition: color 0.2s ease-in-out;
     }
     .sale-tab:hover {
-      color: #18FFF7; /*  on hover */
+      color: #18FFF7; /* on hover */
     }
 
     /* "Connect Wallet" */
@@ -88,7 +89,6 @@
       box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
     }
 
- 
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -100,20 +100,8 @@
     }
   </style>
 
- 
-  <script>
-    window.si = window.si || function () {
-      (window.siq = window.siq || []).push(arguments);
-    };
-  </script>
+  <!-- Analytics Scripts -->
   <script defer src="/_vercel/speed-insights/script.js"></script>
-
-  <!-- Vercel Web Analytics -->
-  <script>
-    window.va = window.va || function () {
-      (window.vaq = window.vaq || []).push(arguments);
-    };
-  </script>
   <script defer src="/_vercel/insights/script.js"></script>
 
 </head>
@@ -126,7 +114,7 @@
       <div class="flex flex-col lg:flex-row items-center">
         <!-- Hamburger Menu for Mobile -->
         <div class="block lg:hidden mr-4">
-          <button id="mobileMenuToggle" class="text-white focus:outline-none">
+          <button id="mobileMenuToggle" class="text-white focus:outline-none" aria-label="Toggle Navigation Menu">
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
               class="h-6 w-6" 
@@ -174,8 +162,9 @@
       <div class="mt-4 lg:mt-0">
         <!-- "Connect Wallet"  -->
         <button
+          id="connectWalletButton"
           class="neon-button py-2 px-4 text-white rounded"
-          onclick="alert('Coming Soon!')"
+          onclick="connectWallet()"
         >
           Connect Wallet
         </button>
@@ -196,7 +185,7 @@
       Below are all Legion ICOs and their current ROI (in %):
     </p>
 
-    <!--  list  -->
+    <!-- list -->
     <div id="overviewList" class="space-y-4"></div>
   </div>
 
@@ -228,6 +217,10 @@
           id="investment" 
           class="w-full p-3 bg-gray-800 rounded text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
           placeholder="Enter your investment"
+          required
+          min="0.01"
+          step="0.01"
+          aria-required="true"
         >
       </div>
       <p class="text-sm text-center mb-6">
@@ -237,8 +230,7 @@
       <button 
         id="calculateButton" 
         type="submit" 
-        class="w-full py-3 rounded font-bold text-white shadow-md disabled-button"
-        style="background-color: #32CD32;"
+        class="w-full py-3 rounded font-bold text-white shadow-md bg-green-500 hover:bg-green-600 transition-colors duration-200"
       >
         Calculate
       </button>
@@ -251,7 +243,7 @@
   <!-- FOOTERS -->
   <footer class="mt-10 text-center text-gray-500">
     Built by 
-    <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">
+    <a href="https://x.com/Dustybeerbong" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
       Sadpepe.exe
     </a>
   </footer>
@@ -259,12 +251,12 @@
   <footer class="text-gray-400 text-sm text-center py-4 mt-8" style="background-color: rgba(0,0,0,0.75);">
     <p>
       Price data provided by 
-      <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">
+      <a href="https://coingecko.com" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
         CoinGecko
       </a>.
     </p>
     <br/>
-  
+
     <p class="mx-4">
       <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
       <em>not</em> offer financial or trading advice. This website is purely for informational 
@@ -274,282 +266,302 @@
   </footer>
 
   <script>
-    // mobile menu
-    const mobileMenuToggle = document.getElementById("mobileMenuToggle");
-    const navTabs = document.getElementById("navTabs");
-    mobileMenuToggle.addEventListener("click", () => {
-      navTabs.classList.toggle("hidden");
-    });
+    document.addEventListener("DOMContentLoaded", () => {
+      // Mobile menu toggle
+      const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+      const navTabs = document.getElementById("navTabs");
+      mobileMenuToggle.addEventListener("click", () => {
+        navTabs.classList.toggle("hidden");
+      });
 
-    // All tokens
-    const sales = {
-      fuel: {
-        title: "Fuel",
-        tokenName: "Fuel Token",
-        seedPrice: 0.02,
-        isTradable: true,
-        fontColor: "#32CD32",
-        buttonColor: "#32CD32",
-      },
-      almanak: {
-        title: "Almanak",
-        tokenName: "Almanak Token",
-        seedPrice: 0.0435,
-        isTradable: false,
-        fontColor: "#FFFFFF",
-        buttonColor: "#4A5568",
-      },
-      pulse: {
-        title: "Pulse",
-        tokenName: "Pulse Token",
-        seedPrice: "Coming Soon",
-        isTradable: false,
-        fontColor: "#0000FF",
-        buttonColor: "#1E90FF",
-      },
-      silencio: {
-        title: "Silencio",
-        tokenName: "Silencio Token",
-        seedPrice: "Coming Soon",
-        isTradable: false,
-        fontColor: "#87CEEB",
-        buttonColor: "#4682B4",
-      },
-      enclave: {
-        title: "Enclave",
-        tokenName: "Enclave Token",
-        seedPrice: "ICO Soon",
-        isTradable: false,
-        fontColor: "#FFFFFF",
-        buttonColor: "#ADD8E6",
-      },
-      corn: {
-        title: "Corn",
-        tokenName: "Corn Token",
-        seedPrice: "ICO Soon",
-        isTradable: false,
-        fontColor: "#FFA500",
-        buttonColor: "#FF8C00",
-      }
-    };
+      // All tokens
+      const sales = {
+        fuel: {
+          title: "Fuel",
+          tokenName: "Fuel Token",
+          seedPrice: 0.02,
+          isTradable: true,
+          fontColor: "#32CD32",
+          buttonColor: "#32CD32",
+        },
+        almanak: {
+          title: "Almanak",
+          tokenName: "Almanak Token",
+          seedPrice: 0.0435,
+          isTradable: false,
+          fontColor: "#FFFFFF",
+          buttonColor: "#4A5568",
+        },
+        pulse: {
+          title: "Pulse",
+          tokenName: "Pulse Token",
+          seedPrice: "Coming Soon",
+          isTradable: false,
+          fontColor: "#0000FF",
+          buttonColor: "#1E90FF",
+        },
+        silencio: {
+          title: "Silencio",
+          tokenName: "Silencio Token",
+          seedPrice: "Coming Soon",
+          isTradable: false,
+          fontColor: "#87CEEB",
+          buttonColor: "#4682B4",
+        },
+        enclave: {
+          title: "Enclave",
+          tokenName: "Enclave Token",
+          seedPrice: "ICO Soon",
+          isTradable: false,
+          fontColor: "#FFFFFF",
+          buttonColor: "#ADD8E6",
+        },
+        corn: {
+          title: "Corn",
+          tokenName: "Corn Token",
+          seedPrice: "ICO Soon",
+          isTradable: false,
+          fontColor: "#FFA500",
+          buttonColor: "#FF8C00",
+        }
+      };
 
-    // Overview
-    let currentSale = 'overview';
+      // Overview
+      let currentSale = 'overview';
 
-    // Cache
-    const CACHE_TTL = 120000; 
-    let cachedFuelData = null;
-    let cachedFuelTimestamp = null;
+      // Cache
+      const CACHE_TTL = 120000; // 2 minutes in milliseconds
+      let cachedFuelData = null;
+      let cachedFuelTimestamp = null;
 
-    // Switch pages
-    function switchSale(sale) {
-      currentSale = sale;
+      // Switch pages
+      window.switchSale = function(sale) {
+        currentSale = sale;
 
-      if (sale === 'overview') {
-        document
-          .querySelectorAll(".sale-tab")
-          .forEach((tab) => tab.classList.remove("active-tab"));
-        document
-          .querySelector(`[onclick="switchSale('overview')"]`)
-          .classList.add("active-tab");
+        if (sale === 'overview') {
+          document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
+          document.querySelector(`[onclick="switchSale('overview')"]`).classList.add("active-tab");
 
-        // show overview
-        document.getElementById("mainSaleContainer").style.display = "none";
-        document.getElementById("overviewSection").style.display = "block";
+          // Show overview
+          document.getElementById("mainSaleContainer").style.display = "none";
+          document.getElementById("overviewSection").style.display = "block";
 
-        showOverview();
-        return;
-      } else {
-        // show main sale
-        document.getElementById("overviewSection").style.display = "none";
-        document.getElementById("mainSaleContainer").style.display = "block";
-      }
-
-      // Normal token logic
-      const saleData = sales[sale];
-      if (!saleData) return;
-
-      // Highlight correct tab
-      document
-        .querySelectorAll(".sale-tab")
-        .forEach((tab) => tab.classList.remove("active-tab"));
-      document
-        .querySelector(`[onclick="switchSale('${sale}')"]`)
-        .classList.add("active-tab");
-
-      // Update headings
-      document.getElementById("saleTitle").textContent = saleData.title;
-      document.getElementById("tokenName").textContent = saleData.tokenName;
-
-      // Display seed price
-      if (typeof saleData.seedPrice === "string") {
-        document.getElementById("seedPrice").textContent = saleData.seedPrice;
-      } else {
-        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`;
-      }
-
-      // Enable or disable the Calculate button
-      const calculateButton = document.getElementById("calculateButton");
-      if (!saleData.isTradable) {
-        calculateButton.disabled = true;
-        calculateButton.classList.add("disabled-button");
-        calculateButton.classList.remove("bg-red-600");
-      } else {
-        calculateButton.disabled = false;
-        calculateButton.classList.remove("disabled-button");
-        calculateButton.classList.add("bg-red-600");
-      }
-
-      document.getElementById("saleTitle").style.color = saleData.fontColor;
-      calculateButton.style.backgroundColor = saleData.buttonColor;
-
-      // Reset results
-      document.getElementById("results").style.display = "none";
-      document.getElementById("investment").value = "";
-    }
-
-    // ROI calculation
-    async function calculateROI(event) {
-      event.preventDefault();
-
-      const investment = parseFloat(document.getElementById("investment").value);
-      const saleData = sales[currentSale];
-
-      if (isNaN(investment) || investment <= 0) {
-        alert("Please enter a valid investment amount.");
-        return;
-      }
-
-      // If not tradable, show "Not Available"
-      if (!saleData.isTradable) {
-        document.getElementById("results").style.display = "block";
-        document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">
-            Current Token Price: <span class="text-white">Not Available</span>
-          </p>
-          <p class="text-lg text-gray-400">
-            Current Value: <span class="text-white">Not Applicable</span>
-          </p>
-        `;
-        return;
-      }
-
-      try {
-        const response = await fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
-        });
-        const data = await response.json();
-        if (data.error) {
-          alert(data.error);
+          showOverview();
+          return;
         } else {
+          // Show main sale
+          document.getElementById("overviewSection").style.display = "none";
+          document.getElementById("mainSaleContainer").style.display = "block";
+        }
+
+        // Normal token logic
+        const saleData = sales[sale];
+        if (!saleData) return;
+
+        // Highlight correct tab
+        document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
+        document.querySelector(`[onclick="switchSale('${sale}')"]`).classList.add("active-tab");
+
+        // Update headings
+        document.getElementById("saleTitle").textContent = saleData.title;
+        document.getElementById("tokenName").textContent = saleData.tokenName;
+
+        // Display seed price
+        if (typeof saleData.seedPrice === "string") {
+          document.getElementById("seedPrice").textContent = saleData.seedPrice;
+        } else {
+          document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`;
+        }
+
+        // Enable or disable the Calculate button
+        const calculateButton = document.getElementById("calculateButton");
+        if (!saleData.isTradable) {
+          calculateButton.disabled = true;
+          calculateButton.classList.add("disabled-button");
+          calculateButton.style.backgroundColor = "#4A5568"; // Gray
+        } else {
+          calculateButton.disabled = false;
+          calculateButton.classList.remove("disabled-button");
+          calculateButton.style.backgroundColor = saleData.buttonColor;
+        }
+
+        document.getElementById("saleTitle").style.color = saleData.fontColor;
+
+        // Reset results
+        document.getElementById("results").style.display = "none";
+        document.getElementById("investment").value = "";
+      }
+
+      // ROI calculation
+      window.calculateROI = async function(event) {
+        event.preventDefault();
+
+        const investmentInput = document.getElementById("investment");
+        const investment = parseFloat(investmentInput.value);
+        const saleData = sales[currentSale];
+
+        if (isNaN(investment) || investment <= 0) {
+          alert("Please enter a valid investment amount.");
+          investmentInput.focus();
+          return;
+        }
+
+        // If not tradable, show "Not Available"
+        if (!saleData.isTradable) {
           document.getElementById("results").style.display = "block";
           document.getElementById("results").innerHTML = `
             <p class="text-lg text-gray-400">
-              Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
+              Current Token Price: <span class="text-white">Not Available</span>
             </p>
             <p class="text-lg text-gray-400">
-              Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
-            </p>
-            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
-              Current Value: $${data.roi_value.toFixed(2)}
+              Current Value: <span class="text-white">Not Applicable</span>
             </p>
           `;
+          return;
         }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred while calculating ROI.");
-      }
-    }
 
-    // We'll wait for Fuel to be appended, then add other tokens
-    function showOverview() {
-      const overviewList = document.getElementById("overviewList");
-      overviewList.innerHTML = '';
-
-      // 1) Fetch/Append Fuel FIRST
-      fetchFuelThen(() => {
-        const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
-        otherTokens.forEach((tokenKey) => {
-          const tokenData = sales[tokenKey];
-          if (!tokenData) return;
-          addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
-        });
-      });
-    }
-
-    //fetches Fuel data, uses cache
-    function fetchFuelThen(onDone) {
-      const fuelData = sales['fuel'];
-      if (!fuelData.isTradable) {
-        addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
-        if (typeof onDone === 'function') onDone();
-        return;
-      }
-
-      // fresh cache
-      if (
-        cachedFuelData &&
-        cachedFuelTimestamp &&
-        Date.now() - cachedFuelTimestamp < CACHE_TTL
-      ) {
-        console.log("Using cached Fuel data");
-        displayFuelROI(cachedFuelData);
-        if (typeof onDone === 'function') onDone();
-      } else {
-        console.log("Fetching new Fuel data");
-        fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
-        })
-        .then((res) => res.json())
-        .then((data) => {
-          if (!data.error) {
-            cachedFuelData = data;
-            cachedFuelTimestamp = Date.now();
-            displayFuelROI(data);
+        try {
+          const response = await fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
+          });
+          const data = await response.json();
+          if (data.error) {
+            alert(data.error);
           } else {
-            addOverviewItem('Fuel', 'Error', 'text-red-500');
+            document.getElementById("results").style.display = "block";
+            document.getElementById("results").innerHTML = `
+              <p class="text-lg text-gray-400">
+                Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
+              </p>
+              <p class="text-lg text-gray-400">
+                Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
+              </p>
+              <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
+                Current Value: $${data.roi_value.toFixed(2)}
+              </p>
+            `;
           }
-          if (typeof onDone === 'function') onDone();
-        })
-        .catch(() => {
-          addOverviewItem('Fuel', 'Error', 'text-red-500');
-          if (typeof onDone === 'function') onDone();
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred while calculating ROI.");
+        }
+      }
+
+      // Overview
+      function showOverview() {
+        const overviewList = document.getElementById("overviewList");
+        overviewList.innerHTML = '';
+
+        // Fetch/Append Fuel FIRST
+        fetchFuelThen(() => {
+          const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
+          otherTokens.forEach((tokenKey) => {
+            const tokenData = sales[tokenKey];
+            if (!tokenData) return;
+            addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
+          });
         });
       }
-    }
 
-    // Show the ROI% 
-    function displayFuelROI(data) {
-      const fuelData = sales['fuel'];
-      const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
-      let roiClass = 'text-green-400';
-      if (pctGain < 0) roiClass = 'text-red-500';
-      addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
-    }
+      // Fetches Fuel data, uses cache
+      function fetchFuelThen(onDone) {
+        const fuelData = sales['fuel'];
+        if (!fuelData.isTradable) {
+          addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
+          if (typeof onDone === 'function') onDone();
+          return;
+        }
 
-    function addOverviewItem(tokenName, roiText, colorClass) {
-      const overviewList = document.getElementById("overviewList");
-      const row = document.createElement('div');
-      row.className = "flex justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
+        // Check cache validity
+        if (
+          cachedFuelData &&
+          cachedFuelTimestamp &&
+          Date.now() - cachedFuelTimestamp < CACHE_TTL
+        ) {
+          console.log("Using cached Fuel data");
+          displayFuelROI(cachedFuelData);
+          if (typeof onDone === 'function') onDone();
+        } else {
+          console.log("Fetching new Fuel data");
+          fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.error) {
+              cachedFuelData = data;
+              cachedFuelTimestamp = Date.now();
+              displayFuelROI(data);
+            } else {
+              addOverviewItem('Fuel', 'Error', 'text-red-500');
+            }
+            if (typeof onDone === 'function') onDone();
+          })
+          .catch(() => {
+            addOverviewItem('Fuel', 'Error', 'text-red-500');
+            if (typeof onDone === 'function') onDone();
+          });
+        }
+      }
 
-      const nameEl = document.createElement('span');
-      nameEl.className = "font-semibold";
-      nameEl.textContent = tokenName;
+      // Show the ROI% 
+      function displayFuelROI(data) {
+        const fuelData = sales['fuel'];
+        const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
+        let roiClass = 'text-green-400';
+        if (pctGain < 0) roiClass = 'text-red-500';
+        addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
+      }
 
-      const roiEl = document.createElement('span');
-      roiEl.className = colorClass;
-      roiEl.textContent = roiText;
+      // Add Overview Item
+      function addOverviewItem(tokenName, roiText, colorClass) {
+        const overviewList = document.getElementById("overviewList");
+        const row = document.createElement('div');
+        row.className = "flex justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
 
-      row.appendChild(nameEl);
-      row.appendChild(roiEl);
-      overviewList.appendChild(row);
-    }
+        const nameEl = document.createElement('span');
+        nameEl.className = "font-semibold";
+        nameEl.textContent = tokenName;
 
-    switchSale(currentSale);
+        const roiEl = document.createElement('span');
+        roiEl.className = colorClass;
+        roiEl.textContent = roiText;
+
+        row.appendChild(nameEl);
+        row.appendChild(roiEl);
+        overviewList.appendChild(row);
+      }
+
+      // Initial Setup
+      switchSale(currentSale);
+
+      // Connect Wallet Functionality using Ethers.js v6
+      window.connectWallet = async function() {
+        if (!window.ethereum) {
+          alert("MetaMask is not installed. Please install it to use this feature.");
+          return;
+        }
+
+        try {
+          // Request account access if needed
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+          // Correctly reference Web3Provider from providers namespace
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
+          const address = await signer.getAddress();
+          alert(`Connected wallet: ${address}`);
+          // You can update the UI to reflect the connected state here
+        } catch (error) {
+          console.error(error);
+          alert("Failed to connect wallet.");
+        }
+      }
+    });
   </script>
 </body>
 </html>
