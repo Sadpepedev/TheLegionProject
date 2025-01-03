@@ -1,4 +1,6 @@
-Flask
+Flask==2.0.3
+requests==2.26.0
+Flask-Limiter==2.5.4
 requests
 gunicorn
 python-dotenv
