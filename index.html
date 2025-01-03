@@ -17,7 +17,6 @@
   >
   
   <style>
-    
     body {
       background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       color: #FFFFFF;
@@ -88,17 +87,20 @@
       color: #18FFF7;
       box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
     }
+
+ 
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
   </style>
 
-  <!-- 
-    ================
-    VERCEL SCRIPTS
-    ================
-    1) Vercel Speed Insights
-    2) Vercel Web Analytics (Insights)
-  -->
-
-  <!-- Vercel Speed Insights (Performance Metrics) -->
+ 
   <script>
     window.si = window.si || function () {
       (window.siq = window.siq || []).push(arguments);
@@ -106,7 +108,7 @@
   </script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
 
-  <!-- Vercel Web Analytics / Insights (Page Views, Referrers, etc.) -->
+  <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () {
       (window.vaq = window.vaq || []).push(arguments);
@@ -262,11 +264,7 @@
       </a>.
     </p>
     <br/>
-    <!-- 
-      ===========================
-      Disclaimer (NEWLY ADDED)
-      ===========================
-    -->
+  
     <p class="mx-4">
       <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
       <em>not</em> offer financial or trading advice. This website is purely for informational 
@@ -465,14 +463,13 @@
       }
     }
 
-   
+    // We'll wait for Fuel to be appended, then add other tokens
     function showOverview() {
       const overviewList = document.getElementById("overviewList");
       overviewList.innerHTML = '';
 
       // 1) Fetch/Append Fuel FIRST
       fetchFuelThen(() => {
-        // 2) Then append the rest
         const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
         otherTokens.forEach((tokenKey) => {
           const tokenData = sales[tokenKey];
@@ -482,7 +479,7 @@
       });
     }
 
-    // Helper that fetches Fuel data, uses cache
+    //fetches Fuel data, uses cache
     function fetchFuelThen(onDone) {
       const fuelData = sales['fuel'];
       if (!fuelData.isTradable) {
@@ -491,7 +488,7 @@
         return;
       }
 
-      // cache
+      // fresh cache
       if (
         cachedFuelData &&
         cachedFuelTimestamp &&
@@ -525,7 +522,7 @@
       }
     }
 
-    // ROI% 
+    // Show the ROI% 
     function displayFuelROI(data) {
       const fuelData = sales['fuel'];
       const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
@@ -534,7 +531,6 @@
       addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
     }
 
-    // Helper: Append a row to overview
     function addOverviewItem(tokenName, roiText, colorClass) {
       const overviewList = document.getElementById("overviewList");
       const row = document.createElement('div');
@@ -553,7 +549,6 @@
       overviewList.appendChild(row);
     }
 
-    // Start on "overview"
     switchSale(currentSale);
   </script>
 </body>
