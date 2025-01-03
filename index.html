@@ -525,7 +525,7 @@
     // Show the ROI% 
     function displayFuelROI(data) {
       const fuelData = sales['fuel'];
-      const pctGain = ((data.current_price - fuelData.seedPrice) / fuelData.seedPrice) * 100;
+      const pctGain = (data.current_price - fuelData.seedPrice)* 100;
       let roiClass = 'text-green-400';
       if (pctGain < 0) roiClass = 'text-red-500';
       addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
