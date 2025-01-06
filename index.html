@@ -110,6 +110,11 @@
     input[type=number] {
       -moz-appearance: textfield;
     }
+
+    /* Smooth dropdown transition */
+    .transition-height {
+      transition: max-height 0.3s ease-in-out;
+    }
   </style>
 
   <!-- Vercel Scripts (Optional, can remove if not using Vercel) -->
@@ -134,9 +139,9 @@
     <nav class="shadow-md" style="background-color: rgba(0,0,0,0.75);">
       <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
         <!-- Left: Tabs / Hamburger -->
-        <div class="flex flex-col lg:flex-row items-center">
+        <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto">
           <!-- Hamburger Menu (Mobile) -->
-          <div class="block lg:hidden mr-4">
+          <div class="block lg:hidden mb-4 lg:mb-0">
             <button id="mobileMenuToggle" class="text-white focus:outline-none">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -156,31 +161,31 @@
           </div>
 
           <!-- Navigation Tabs -->
-          <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
-            <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
-            <button class="sale-tab" onclick="switchSale('fuel')">
+          <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col w-full lg:w-auto transition-all duration-300 ease-in-out">
+            <button class="sale-tab w-full lg:w-auto text-left lg:text-center py-2" onclick="switchSale('overview')">Overview</button>
+            <button class="sale-tab w-full lg:w-auto text-left lg:text-center py-2" onclick="switchSale('fuel')">
               Fuel <span class="status-live">Live</span>
             </button>
-            <button class="sale-tab" onclick="switchSale('almanak')">
+            <button class="sale-tab w-full lg:w-auto text-left lg:text-center py-2" onclick="switchSale('almanak')">
               Almanak <span class="status-soon">Trading Soon</span>
             </button>
-            <button class="sale-tab" onclick="switchSale('pulse')">
+            <button class="sale-tab w-full lg:w-auto text-left lg:text-center py-2" onclick="switchSale('pulse')">
               Pulse <span class="status-soon">Trading Soon</span>
             </button>
-            <button class="sale-tab" onclick="switchSale('silencio')">
+            <button class="sale-tab w-full lg:w-auto text-left lg:text-center py-2" onclick="switchSale('silencio')">
               Silencio <span class="status-soon">Trading Soon</span>
             </button>
-            <button class="sale-tab" onclick="switchSale('enclave')">
+            <button class="sale-tab w-full lg:w-auto text-left lg:text-center py-2" onclick="switchSale('enclave')">
               Enclave <span class="status-ico">Upcoming ICO</span>
             </button>
-            <button class="sale-tab" onclick="switchSale('corn')">
+            <button class="sale-tab w-full lg:w-auto text-left lg:text-center py-2" onclick="switchSale('corn')">
               Corn <span class="status-ico">Upcoming ICO</span>
             </button>
           </div>
         </div>
 
         <!-- Right: (Hidden) Connect Wallet + Support the Site -->
-        <div class="mt-4 lg:mt-0 flex flex-row space-x-2">
+        <div class="mt-4 lg:mt-0 flex flex-row space-x-2 w-full lg:w-auto">
           <!-- Connect Wallet Hidden -->
           <button
             class="neon-button py-2 px-4 text-white rounded hidden-button"
@@ -191,7 +196,7 @@
 
           <!-- Support the Site (Flashing) -->
           <button
-            class="flashing-button py-2 px-4 text-white rounded"
+            class="flashing-button py-2 px-4 text-white rounded w-full lg:w-auto"
             onclick="supportSite()"
           >
             Support the Site
@@ -277,7 +282,7 @@
         <!-- Built By Section -->
         <div class="flex items-center mb-6 md:mb-0">
           <!-- Optional: Add an Icon or Logo -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           
