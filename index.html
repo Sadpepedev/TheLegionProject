@@ -29,30 +29,33 @@
       transition: all 0.2s ease-in-out;
     }
 
-    /* Status labels */
-    .status-live {
+    /* Status badges */
+    .badge-live {
       background-color: #4CAF50; /* Green */
       color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 12px;
-      box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      display: inline-block;
+      margin-top: 0.5rem;
     }
-    .status-soon {
-      background-color: #60A5FA; /* Tailwind text-blue-400 */
+    .badge-soon {
+      background-color: #60A5FA; /* Blue */
       color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 12px;
-      box-shadow: 0 0 5px rgba(96, 165, 250, 0.6);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      display: inline-block;
+      margin-top: 0.5rem;
     }
-    .status-ico {
-      background-color: #FB923C; /* Tailwind text-orange-400 */
+    .badge-ico {
+      background-color: #FB923C; /* Orange */
       color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 12px;
-      box-shadow: 0 0 5px rgba(251, 146, 60, 0.6);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      display: inline-block;
+      margin-top: 0.5rem;
     }
 
     /* Disabled */
@@ -110,6 +113,11 @@
     input[type=number] {
       -moz-appearance: textfield;
     }
+
+    /* Smooth dropdown transition */
+    .transition-height {
+      transition: max-height 0.3s ease-in-out;
+    }
   </style>
 
   <!-- Vercel Scripts (Optional, can remove if not using Vercel) -->
@@ -134,9 +142,9 @@
     <nav class="shadow-md" style="background-color: rgba(0,0,0,0.75);">
       <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
         <!-- Left: Tabs / Hamburger -->
-        <div class="flex flex-col lg:flex-row items-center">
+        <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto">
           <!-- Hamburger Menu (Mobile) -->
-          <div class="block lg:hidden mr-4">
+          <div class="block lg:hidden mb-4 lg:mb-0">
             <button id="mobileMenuToggle" class="text-white focus:outline-none">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -156,31 +164,19 @@
           </div>
 
           <!-- Navigation Tabs -->
-          <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
+          <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col w-full lg:w-auto transition-all duration-300 ease-in-out">
             <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
-            <button class="sale-tab" onclick="switchSale('fuel')">
-              Fuel <span class="status-live">Live</span>
-            </button>
-            <button class="sale-tab" onclick="switchSale('almanak')">
-              Almanak <span class="status-soon">Trading Soon</span>
-            </button>
-            <button class="sale-tab" onclick="switchSale('pulse')">
-              Pulse <span class="status-soon">Trading Soon</span>
-            </button>
-            <button class="sale-tab" onclick="switchSale('silencio')">
-              Silencio <span class="status-soon">Trading Soon</span>
-            </button>
-            <button class="sale-tab" onclick="switchSale('enclave')">
-              Enclave <span class="status-ico">Upcoming ICO</span>
-            </button>
-            <button class="sale-tab" onclick="switchSale('corn')">
-              Corn <span class="status-ico">Upcoming ICO</span>
-            </button>
+            <button class="sale-tab" onclick="switchSale('fuel')">Fuel</button>
+            <button class="sale-tab" onclick="switchSale('almanak')">Almanak</button>
+            <button class="sale-tab" onclick="switchSale('pulse')">Pulse</button>
+            <button class="sale-tab" onclick="switchSale('silencio')">Silencio</button>
+            <button class="sale-tab" onclick="switchSale('enclave')">Enclave</button>
+            <button class="sale-tab" onclick="switchSale('corn')">Corn</button>
           </div>
         </div>
 
         <!-- Right: (Hidden) Connect Wallet + Support the Site -->
-        <div class="mt-4 lg:mt-0 flex flex-row space-x-2">
+        <div class="mt-4 lg:mt-0 flex flex-row space-x-2 w-full lg:w-auto">
           <!-- Connect Wallet Hidden -->
           <button
             class="neon-button py-2 px-4 text-white rounded hidden-button"
@@ -191,7 +187,7 @@
 
           <!-- Support the Site (Flashing) -->
           <button
-            class="flashing-button py-2 px-4 text-white rounded"
+            class="flashing-button py-2 px-4 text-white rounded w-full lg:w-auto"
             onclick="supportSite()"
           >
             Support the Site
@@ -225,10 +221,13 @@
         class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
         style="background-color: rgba(0,0,0,0.65);"
       >
-        <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
+        <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-2" style="color: #18FFF7;">
           Fuel
         </h1>
-        <p class="text-sm text-center text-gray-400 mb-8">
+        <p class="text-sm text-center text-gray-400">
+          Status: <span id="saleStatus" class="badge-live">Live</span>
+        </p>
+        <p class="text-sm text-center text-gray-400 mt-4 mb-8">
           Enter your initial approval amount to calculate your current value for 
           <span id="tokenName">Fuel Token</span>
         </p>
@@ -277,7 +276,7 @@
         <!-- Built By Section -->
         <div class="flex items-center mb-6 md:mb-0">
           <!-- Optional: Add an Icon or Logo -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           
@@ -308,6 +307,24 @@
     </footer>
   </div>
 
+  <!-- Modal for Wallet Address (Optional) -->
+  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <!-- Modal Content -->
+    <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
+      <h2 class="text-xl font-semibold text-white mb-4">Support the Site</h2>
+      <p class="text-gray-300 mb-4">Please send your donations to the following wallet address:</p>
+      <div class="flex items-center bg-gray-700 p-2 rounded">
+        <span id="walletAddress" class="text-gray-200 mr-2">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
+        <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
+          Copy
+        </button>
+      </div>
+      <button onclick="closeModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">
+        Close
+      </button>
+    </div>
+  </div>
+
   <!-- Main Script -->
   <script>
     // Mobile menu toggle
@@ -326,6 +343,8 @@
         isTradable: true,
         fontColor: "#32CD32",
         buttonColor: "#32CD32",
+        status: "Live",
+        statusClass: "badge-live"
       },
       almanak: {
         title: "Almanak",
@@ -334,6 +353,8 @@
         isTradable: false,
         fontColor: "#FFFFFF",
         buttonColor: "#4A5568",
+        status: "Trading Soon",
+        statusClass: "badge-soon"
       },
       pulse: {
         title: "Pulse",
@@ -342,6 +363,8 @@
         isTradable: false,
         fontColor: "#0000FF",
         buttonColor: "#1E90FF",
+        status: "Trading Soon",
+        statusClass: "badge-soon"
       },
       silencio: {
         title: "Silencio",
@@ -350,6 +373,8 @@
         isTradable: false,
         fontColor: "#87CEEB",
         buttonColor: "#4682B4",
+        status: "Trading Soon",
+        statusClass: "badge-soon"
       },
       enclave: {
         title: "Enclave",
@@ -358,6 +383,8 @@
         isTradable: false,
         fontColor: "#FFFFFF",
         buttonColor: "#ADD8E6",
+        status: "Upcoming ICO",
+        statusClass: "badge-ico"
       },
       corn: {
         title: "Corn",
@@ -366,6 +393,8 @@
         isTradable: false,
         fontColor: "#FFA500",
         buttonColor: "#FF8C00",
+        status: "Upcoming ICO",
+        statusClass: "badge-ico"
       }
     };
 
@@ -415,6 +444,11 @@
         document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`;
       }
 
+      // Display status
+      const saleStatus = document.getElementById("saleStatus");
+      saleStatus.textContent = saleData.status;
+      saleStatus.className = saleData.statusClass;
+
       // Enable or disable the Calculate button
       const calculateButton = document.getElementById("calculateButton");
       if (!saleData.isTradable) {
@@ -461,6 +495,10 @@
       }
 
       try {
+        // Show loading indicator
+        document.getElementById("results").style.display = "block";
+        document.getElementById("results").innerHTML = `<p class="text-lg text-gray-400">Calculating...</p>`;
+
         const response = await fetch("/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -469,13 +507,13 @@
         const data = await response.json();
         if (data.error) {
           alert(data.error);
+          document.getElementById("results").innerHTML = `<p class="text-lg text-red-500">Error: ${data.error}</p>`;
         } else {
-          document.getElementById("results").style.display = "block";
           document.getElementById("results").innerHTML = 
-            `<p class="text-lg text-gray-400">
+            `<p class="text-lg font-bold text-gray-400">
               Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
             </p>
-            <p class="text-lg text-gray-400">
+            <p class="text-lg font-bold text-gray-400">
               Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
             </p>
             <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
@@ -485,6 +523,7 @@
       } catch (error) {
         console.error("Error:", error);
         alert("An error occurred while calculating ROI.");
+        document.getElementById("results").innerHTML = `<p class="text-lg text-red-500">An unexpected error occurred.</p>`;
       }
     }
 
@@ -493,83 +532,68 @@
       const overviewList = document.getElementById("overviewList");
       overviewList.innerHTML = '';
 
-      // First fetch Fuel data
-      fetchFuelThen(() => {
-        const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
-        otherTokens.forEach((tokenKey) => {
-          const tokenData = sales[tokenKey];
-          if (!tokenData) return;
+      // Fetch ROI data for all tradable tokens
+      const tradableTokens = Object.keys(sales).filter(token => sales[token].isTradable);
 
-          const status = (tokenKey === 'corn' || tokenKey === 'enclave') 
-            ? 'Upcoming ICO' 
-            : 'Pending TGE';
-          const colorClass = (tokenKey === 'corn' || tokenKey === 'enclave') 
-            ? 'text-orange-400' 
-            : 'text-blue-400';
-          
-          addOverviewItem(tokenData.title, status, colorClass);
-        });
+      tradableTokens.forEach(async (tokenKey) => {
+        const tokenData = sales[tokenKey];
+        if (!tokenData) return;
+
+        try {
+          const response = await fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ investment: 1, round_price: tokenData.seedPrice }), // Investment of 1 for ROI
+          });
+          const data = await response.json();
+          if (!data.error) {
+            const roiPercentage = ((data.current_price / tokenData.seedPrice) - 1) * 100;
+            addOverviewItem(tokenData.title, `${roiPercentage.toFixed(2)}%`);
+          } else {
+            addOverviewItem(tokenData.title, "N/A");
+          }
+        } catch (error) {
+          console.error(`Error fetching ROI for ${tokenData.title}:`, error);
+          addOverviewItem(tokenData.title, "N/A");
+        }
+      });
+
+      // Handle non-tradable tokens
+      const nonTradableTokens = Object.keys(sales).filter(token => !sales[token].isTradable);
+      nonTradableTokens.forEach((tokenKey) => {
+        const tokenData = sales[tokenKey];
+        if (!tokenData) return;
+        addOverviewItem(tokenData.title, "N/A");
       });
     }
 
-    function fetchFuelThen(onDone) {
-      const fuelData = sales['fuel'];
-      if (!fuelData.isTradable) {
-        addOverviewItem('Fuel', 'Pending TGE', 'text-blue-400');
-        if (typeof onDone === 'function') onDone();
-        return;
-      }
-
-      // Use cache if fresh
-      if (cachedFuelData && cachedFuelTimestamp && Date.now() - cachedFuelTimestamp < CACHE_TTL) {
-        displayFuelROI(cachedFuelData);
-        if (typeof onDone === 'function') onDone();
-      } else {
-        fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (!data.error) {
-            cachedFuelData = data;
-            cachedFuelTimestamp = Date.now();
-            displayFuelROI(data);
-          } else {
-            addOverviewItem('Fuel', 'Error', 'text-red-500');
-          }
-          if (typeof onDone === 'function') onDone();
-        })
-        .catch(() => {
-          addOverviewItem('Fuel', 'Error', 'text-red-500');
-          if (typeof onDone === 'function') onDone();
-        });
-      }
-    }
-
-    // Display Fuel ROI in overview
-    function displayFuelROI(data) {
-      const fuelData = sales['fuel'];
-      const pctGain = (data.current_price / fuelData.seedPrice) * 100;
-      let roiClass = 'text-green-400';
-      if (pctGain < 0) roiClass = 'text-red-500';
-      addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
-    }
-
     // Add an overview row
-    function addOverviewItem(tokenName, roiText, colorClass) {
+    function addOverviewItem(tokenName, roiText) {
       const overviewList = document.getElementById("overviewList");
       const row = document.createElement('div');
-      row.className = "flex justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
+      row.className = "flex flex-col md:flex-row justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
 
       const nameEl = document.createElement('span');
-      nameEl.className = "font-semibold";
+      nameEl.className = "font-semibold text-lg";
       nameEl.textContent = tokenName;
 
       const roiEl = document.createElement('span');
-      roiEl.className = colorClass;
+      roiEl.className = "font-bold text-lg";
       roiEl.textContent = roiText;
+
+      // Color coding based on ROI
+      if (roiText !== "N/A") {
+        const roiValue = parseFloat(roiText.replace('%', ''));
+        if (roiValue > 0) {
+          roiEl.classList.add("text-green-400");
+        } else if (roiValue < 0) {
+          roiEl.classList.add("text-red-500");
+        } else {
+          roiEl.classList.add("text-yellow-400");
+        }
+      } else {
+        roiEl.classList.add("text-gray-400");
+      }
 
       row.appendChild(nameEl);
       row.appendChild(roiEl);
@@ -580,11 +604,22 @@
     // Support Site
     // ------------
     function supportSite() {
-      const walletAddress = "0x62f1F6bFE3A798d5023608ac0a9c8a9538276283";
-      const message = `Please send your donations to the following wallet address:\n\n${walletAddress}\n\nYou can copy the address below:`;
-      
-      // Display the wallet address in a prompt
-      prompt(message, walletAddress);
+      const modal = document.getElementById('walletModal');
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('walletModal');
+      modal.classList.add('hidden');
+    }
+
+    function copyWalletAddress() {
+      const walletAddress = document.getElementById('walletAddress').textContent;
+      navigator.clipboard.writeText(walletAddress).then(() => {
+        alert('Wallet address copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy wallet address.');
+      });
     }
 
     // Initialize page
