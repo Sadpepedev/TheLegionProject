@@ -294,7 +294,7 @@
       almanak: {
         title: "Almanak",
         tokenName: "Almanak Token",
-        seedPrice: 0.0435,
+        seedPrice: "Pending TGE",
         isTradable: false,
         fontColor: "#FFFFFF",
         buttonColor: "#4A5568",
@@ -302,7 +302,7 @@
       pulse: {
         title: "Pulse",
         tokenName: "Pulse Token",
-        seedPrice: "Coming Soon",
+        seedPrice: "Pending TGE",
         isTradable: false,
         fontColor: "#0000FF",
         buttonColor: "#1E90FF",
@@ -310,7 +310,7 @@
       silencio: {
         title: "Silencio",
         tokenName: "Silencio Token",
-        seedPrice: "Coming Soon",
+        seedPrice: "Pending TGE",
         isTradable: false,
         fontColor: "#87CEEB",
         buttonColor: "#4682B4",
@@ -318,7 +318,7 @@
       enclave: {
         title: "Enclave",
         tokenName: "Enclave Token",
-        seedPrice: "Coming Soon",
+        seedPrice: "Pending TGE",
         isTradable: false,
         fontColor: "#FFFFFF",
         buttonColor: "#ADD8E6",
@@ -474,7 +474,7 @@
         otherTokens.forEach((tokenKey) => {
           const tokenData = sales[tokenKey];
           if (!tokenData) return;
-          addOverviewItem(tokenData.title, 'Coming Soon', 'text-blue-400');
+          addOverviewItem(tokenData.title, 'Pending TGE', 'text-blue-400');
         });
       });
     }
@@ -483,7 +483,7 @@
     function fetchFuelThen(onDone) {
       const fuelData = sales['fuel'];
       if (!fuelData.isTradable) {
-        addOverviewItem('Fuel', 'Coming Soon', 'text-blue-400');
+        addOverviewItem('Fuel', 'Pending TGE', 'text-blue-400');
         if (typeof onDone === 'function') onDone();
         return;
       }
