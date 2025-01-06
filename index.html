@@ -5,6 +5,22 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Track Legion ICO Performance</title>
   
+  <!-- Security Headers -->
+  
+  <!-- Content-Security-Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://*.vercel-insights.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    object-src 'none';
+    base-uri 'self';
+    frame-ancestors 'none';
+  ">
+  
+  <!-- Prevent Content Type Sniffing -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -84,14 +100,13 @@
     }
 
     /* "Support the Site" button with unique but subtle styling */
-.support-button {
-  border: 1px solid #18FFF7;
-  transition: all 0.3s ease;
-}
-.support-button:hover {
-  color: #18FFF7;
-  box-shadow: 0 0 5px #18FFF7;
-}
+    .support-button {
+      border: 1px solid #18FFF7;
+      transition: all 0.3s ease;
+    }
+    .support-button:hover {
+      color: #18FFF7;
+      box-shadow: 0 0 5px #18FFF7;
     }
 
     /* Numeric input without spinners */
@@ -177,12 +192,12 @@
           </button>
 
           <!-- Support the Site (Unique but less flashy) -->
-<button
-  class="support-button py-2 px-4 text-white rounded w-full lg:w-auto"
-  onclick="supportSite()"
->
-  Support the Site
-</button>
+          <button
+            class="support-button py-2 px-4 text-white rounded w-full lg:w-auto"
+            onclick="supportSite()"
+          >
+            Support the Site
+          </button>
         </div>
       </div>
     </nav>
