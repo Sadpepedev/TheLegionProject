@@ -41,20 +41,20 @@
       box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
     }
     .status-soon {
-      background-color: #FF9800; /* Orange */
+      background-color: #60A5FA; /* Tailwind text-blue-400 */
       color: white;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 12px;
-      box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
+      box-shadow: 0 0 5px rgba(96, 165, 250, 0.6);
     }
     .status-ico {
-      background-color: #3F51B5; /* Blue */
+      background-color: #FB923C; /* Tailwind text-orange-400 */
       color: white;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 12px;
-      box-shadow: 0 0 5px rgba(63, 81, 181, 0.6);
+      box-shadow: 0 0 5px rgba(251, 146, 60, 0.6);
     }
 
     /*  Disabled  */
@@ -87,8 +87,8 @@
       color: #18FFF7;
       box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
     }
-
  
+
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -100,7 +100,7 @@
     }
   </style>
 
- 
+
   <script>
     window.si = window.si || function () {
       (window.siq = window.siq || []).push(arguments);
@@ -165,7 +165,7 @@
             Enclave <span class="status-soon">Trading Soon</span>
           </button>
           <button class="sale-tab" onclick="switchSale('corn')">
-            Corn <span class="status-ico">ICO Soon</span>
+            Corn <span class="status-ico">Upcoming ICO</span>
           </button>
         </div>
       </div>
@@ -345,13 +345,15 @@
     function switchSale(sale) {
       currentSale = sale;
 
+      // Remove 'active-tab' from all tabs
+      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
+
       if (sale === 'overview') {
-        document
-          .querySelectorAll(".sale-tab")
-          .forEach((tab) => tab.classList.remove("active-tab"));
-        document
-          .querySelector(`[onclick="switchSale('overview')"]`)
-          .classList.add("active-tab");
+        // Corrected querySelector syntax with escaped quotes
+        const overviewTab = document.querySelector('[onclick="switchSale(\'overview\')"]');
+        if (overviewTab) {
+          overviewTab.classList.add("active-tab");
+        }
 
         // show overview
         document.getElementById("mainSaleContainer").style.display = "none";
@@ -370,12 +372,11 @@
       if (!saleData) return;
 
       // Highlight correct tab
-      document
-        .querySelectorAll(".sale-tab")
-        .forEach((tab) => tab.classList.remove("active-tab"));
-      document
-        .querySelector(`[onclick="switchSale('${sale}')"]`)
-        .classList.add("active-tab");
+      // Corrected querySelector syntax with escaped quotes and template literals
+      const saleTab = document.querySelector(`[onclick="switchSale('${sale}')"]`);
+      if (saleTab) {
+        saleTab.classList.add("active-tab");
+      }
 
       // Update headings
       document.getElementById("saleTitle").textContent = saleData.title;
@@ -423,8 +424,8 @@
       // If not tradable, show "Not Available"
       if (!saleData.isTradable) {
         document.getElementById("results").style.display = "block";
-        document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">
+        document.getElementById("results").innerHTML = 
+          `<p class="text-lg text-gray-400">
             Current Token Price: <span class="text-white">Not Available</span>
           </p>
           <p class="text-lg text-gray-400">
@@ -445,8 +446,8 @@
           alert(data.error);
         } else {
           document.getElementById("results").style.display = "block";
-          document.getElementById("results").innerHTML = `
-            <p class="text-lg text-gray-400">
+          document.getElementById("results").innerHTML = 
+            `<p class="text-lg text-gray-400">
               Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
             </p>
             <p class="text-lg text-gray-400">
@@ -553,6 +554,7 @@
       overviewList.appendChild(row);
     }
 
+    // Initialize the page by switching to the default sale
     switchSale(currentSale);
   </script>
 </body>
