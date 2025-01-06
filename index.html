@@ -84,14 +84,13 @@
     }
 
     /* "Support the Site" button with unique but subtle styling */
-.support-button {
-  border: 1px solid #18FFF7;
-  transition: all 0.3s ease;
-}
-.support-button:hover {
-  color: #18FFF7;
-  box-shadow: 0 0 5px #18FFF7;
-}
+    .support-button {
+      border: 1px solid #18FFF7;
+      transition: all 0.3s ease;
+    }
+    .support-button:hover {
+      color: #18FFF7;
+      box-shadow: 0 0 5px #18FFF7;
     }
 
     /* Numeric input without spinners */
@@ -177,12 +176,12 @@
           </button>
 
           <!-- Support the Site (Unique but less flashy) -->
-<button
-  class="support-button py-2 px-4 text-white rounded w-full lg:w-auto"
-  onclick="supportSite()"
->
-  Support the Site
-</button>
+          <button
+            class="support-button py-2 px-4 text-white rounded w-full lg:w-auto"
+            onclick="supportSite()"
+          >
+            Support the Site
+          </button>
         </div>
       </div>
     </nav>
@@ -302,8 +301,8 @@
   <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <!-- Modal Content -->
     <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
-      <h2 class="text-xl font-semibold text-white mb-4"></h2>
-      <p class="text-gray-300 mb-4">If you're feeling generous, i'd love a nice cold drink:</p>
+      <h2 class="text-xl font-semibold text-white mb-4">Support the Site</h2>
+      <p class="text-gray-300 mb-4">Please send your donations to the following wallet address:</p>
       <div class="flex flex-wrap items-center bg-gray-700 p-2 rounded">
         <span id="walletAddress" class="text-gray-200 mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
         <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
@@ -490,7 +489,7 @@
         document.getElementById("results").style.display = "block";
         document.getElementById("results").innerHTML = `<p class="text-lg text-gray-400">Calculating...</p>`;
 
-        const response = await fetch("/calculate", {
+        const response = await fetch("/api/calculate", { // Updated to /api/calculate for Vercel functions
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
@@ -542,7 +541,7 @@
         displayFuelROI(cachedFuelData, fuelData);
         if (typeof callback === 'function') callback();
       } else {
-        fetch("/calculate", {
+        fetch("/api/calculate", { // Updated to /api/calculate for Vercel functions
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ investment: 1, round_price: fuelData.seedPrice }), // Investment of 1 for ROI
@@ -567,7 +566,7 @@
 
     // Display Fuel ROI in overview
     function displayFuelROI(data, fuelData) {
-      const roiPercentage = (data.current_price / fuelData.seedPrice) * 100;
+      const roiPercentage = ((data.current_price / fuelData.seedPrice) - 1) * 100;
       let roiClass = 'text-green-400';
       if (roiPercentage < 0) roiClass = 'text-red-500';
       addOverviewItem(fuelData.title, `${roiPercentage.toFixed(2)}%`, roiClass);
