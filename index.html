@@ -1,16 +1,14 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Track Legion ICO Performance</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Ethers.js -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
   
-  <!--  Font  -->
+  <!-- Google Font -->
   <link 
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" 
     rel="stylesheet"
@@ -20,18 +18,18 @@
     body {
       background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       color: #FFFFFF;
-      font-family: 'Orbitron', sans-serif; /* Use that futuristic vibe */
+      font-family: 'Orbitron', sans-serif; /* Futuristic vibe */
       min-height: 100vh;
     }
 
-    /*  Active tab  */
+    /* Active tab highlight */
     .active-tab {
       border-bottom: 2px solid #18FFF7; 
       font-weight: bold;
       transition: all 0.2s ease-in-out;
     }
 
-    /*  status labels */
+    /* Status labels */
     .status-live {
       background-color: #4CAF50; /* Green */
       color: white;
@@ -57,38 +55,52 @@
       box-shadow: 0 0 5px rgba(251, 146, 60, 0.6);
     }
 
-    /*  Disabled  */
+    /* Disabled */
     .disabled-button {
       background-color: #4A5568; /* Gray */
       cursor: not-allowed;
       opacity: 0.5;
     }
 
-    /*  Hide results  */
+    /* Hide results by default */
     #results {
       display: none;
     }
 
-    /* nav buttons */
+    /* Navigation tabs hover effect */
     .sale-tab {
       transition: color 0.2s ease-in-out;
     }
     .sale-tab:hover {
-      color: #18FFF7; /*  on hover */
+      color: #18FFF7;
     }
 
-    /* "Connect Wallet" */
-    .neon-button {
+    /* Connect Wallet button (currently hidden) */
+    .hidden-button {
+      display: none;
+    }
+
+    /* "Support the Site" button with flashing effect */
+    .flashing-button {
       border: 1px solid #18FFF7;
       position: relative;
       transition: all 0.3s ease;
+      animation: flash 1.5s ease-in-out infinite;
     }
-    .neon-button:hover {
+    .flashing-button:hover {
       color: #18FFF7;
       box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
     }
- 
+    @keyframes flash {
+      0%, 100% {
+        box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
+      }
+      50% {
+        box-shadow: 0 0 15px #FF00FF, 0 0 30px #FF00FF;
+      }
+    }
 
+    /* Numeric input without spinners */
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -100,15 +112,13 @@
     }
   </style>
 
-
+  <!-- Vercel Scripts (Optional, can remove if not using Vercel) -->
   <script>
     window.si = window.si || function () {
       (window.siq = window.siq || []).push(arguments);
     };
   </script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
-
-  <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () {
       (window.vaq = window.vaq || []).push(arguments);
@@ -117,14 +127,13 @@
   <script defer src="/_vercel/insights/script.js"></script>
 
 </head>
-
 <body>
-  <!-- Top Bar Navigation -->
+  <!-- Top Nav Bar -->
   <nav class="shadow-md" style="background-color: rgba(0,0,0,0.75);">
     <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
-      <!-- Left Section: Tabs / Hamburger -->
+      <!-- Left: Tabs / Hamburger -->
       <div class="flex flex-col lg:flex-row items-center">
-        <!-- Hamburger Menu for Mobile -->
+        <!-- Hamburger Menu (Mobile) -->
         <div class="block lg:hidden mr-4">
           <button id="mobileMenuToggle" class="text-white focus:outline-none">
             <svg 
@@ -146,9 +155,7 @@
 
         <!-- Navigation Tabs -->
         <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
-          <!-- Overview first -->
           <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
-
           <button class="sale-tab" onclick="switchSale('fuel')">
             Fuel <span class="status-live">Live</span>
           </button>
@@ -170,14 +177,22 @@
         </div>
       </div>
 
-      <!-- Right Section: Connect Wallet -->
-      <div class="mt-4 lg:mt-0">
-        <!-- "Connect Wallet"  -->
+      <!-- Right: (Hidden) Connect Wallet + Support the Site -->
+      <div class="mt-4 lg:mt-0 flex flex-row space-x-2">
+        <!-- Connect Wallet Hidden -->
         <button
-          class="neon-button py-2 px-4 text-white rounded"
+          class="neon-button py-2 px-4 text-white rounded hidden-button"
           onclick="alert('Coming Soon!')"
         >
           Connect Wallet
+        </button>
+
+        <!-- Support the Site (Flashing) -->
+        <button
+          class="flashing-button py-2 px-4 text-white rounded"
+          onclick="supportSite()"
+        >
+          Support the Site
         </button>
       </div>
     </div>
@@ -196,11 +211,11 @@
       Below are all Legion ICOs and their current ROI (in %):
     </p>
 
-    <!--  list  -->
+    <!-- List of Tokens on Overview -->
     <div id="overviewList" class="space-y-4"></div>
   </div>
 
-  <!-- SALE CONTAINER -->
+  <!-- MAIN SALE CONTAINER -->
   <div 
     id="mainSaleContainer"
     class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
@@ -210,7 +225,7 @@
       Fuel
     </h1>
     <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your initial approval amount or connect your wallet to calculate your current value for 
+      Enter your initial approval amount to calculate your current value for 
       <span id="tokenName">Fuel Token</span>
     </p>
 
@@ -228,6 +243,8 @@
           id="investment" 
           class="w-full p-3 bg-gray-800 rounded text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
           placeholder="Enter your investment"
+          min="0"
+          step="any"
         >
       </div>
       <p class="text-sm text-center mb-6">
@@ -244,11 +261,11 @@
       </button>
     </form>
 
-    <!-- Results Section -->
+    <!-- Results -->
     <div id="results" class="mt-8 p-6 bg-gray-800 bg-opacity-80 rounded text-center"></div>
   </div>
 
-  <!-- FOOTERS -->
+  <!-- FOOTER -->
   <footer class="mt-10 text-center text-gray-500">
     Built by 
     <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">
@@ -264,7 +281,6 @@
       </a>.
     </p>
     <br/>
-  
     <p class="mx-4">
       <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
       <em>not</em> offer financial or trading advice. This website is purely for informational 
@@ -273,8 +289,9 @@
     </p>
   </footer>
 
+  <!-- Main Script -->
   <script>
-    // mobile menu
+    // Mobile menu toggle
     const mobileMenuToggle = document.getElementById("mobileMenuToggle");
     const navTabs = document.getElementById("navTabs");
     mobileMenuToggle.addEventListener("click", () => {
@@ -318,7 +335,7 @@
       enclave: {
         title: "Enclave",
         tokenName: "Enclave Token",
-        seedPrice: "Upcoming ICO", <!-- Updated from "Pending TGE" to "Upcoming ICO" -->
+        seedPrice: "Upcoming ICO",
         isTradable: false,
         fontColor: "#FFFFFF",
         buttonColor: "#ADD8E6",
@@ -326,17 +343,17 @@
       corn: {
         title: "Corn",
         tokenName: "Corn Token",
-        seedPrice: "Upcoming ICO", <!-- Updated from "ICO Soon" to "Upcoming ICO" -->
+        seedPrice: "Upcoming ICO",
         isTradable: false,
         fontColor: "#FFA500",
         buttonColor: "#FF8C00",
       }
     };
 
-    // Overview
+    // Start with Overview
     let currentSale = 'overview';
 
-    // Cache
+    // Cache for Fuel
     const CACHE_TTL = 120000; 
     let cachedFuelData = null;
     let cachedFuelTimestamp = null;
@@ -344,25 +361,20 @@
     // Switch pages
     function switchSale(sale) {
       currentSale = sale;
-
-      // Remove 'active-tab' from all tabs
       document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
 
       if (sale === 'overview') {
-        // Corrected querySelector syntax with escaped quotes
         const overviewTab = document.querySelector('[onclick="switchSale(\'overview\')"]');
-        if (overviewTab) {
-          overviewTab.classList.add("active-tab");
-        }
+        if (overviewTab) overviewTab.classList.add("active-tab");
 
-        // show overview
+        // Show overview
         document.getElementById("mainSaleContainer").style.display = "none";
         document.getElementById("overviewSection").style.display = "block";
 
         showOverview();
         return;
       } else {
-        // show main sale
+        // Show sale container
         document.getElementById("overviewSection").style.display = "none";
         document.getElementById("mainSaleContainer").style.display = "block";
       }
@@ -371,14 +383,9 @@
       const saleData = sales[sale];
       if (!saleData) return;
 
-      // Highlight correct tab
-      // Corrected querySelector syntax with escaped quotes and template literals
       const saleTab = document.querySelector(`[onclick="switchSale('${sale}')"]`);
-      if (saleTab) {
-        saleTab.classList.add("active-tab");
-      }
+      if (saleTab) saleTab.classList.add("active-tab");
 
-      // Update headings
       document.getElementById("saleTitle").textContent = saleData.title;
       document.getElementById("tokenName").textContent = saleData.tokenName;
 
@@ -421,7 +428,7 @@
         return;
       }
 
-      // If not tradable, show "Not Available"
+      // If not tradable
       if (!saleData.isTradable) {
         document.getElementById("results").style.display = "block";
         document.getElementById("results").innerHTML = 
@@ -430,8 +437,7 @@
           </p>
           <p class="text-lg text-gray-400">
             Current Value: <span class="text-white">Not Applicable</span>
-          </p>
-        `;
+          </p>`;
         return;
       }
 
@@ -455,8 +461,7 @@
             </p>
             <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
               Current Value: $${data.roi_value.toFixed(2)}
-            </p>
-          `;
+            </p>`;
         }
       } catch (error) {
         console.error("Error:", error);
@@ -464,27 +469,30 @@
       }
     }
 
-    // We'll wait for Fuel to be appended, then add other tokens
+    // Show overview with ROI data
     function showOverview() {
       const overviewList = document.getElementById("overviewList");
       overviewList.innerHTML = '';
 
-      // 1) Fetch/Append Fuel FIRST
+      // First fetch Fuel data
       fetchFuelThen(() => {
         const otherTokens = ['almanak', 'pulse', 'silencio', 'enclave', 'corn'];
         otherTokens.forEach((tokenKey) => {
           const tokenData = sales[tokenKey];
           if (!tokenData) return;
 
-          // Custom condition to show "Upcoming ICO" for Corn and Enclave
-          const status = (tokenKey === 'corn' || tokenKey === 'enclave') ? 'Upcoming ICO' : 'Pending TGE';
-          const colorClass = (tokenKey === 'corn' || tokenKey === 'enclave') ? 'text-orange-400' : 'text-blue-400';
+          const status = (tokenKey === 'corn' || tokenKey === 'enclave') 
+            ? 'Upcoming ICO' 
+            : 'Pending TGE';
+          const colorClass = (tokenKey === 'corn' || tokenKey === 'enclave') 
+            ? 'text-orange-400' 
+            : 'text-blue-400';
+          
           addOverviewItem(tokenData.title, status, colorClass);
         });
       });
     }
 
-    //fetches Fuel data, uses cache
     function fetchFuelThen(onDone) {
       const fuelData = sales['fuel'];
       if (!fuelData.isTradable) {
@@ -493,24 +501,18 @@
         return;
       }
 
-      // fresh cache
-      if (
-        cachedFuelData &&
-        cachedFuelTimestamp &&
-        Date.now() - cachedFuelTimestamp < CACHE_TTL
-      ) {
-        console.log("Using cached Fuel data");
+      // Use cache if fresh
+      if (cachedFuelData && cachedFuelTimestamp && Date.now() - cachedFuelTimestamp < CACHE_TTL) {
         displayFuelROI(cachedFuelData);
         if (typeof onDone === 'function') onDone();
       } else {
-        console.log("Fetching new Fuel data");
         fetch("/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ investment: 100, round_price: fuelData.seedPrice }),
         })
-        .then((res) => res.json())
-        .then((data) => {
+        .then(res => res.json())
+        .then(data => {
           if (!data.error) {
             cachedFuelData = data;
             cachedFuelTimestamp = Date.now();
@@ -527,7 +529,7 @@
       }
     }
 
-    // Show the ROI% 
+    // Display Fuel ROI in overview
     function displayFuelROI(data) {
       const fuelData = sales['fuel'];
       const pctGain = (data.current_price / fuelData.seedPrice) * 100;
@@ -536,6 +538,7 @@
       addOverviewItem('Fuel', `${pctGain.toFixed(2)}%`, roiClass);
     }
 
+    // Add an overview row
     function addOverviewItem(tokenName, roiText, colorClass) {
       const overviewList = document.getElementById("overviewList");
       const row = document.createElement('div');
@@ -554,7 +557,18 @@
       overviewList.appendChild(row);
     }
 
-    // Initialize the page by switching to the default sale
+    // ------------
+    // Support Site
+    // ------------
+    function supportSite() {
+      const walletAddress = "0x62f1F6bFE3A798d5023608ac0a9c8a9538276283";
+      const message = `Please send your donations to the following wallet address:\n\n${walletAddress}\n\nYou can copy the address below:`;
+      
+      // Display the wallet address in a prompt
+      prompt(message, walletAddress);
+    }
+
+    // Initialize page
     switchSale(currentSale);
   </script>
 </body>
