@@ -41,20 +41,20 @@
       box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
     }
     .status-soon {
-      background-color: #FF9800; /* Orange */
+      background-color: #60A5FA; /* Tailwind text-blue-400 */
       color: white;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 12px;
-      box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
+      box-shadow: 0 0 5px rgba(96, 165, 250, 0.6);
     }
     .status-ico {
-      background-color: #3F51B5; /* Blue */
+      background-color: #FB923C; /* Tailwind text-orange-400 */
       color: white;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 12px;
-      box-shadow: 0 0 5px rgba(63, 81, 181, 0.6);
+      box-shadow: 0 0 5px rgba(251, 146, 60, 0.6);
     }
 
     /*  Disabled  */
@@ -100,7 +100,7 @@
     }
   </style>
 
- 
+
   <script>
     window.si = window.si || function () {
       (window.siq = window.siq || []).push(arguments);
@@ -165,7 +165,7 @@
             Enclave <span class="status-soon">Trading Soon</span>
           </button>
           <button class="sale-tab" onclick="switchSale('corn')">
-            Corn <span class="status-ico">ICO Soon</span>
+            Corn <span class="status-ico">Upcoming ICO</span>
           </button>
         </div>
       </div>
@@ -350,7 +350,7 @@
           .querySelectorAll(".sale-tab")
           .forEach((tab) => tab.classList.remove("active-tab"));
         document
-          .querySelector(`[onclick="switchSale('overview')"]`)
+          .querySelector([onclick="switchSale('overview')"])
           .classList.add("active-tab");
 
         // show overview
@@ -374,7 +374,7 @@
         .querySelectorAll(".sale-tab")
         .forEach((tab) => tab.classList.remove("active-tab"));
       document
-        .querySelector(`[onclick="switchSale('${sale}')"]`)
+        .querySelector([onclick="switchSale('${sale}')"])
         .classList.add("active-tab");
 
       // Update headings
@@ -423,8 +423,8 @@
       // If not tradable, show "Not Available"
       if (!saleData.isTradable) {
         document.getElementById("results").style.display = "block";
-        document.getElementById("results").innerHTML = `
-          <p class="text-lg text-gray-400">
+        document.getElementById("results").innerHTML = 
+          `<p class="text-lg text-gray-400">
             Current Token Price: <span class="text-white">Not Available</span>
           </p>
           <p class="text-lg text-gray-400">
@@ -445,8 +445,8 @@
           alert(data.error);
         } else {
           document.getElementById("results").style.display = "block";
-          document.getElementById("results").innerHTML = `
-            <p class="text-lg text-gray-400">
+          document.getElementById("results").innerHTML = 
+            `<p class="text-lg text-gray-400">
               Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
             </p>
             <p class="text-lg text-gray-400">
