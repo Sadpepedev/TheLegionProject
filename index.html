@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -318,7 +318,7 @@
       enclave: {
         title: "Enclave",
         tokenName: "Enclave Token",
-        seedPrice: "Pending TGE",
+        seedPrice: "Upcoming ICO", <!-- Updated from "Pending TGE" to "Upcoming ICO" -->
         isTradable: false,
         fontColor: "#FFFFFF",
         buttonColor: "#ADD8E6",
@@ -326,7 +326,7 @@
       corn: {
         title: "Corn",
         tokenName: "Corn Token",
-        seedPrice: "ICO Soon",
+        seedPrice: "Upcoming ICO", <!-- Updated from "ICO Soon" to "Upcoming ICO" -->
         isTradable: false,
         fontColor: "#FFA500",
         buttonColor: "#FF8C00",
@@ -474,7 +474,11 @@
         otherTokens.forEach((tokenKey) => {
           const tokenData = sales[tokenKey];
           if (!tokenData) return;
-          addOverviewItem(tokenData.title, 'Pending TGE', 'text-blue-400');
+
+          // Custom condition to show "Upcoming ICO" for Corn and Enclave
+          const status = (tokenKey === 'corn' || tokenKey === 'enclave') ? 'Upcoming ICO' : 'Pending TGE';
+          const colorClass = (tokenKey === 'corn' || tokenKey === 'enclave') ? 'text-orange-400' : 'text-blue-400';
+          addOverviewItem(tokenData.title, status, colorClass);
         });
       });
     }
