@@ -312,7 +312,7 @@
     <!-- Modal Content -->
     <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
       <h2 class="text-xl font-semibold text-white mb-4">Support the Site</h2>
-      <p class="text-gray-300 mb-4">If youre feeling generous, i'd love a nice drink:</p>
+      <p class="text-gray-300 mb-4">If you're feeling generous, i'd love a nice cold drink:</p>
       <div class="flex flex-wrap items-center bg-gray-700 p-2 rounded">
         <span id="walletAddress" class="text-gray-200 mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
         <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
@@ -510,10 +510,10 @@
           document.getElementById("results").innerHTML = `<p class="text-lg text-red-500">Error: ${data.error}</p>`;
         } else {
           document.getElementById("results").innerHTML = 
-            `<p class="text-lg font-bold text-gray-400">
+            `<p class="text-lg text-gray-400">
               Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
             </p>
-            <p class="text-lg font-bold text-gray-400">
+            <p class="text-lg text-gray-400">
               Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
             </p>
             <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
@@ -612,11 +612,11 @@
       row.className = "flex flex-col md:flex-row justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
 
       const nameEl = document.createElement('span');
-      nameEl.className = "font-semibold text-lg";
+      nameEl.className = "font-normal text-lg"; // Changed from "font-semibold" to "font-normal"
       nameEl.textContent = tokenName;
 
       const valueEl = document.createElement('span');
-      valueEl.className = "font-bold text-lg " + (colorClass || "text-gray-400");
+      valueEl.className = "text-lg " + (colorClass || "text-gray-400"); // Removed "font-bold"
       valueEl.textContent = valueText;
 
       row.appendChild(nameEl);
