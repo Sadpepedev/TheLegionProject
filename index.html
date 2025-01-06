@@ -312,7 +312,7 @@
     <!-- Modal Content -->
     <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
       <h2 class="text-xl font-semibold text-white mb-4">Support the Site</h2>
-      <p class="text-gray-300 mb-4">Please send your donations to the following wallet address:</p>
+      <p class="text-gray-300 mb-4">If youre feeling generous, i'd love a nice drink:</p>
       <div class="flex flex-wrap items-center bg-gray-700 p-2 rounded">
         <span id="walletAddress" class="text-gray-200 mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
         <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
@@ -576,7 +576,7 @@
 
     // Display Fuel ROI in overview
     function displayFuelROI(data, fuelData) {
-      const roiPercentage = ((data.current_price / fuelData.seedPrice) - 1) * 100;
+      const roiPercentage = (data.current_price / fuelData.seedPrice) * 100;
       let roiClass = 'text-green-400';
       if (roiPercentage < 0) roiClass = 'text-red-500';
       addOverviewItem(fuelData.title, `${roiPercentage.toFixed(2)}%`, roiClass);
