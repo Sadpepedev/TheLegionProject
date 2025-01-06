@@ -19,7 +19,7 @@
       background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       color: #FFFFFF;
       font-family: 'Orbitron', sans-serif; /* Futuristic vibe */
-      min-height: 100vh;
+      margin: 0; /* Remove default margin */
     }
 
     /* Active tab highlight */
@@ -128,166 +128,185 @@
 
 </head>
 <body>
-  <!-- Top Nav Bar -->
-  <nav class="shadow-md" style="background-color: rgba(0,0,0,0.75);">
-    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
-      <!-- Left: Tabs / Hamburger -->
-      <div class="flex flex-col lg:flex-row items-center">
-        <!-- Hamburger Menu (Mobile) -->
-        <div class="block lg:hidden mr-4">
-          <button id="mobileMenuToggle" class="text-white focus:outline-none">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              class="h-6 w-6" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path 
-                stroke-linecap="round" 
-                stroke-linejoin="round" 
-                stroke-width="2" 
-                d="M4 6h16M4 12h16M4 18h16" 
-              />
-            </svg>
-          </button>
+  <!-- Flex Container -->
+  <div class="flex flex-col min-h-screen">
+    <!-- Top Nav Bar -->
+    <nav class="shadow-md" style="background-color: rgba(0,0,0,0.75);">
+      <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between py-4 px-6">
+        <!-- Left: Tabs / Hamburger -->
+        <div class="flex flex-col lg:flex-row items-center">
+          <!-- Hamburger Menu (Mobile) -->
+          <div class="block lg:hidden mr-4">
+            <button id="mobileMenuToggle" class="text-white focus:outline-none">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                class="h-6 w-6" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16" 
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Navigation Tabs -->
+          <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
+            <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
+            <button class="sale-tab" onclick="switchSale('fuel')">
+              Fuel <span class="status-live">Live</span>
+            </button>
+            <button class="sale-tab" onclick="switchSale('almanak')">
+              Almanak <span class="status-soon">Trading Soon</span>
+            </button>
+            <button class="sale-tab" onclick="switchSale('pulse')">
+              Pulse <span class="status-soon">Trading Soon</span>
+            </button>
+            <button class="sale-tab" onclick="switchSale('silencio')">
+              Silencio <span class="status-soon">Trading Soon</span>
+            </button>
+            <button class="sale-tab" onclick="switchSale('enclave')">
+              Enclave <span class="status-ico">Upcoming ICO</span>
+            </button>
+            <button class="sale-tab" onclick="switchSale('corn')">
+              Corn <span class="status-ico">Upcoming ICO</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col">
-          <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
-          <button class="sale-tab" onclick="switchSale('fuel')">
-            Fuel <span class="status-live">Live</span>
+        <!-- Right: (Hidden) Connect Wallet + Support the Site -->
+        <div class="mt-4 lg:mt-0 flex flex-row space-x-2">
+          <!-- Connect Wallet Hidden -->
+          <button
+            class="neon-button py-2 px-4 text-white rounded hidden-button"
+            onclick="alert('Coming Soon!')"
+          >
+            Connect Wallet
           </button>
-          <button class="sale-tab" onclick="switchSale('almanak')">
-            Almanak <span class="status-soon">Trading Soon</span>
-          </button>
-          <button class="sale-tab" onclick="switchSale('pulse')">
-            Pulse <span class="status-soon">Trading Soon</span>
-          </button>
-          <button class="sale-tab" onclick="switchSale('silencio')">
-            Silencio <span class="status-soon">Trading Soon</span>
-          </button>
-          <button class="sale-tab" onclick="switchSale('enclave')">
-            Enclave <span class="status-ico">Upcoming ICO</span>
-          </button>
-          <button class="sale-tab" onclick="switchSale('corn')">
-            Corn <span class="status-ico">Upcoming ICO</span>
+
+          <!-- Support the Site (Flashing) -->
+          <button
+            class="flashing-button py-2 px-4 text-white rounded"
+            onclick="supportSite()"
+          >
+            Support the Site
           </button>
         </div>
       </div>
+    </nav>
 
-      <!-- Right: (Hidden) Connect Wallet + Support the Site -->
-      <div class="mt-4 lg:mt-0 flex flex-row space-x-2">
-        <!-- Connect Wallet Hidden -->
-        <button
-          class="neon-button py-2 px-4 text-white rounded hidden-button"
-          onclick="alert('Coming Soon!')"
-        >
-          Connect Wallet
-        </button>
-
-        <!-- Support the Site (Flashing) -->
-        <button
-          class="flashing-button py-2 px-4 text-white rounded"
-          onclick="supportSite()"
-        >
-          Support the Site
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- OVERVIEW SECTION -->
-  <div
-    id="overviewSection"
-    class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
-    style="display: none; background-color: rgba(0,0,0,0.65);"
-  >
-    <h2 class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
-      Token Overviews
-    </h2>
-    <p class="text-sm text-center text-gray-400 mb-8">
-      Below are all Legion ICOs and their current ROI (in %):
-    </p>
-
-    <!-- List of Tokens on Overview -->
-    <div id="overviewList" class="space-y-4"></div>
-  </div>
-
-  <!-- MAIN SALE CONTAINER -->
-  <div 
-    id="mainSaleContainer"
-    class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
-    style="background-color: rgba(0,0,0,0.65);"
-  >
-    <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
-      Fuel
-    </h1>
-    <p class="text-sm text-center text-gray-400 mb-8">
-      Enter your initial approval amount to calculate your current value for 
-      <span id="tokenName">Fuel Token</span>
-    </p>
-
-    <!-- ROI Form -->
-    <form onsubmit="calculateROI(event)">
-      <div class="mb-6">
-        <label 
-          for="investment" 
-          class="block text-gray-200 text-center font-semibold"
-        >
-          Initial Investment ($USD):
-        </label>
-        <input 
-          type="number" 
-          id="investment" 
-          class="w-full p-3 bg-gray-800 rounded text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
-          placeholder="Enter your investment"
-          min="0"
-          step="any"
-        >
-      </div>
-      <p class="text-sm text-center mb-6">
-        <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span>
-      </p>
-
-      <button 
-        id="calculateButton" 
-        type="submit" 
-        class="w-full py-3 rounded font-bold text-white shadow-md disabled-button"
-        style="background-color: #32CD32;"
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow">
+      <!-- OVERVIEW SECTION -->
+      <div
+        id="overviewSection"
+        class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
+        style="display: none; background-color: rgba(0,0,0,0.65);"
       >
-        Calculate
-      </button>
-    </form>
+        <h2 class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
+          Token Overviews
+        </h2>
+        <p class="text-sm text-center text-gray-400 mb-8">
+          Below are all Legion ICOs and their current ROI (in %):
+        </p>
 
-    <!-- Results -->
-    <div id="results" class="mt-8 p-6 bg-gray-800 bg-opacity-80 rounded text-center"></div>
+        <!-- List of Tokens on Overview -->
+        <div id="overviewList" class="space-y-4"></div>
+      </div>
+
+      <!-- MAIN SALE CONTAINER -->
+      <div 
+        id="mainSaleContainer"
+        class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
+        style="background-color: rgba(0,0,0,0.65);"
+      >
+        <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
+          Fuel
+        </h1>
+        <p class="text-sm text-center text-gray-400 mb-8">
+          Enter your initial approval amount to calculate your current value for 
+          <span id="tokenName">Fuel Token</span>
+        </p>
+
+        <!-- ROI Form -->
+        <form onsubmit="calculateROI(event)">
+          <div class="mb-6">
+            <label 
+              for="investment" 
+              class="block text-gray-200 text-center font-semibold"
+            >
+              Initial Investment ($USD):
+            </label>
+            <input 
+              type="number" 
+              id="investment" 
+              class="w-full p-3 bg-gray-800 rounded text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+              placeholder="Enter your investment"
+              min="0"
+              step="any"
+            >
+          </div>
+          <p class="text-sm text-center mb-6">
+            <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span>
+          </p>
+
+          <button 
+            id="calculateButton" 
+            type="submit" 
+            class="w-full py-3 rounded font-bold text-white shadow-md disabled-button"
+            style="background-color: #32CD32;"
+          >
+            Calculate
+          </button>
+        </form>
+
+        <!-- Results -->
+        <div id="results" class="mt-8 p-6 bg-gray-800 bg-opacity-80 rounded text-center"></div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 py-8">
+      <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+        
+        <!-- Built By Section -->
+        <div class="flex items-center mb-6 md:mb-0">
+          <!-- Optional: Add an Icon or Logo -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          
+          <div>
+            <p class="text-xl font-semibold text-white">Built by</p>
+            <a href="https://x.com/Dustybeerbong" target="_blank" class="text-pink-400 hover:text-pink-300 transition-colors duration-200">
+              Sadpepe.exe
+            </a>
+          </div>
+        </div>
+        
+        <!-- Additional Footer Content -->
+        <div class="text-center md:text-right">
+          <p class="text-sm">
+            Price data provided by 
+            <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">
+              CoinGecko
+            </a>.
+          </p>
+          <p class="mt-2 text-sm">
+            <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
+            <em>not</em> offer financial or trading advice. This website is purely for informational 
+            purposes to assist in tracking prior ICO performance. Always conduct your own 
+            research before making any investment decisions.
+          </p>
+        </div>
+      </div>
+    </footer>
   </div>
-
-  <!-- FOOTER -->
-  <footer class="mt-10 text-center text-gray-500">
-    Built by 
-    <a href="https://x.com/Dustybeerbong" target="_blank" class="text-blue-400 hover:underline">
-      Sadpepe.exe
-    </a>
-  </footer>
-
-  <footer class="text-gray-400 text-sm text-center py-4 mt-8" style="background-color: rgba(0,0,0,0.75);">
-    <p>
-      Price data provided by 
-      <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">
-        CoinGecko
-      </a>.
-    </p>
-    <br/>
-    <p class="mx-4">
-      <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
-      <em>not</em> offer financial or trading advice. This website is purely for informational 
-      purposes to assist in tracking prior ICO performance. Always conduct your own 
-      research before making any investment decisions.
-    </p>
-  </footer>
 
   <!-- Main Script -->
   <script>
