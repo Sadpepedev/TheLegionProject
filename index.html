@@ -83,24 +83,15 @@
       display: none;
     }
 
-    /* "Support the Site" button with flashing effect */
-    .flashing-button {
-      border: 1px solid #18FFF7;
-      position: relative;
-      transition: all 0.3s ease;
-      animation: flash 1.5s ease-in-out infinite;
-    }
-    .flashing-button:hover {
-      color: #18FFF7;
-      box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
-    }
-    @keyframes flash {
-      0%, 100% {
-        box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
-      }
-      50% {
-        box-shadow: 0 0 15px #FF00FF, 0 0 30px #FF00FF;
-      }
+    /* "Support the Site" button with unique but subtle styling */
+.support-button {
+  border: 1px solid #18FFF7;
+  transition: all 0.3s ease;
+}
+.support-button:hover {
+  color: #18FFF7;
+  box-shadow: 0 0 5px #18FFF7;
+}
     }
 
     /* Numeric input without spinners */
@@ -185,13 +176,13 @@
             Connect Wallet
           </button>
 
-          <!-- Support the Site (Flashing) -->
-          <button
-            class="flashing-button py-2 px-4 text-white rounded w-full lg:w-auto"
-            onclick="supportSite()"
-          >
-            Support the Site
-          </button>
+          <!-- Support the Site (Unique but less flashy) -->
+<button
+  class="support-button py-2 px-4 text-white rounded w-full lg:w-auto"
+  onclick="supportSite()"
+>
+  Support the Site
+</button>
         </div>
       </div>
     </nav>
@@ -311,7 +302,7 @@
   <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <!-- Modal Content -->
     <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
-      <h2 class="text-xl font-semibold text-white mb-4">Support the Site</h2>
+      <h2 class="text-xl font-semibold text-white mb-4"></h2>
       <p class="text-gray-300 mb-4">If you're feeling generous, i'd love a nice cold drink:</p>
       <div class="flex flex-wrap items-center bg-gray-700 p-2 rounded">
         <span id="walletAddress" class="text-gray-200 mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
