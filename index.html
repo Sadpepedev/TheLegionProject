@@ -77,17 +77,31 @@
       color: #18FFF7; /*  on hover */
     }
 
-    /* "Connect Wallet" */
-    .neon-button {
+    /* "Support the Site" Button - with flashing effect */
+    .flashing-button {
       border: 1px solid #18FFF7;
       position: relative;
       transition: all 0.3s ease;
+      animation: flash 1.5s ease-in-out infinite;
     }
-    .neon-button:hover {
+    .flashing-button:hover {
       color: #18FFF7;
       box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
     }
- 
+
+    @keyframes flash {
+      0%, 100% {
+        box-shadow: 0 0 10px #18FFF7, 0 0 20px #18FFF7;
+      }
+      50% {
+        box-shadow: 0 0 15px #FF00FF, 0 0 30px #FF00FF;
+      }
+    }
+
+    /* Hide "Connect Wallet" for now */
+    .hidden-button {
+      display: none;
+    }
 
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button {
@@ -170,14 +184,22 @@
         </div>
       </div>
 
-      <!-- Right Section: Connect Wallet -->
-      <div class="mt-4 lg:mt-0">
-        <!-- "Connect Wallet"  -->
+      <!-- Right Section: Connect Wallet (hidden) + Support the Site (flashing) -->
+      <div class="mt-4 lg:mt-0 flex flex-row space-x-2">
+        <!-- Hide the "Connect Wallet" button -->
         <button
-          class="neon-button py-2 px-4 text-white rounded"
+          class="neon-button py-2 px-4 text-white rounded hidden-button"
           onclick="alert('Coming Soon!')"
         >
           Connect Wallet
+        </button>
+
+        <!-- "Support the Site" -->
+        <button
+          class="flashing-button py-2 px-4 text-white rounded"
+          onclick="supportSite()"
+        >
+          Support the Site
         </button>
       </div>
     </div>
@@ -318,7 +340,7 @@
       enclave: {
         title: "Enclave",
         tokenName: "Enclave Token",
-        seedPrice: "Upcoming ICO", <!-- Updated from "Pending TGE" to "Upcoming ICO" -->
+        seedPrice: "Upcoming ICO",
         isTradable: false,
         fontColor: "#FFFFFF",
         buttonColor: "#ADD8E6",
@@ -326,7 +348,7 @@
       corn: {
         title: "Corn",
         tokenName: "Corn Token",
-        seedPrice: "Upcoming ICO", <!-- Updated from "ICO Soon" to "Upcoming ICO" -->
+        seedPrice: "Upcoming ICO",
         isTradable: false,
         fontColor: "#FFA500",
         buttonColor: "#FF8C00",
@@ -349,7 +371,6 @@
       document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
 
       if (sale === 'overview') {
-        // Corrected querySelector syntax with escaped quotes
         const overviewTab = document.querySelector('[onclick="switchSale(\'overview\')"]');
         if (overviewTab) {
           overviewTab.classList.add("active-tab");
@@ -371,8 +392,6 @@
       const saleData = sales[sale];
       if (!saleData) return;
 
-      // Highlight correct tab
-      // Corrected querySelector syntax with escaped quotes and template literals
       const saleTab = document.querySelector(`[onclick="switchSale('${sale}')"]`);
       if (saleTab) {
         saleTab.classList.add("active-tab");
@@ -552,6 +571,53 @@
       row.appendChild(nameEl);
       row.appendChild(roiEl);
       overviewList.appendChild(row);
+    }
+
+    // ---------------------------------------------------------
+    // "Support the Site" Button: Prompt user for custom ETH value
+    // ---------------------------------------------------------
+    async function supportSite() {
+      // Ask user for the donation amount in ETH
+      const ethAmount = prompt("Enter the amount of ETH you'd like to donate:", "0.01");
+      if (!ethAmount) {
+        // If user cancelled or didn't enter anything, just return
+        return;
+      }
+
+      // Attempt to parse the ETH value using ethers.js
+      let valueInWei;
+      try {
+        valueInWei = ethers.utils.parseEther(ethAmount).toHexString();
+      } catch (err) {
+        alert("Invalid amount entered. Please try again.");
+        return;
+      }
+
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          // Request user accounts
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const fromAccount = accounts[0];
+
+          // Send a transaction with the user-entered amount
+          const txHash = await window.ethereum.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              from: fromAccount,
+              to: "0x62f1F6bFE3A798d5023608ac0a9c8a9538276283",
+              value: valueInWei, 
+            }],
+          });
+
+          console.log("Transaction sent:", txHash);
+          alert(`Transaction sent!\nHash: ${txHash}`);
+        } catch (error) {
+          console.error(error);
+          alert("Transaction failed or cancelled by user.");
+        }
+      } else {
+        alert("MetaMask is not detected. Please install the MetaMask extension.");
+      }
     }
 
     // Initialize the page by switching to the default sale
