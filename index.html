@@ -76,6 +76,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center; /* Center horizontally */
     }
 
     /* Status badges */
@@ -251,35 +252,31 @@
       flex: 1;
     }
 
-    /* Modern Header Styles */
+    /* Simplified Header Styles */
     .modern-header h2 {
-      font-size: 3rem; /* Adjusted for better scaling */
-      font-weight: 800;
+      font-size: 2.5rem; /* Reduced font size for a plainer look */
+      font-weight: 700; /* Slightly less bold */
       margin-bottom: 1rem;
-      background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4);
-      background-size: 400% 400%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      /* Removed animation for static gradient */
-      text-shadow: 0 0 10px rgba(255, 154, 158, 0.7), 0 0 20px rgba(250, 208, 196, 0.7), 0 0 30px rgba(250, 208, 196, 0.7);
+      color: #FFFFFF; /* Solid white color */
       text-align: center; /* Ensure text is centered */
+      /* Removed gradient and text-shadow for plainness */
     }
     .modern-header hr {
-      width: 33%;
+      width: 50%;
       margin: 0 auto 1rem auto;
       border-top: 2px solid #FF4B5C;
     }
     .modern-header p {
       font-size: 1.25rem;
       color: #D1D5DB; /* Tailwind's gray-300 */
-      text-shadow: 0 0 5px rgba(0,0,0,0.5);
       text-align: center; /* Ensure text is centered */
+      /* Removed text-shadow for plainness */
     }
 
     /* Responsive Typography */
     @media (min-width: 768px) {
       .modern-header h2 {
-        font-size: 4rem;
+        font-size: 3.5rem;
       }
       .modern-header p {
         font-size: 1.5rem;
@@ -315,7 +312,7 @@
         class="container mx-auto px-6 py-8 rounded-lg shadow-lg max-w-6xl"
         style="background-color: rgba(0,0,0,0.7);"
       >
-        <!-- Modern Header -->
+        <!-- Simplified Header -->
         <div class="modern-header text-center mb-8">
           <h2>
             Legion ICO Tracker
