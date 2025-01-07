@@ -24,89 +24,110 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Font -->
+  <!-- Google Fonts: Orbitron and Roboto Mono -->
   <link 
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" 
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" 
     rel="stylesheet"
   >
   
   <style>
-    body {
-      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-      color: #FFFFFF;
-      font-family: 'Orbitron', sans-serif; /* Futuristic vibe */
-      margin: 0; /* Remove default margin */
+    /* Global CSS Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Active tab highlight */
-    .active-tab {
-      border-bottom: 2px solid #18FFF7; 
-      font-weight: bold;
-      transition: all 0.2s ease-in-out;
+    html, body {
+      height: 100%;
+    }
+    body {
+      /* Night-Time 80s Vaporwave Background */
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      /* Static Gradient: No animation for a static look */
+      font-family: 'Orbitron', sans-serif; /* Orbitron as primary font */
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Overlay Grid */
+    .overlay-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; /* Center horizontally */
     }
 
     /* Status badges */
     .badge-live {
-      background-color: #4CAF50; /* Green */
+      background-color: #32CD32; /* Green */
       color: white;
       padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
+      border-radius: 9999px;
       font-size: 0.75rem;
       display: inline-block;
       margin-top: 0.5rem;
+      box-shadow: 0 0 5px #32CD32;
+      font-weight: bold; /* Bold status text */
+      white-space: nowrap; /* Prevent text wrapping */
     }
     .badge-soon {
-      background-color: #60A5FA; /* Blue */
+      background-color: #FFB347; /* Warm Yellow */
       color: white;
       padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
+      border-radius: 9999px;
       font-size: 0.75rem;
       display: inline-block;
       margin-top: 0.5rem;
+      box-shadow: 0 0 5px #FFB347;
+      font-weight: bold; /* Bold status text */
+      white-space: nowrap; /* Prevent text wrapping */
     }
     .badge-ico {
-      background-color: #FB923C; /* Orange */
+      background-color: #00BFFF; /* Deep Sky Blue */
       color: white;
       padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
+      border-radius: 9999px;
       font-size: 0.75rem;
       display: inline-block;
       margin-top: 0.5rem;
+      box-shadow: 0 0 5px #00BFFF;
+      font-weight: bold; /* Bold status text */
+      white-space: nowrap; /* Prevent text wrapping */
     }
 
-    /* Disabled */
-    .disabled-button {
-      background-color: #4A5568; /* Gray */
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    /* Hide results by default */
-    #results {
-      display: none;
-    }
-
-    /* Navigation tabs hover effect */
-    .sale-tab {
-      transition: color 0.2s ease-in-out;
-    }
-    .sale-tab:hover {
-      color: #18FFF7;
-    }
-
-    /* Connect Wallet button (currently hidden) */
-    .hidden-button {
-      display: none;
-    }
-
-    /* "Support the Site" button with unique but subtle styling */
+    /* Support Button */
     .support-button {
-      border: 1px solid #18FFF7;
+      border: 2px solid #FF4B5C;
+      color: #FF4B5C;
+      background: transparent;
       transition: all 0.3s ease;
     }
     .support-button:hover {
-      color: #18FFF7;
-      box-shadow: 0 0 5px #18FFF7;
+      background-color: #FF4B5C;
+      color: #FFFFFF;
+      box-shadow: 0 0 10px #FF4B5C;
     }
 
     /* Numeric input without spinners */
@@ -123,6 +144,143 @@
     /* Smooth dropdown transition */
     .transition-height {
       transition: max-height 0.3s ease-in-out;
+    }
+
+    /* Table styles for Overview */
+    .overview-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .overview-table th, .overview-table td {
+      padding: 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid #FF4B5C;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    .overview-table th {
+      background-color: #8B0000; /* Deeper Red */
+      color: #FFFFFF;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      white-space: nowrap; /* Prevent header text wrapping */
+    }
+
+    /* Ensure Status column is wide enough */
+    .overview-table th:nth-child(2),
+    .overview-table td:nth-child(2) {
+      min-width: 150px; /* Adjust as needed */
+      white-space: nowrap; /* Prevent wrapping */
+    }
+
+    .overview-table tr:hover {
+      background-color: rgba(255, 75, 92, 0.2);
+    }
+
+    .overview-table td {
+      color: #FFFFFF;
+      font-size: 1rem;
+    }
+
+    .overview-table .roi-positive {
+      color: #00FF7F; /* Neon Green */
+      font-weight: bold;
+    }
+
+    .overview-table .roi-negative {
+      color: #FF4500; /* Neon Red-Orange */
+      font-weight: bold;
+    }
+
+    /* Token Name Colors */
+    .token-fuel {
+      color: #32CD32; /* Lime Green */
+      font-weight: bold;
+    }
+    .token-almanak {
+      color: #1E90FF; /* Dodger Blue */
+      font-weight: bold;
+    }
+    .token-pulse {
+      color: #FF1493; /* Deep Pink */
+      font-weight: bold;
+    }
+    .token-silencio {
+      color: #00CED1; /* Dark Turquoise */
+      font-weight: bold;
+    }
+    .token-enclave {
+      color: #FFD700; /* Gold */
+      font-weight: bold;
+    }
+    .token-corn {
+      color: #FFA500; /* Orange */
+      font-weight: bold;
+    }
+
+    /* Footer Styles */
+    footer {
+      background: linear-gradient(135deg, #FF4B5C 0%, #2F2F2F 100%);
+      color: #FFFFFF;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Modal Styles */
+    #walletModal .bg-gray-800 {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    /* Button Glow */
+    .glow-button {
+      box-shadow: 0 0 10px #FF4B5C, 0 0 20px #FF4B5C, 0 0 30px #FF4B5C;
+    }
+
+    /* Support Section */
+    .support-section {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    /* Ensure footer stays at bottom */
+    .content {
+      flex: 1;
+    }
+
+    /* Simplified Header Styles */
+    .modern-header h2 {
+      font-size: 2.5rem; /* Reduced font size for a plainer look */
+      font-weight: 700; /* Slightly less bold */
+      margin-bottom: 1rem;
+      color: #FFFFFF; /* Solid white color */
+      text-align: center; /* Ensure text is centered */
+      /* Removed gradient and text-shadow for plainness */
+    }
+    .modern-header hr {
+      width: 50%;
+      margin: 0 auto 1rem auto;
+      border-top: 2px solid #FF4B5C;
+    }
+    .modern-header p {
+      font-size: 1.25rem;
+      color: #D1D5DB; /* Tailwind's gray-300 */
+      text-align: center; /* Ensure text is centered */
+      /* Removed text-shadow for plainness */
+    }
+
+    /* Responsive Typography */
+    @media (min-width: 768px) {
+      .modern-header h2 {
+        font-size: 3.5rem;
+      }
+      .modern-header p {
+        font-size: 1.5rem;
+      }
     }
   </style>
 
@@ -142,183 +300,105 @@
 
 </head>
 <body>
-  <!-- Flex Container -->
-  <div class="flex flex-col min-h-screen">
-    <!-- Top Nav Bar -->
-    <nav class="shadow-md" style="background-color: rgba(0,0,0,0.75);">
-      <div class="container mx-auto flex flex-col lg:flex-row items-center justify-center py-4 px-6">
-        <!-- Left: Tabs / Hamburger -->
-        <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto">
-          <!-- Hamburger Menu (Mobile) -->
-          <div class="block lg:hidden mb-4 lg:mb-0">
-            <button id="mobileMenuToggle" class="text-white focus:outline-none">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                class="h-6 w-6" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path 
-                  stroke-linecap="round" 
-                  stroke-linejoin="round" 
-                  stroke-width="2" 
-                  d="M4 6h16M4 12h16M4 18h16" 
-                />
-              </svg>
-            </button>
-          </div>
+  <!-- Overlay Grid for Vaporwave Effect -->
+  <div class="overlay-grid"></div>
 
-          <!-- Navigation Tabs -->
-          <div id="navTabs" class="hidden lg:flex lg:space-x-6 lg:flex-row lg:items-center flex-col w-full lg:w-auto transition-all duration-300 ease-in-out">
-            <button class="sale-tab" onclick="switchSale('overview')">Overview</button>
-            <button class="sale-tab" onclick="switchSale('fuel')">Fuel</button>
-            <button class="sale-tab" onclick="switchSale('almanak')">Almanak</button>
-            <button class="sale-tab" onclick="switchSale('pulse')">Pulse</button>
-            <button class="sale-tab" onclick="switchSale('silencio')">Silencio</button>
-            <button class="sale-tab" onclick="switchSale('enclave')">Enclave</button>
-            <button class="sale-tab" onclick="switchSale('corn')">Corn</button>
-          </div>
+  <!-- MAIN CONTENT -->
+  <div class="content-wrapper content">
+    <main>
+      <!-- OVERVIEW SECTION -->
+      <div
+        id="overviewSection"
+        class="container mx-auto px-6 py-8 rounded-lg shadow-lg max-w-6xl"
+        style="background-color: rgba(0,0,0,0.7);"
+      >
+        <!-- Simplified Header -->
+        <div class="modern-header text-center mb-8">
+          <h2>
+            Legion ICO Tracker
+          </h2>
+          <hr>
         </div>
 
-        <!-- Right: (Hidden) Connect Wallet + Support the Site -->
-        <div class="mt-4 lg:mt-0 flex flex-row space-x-2 w-full lg:w-auto lg:ml-6">
-          <!-- Connect Wallet Hidden -->
-          <button
-            class="neon-button py-2 px-4 text-white rounded hidden-button"
-            onclick="alert('Coming Soon!')"
-          >
-            Connect Wallet
-          </button>
+        <!-- Overview Table -->
+        <div class="overflow-x-auto">
+          <table class="overview-table">
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Status</th>
+                <th>Seed Price</th>
+                <th>Token Price</th> 
+                <th>ROI (%)</th>
+                <th>If you invested $1000</th>
+              </tr>
+            </thead>
+            <tbody id="overviewList" class="space-y-4">
+              <!-- Loading Indicator -->
+              <tr id="loadingRow">
+                <td colspan="6" class="text-center text-gray-400">Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <!-- Support the Site (Unique but less flashy) -->
+        <!-- Support the Site Button -->
+        <div class="support-section">
           <button
-            class="support-button py-2 px-4 text-white rounded w-full lg:w-auto"
+            class="support-button py-2 px-4 text-white rounded glow-button"
             onclick="supportSite()"
+            aria-label="Support the site"
           >
             Support the Site
           </button>
         </div>
       </div>
-    </nav>
-
-    <!-- MAIN CONTENT -->
-    <main class="flex-grow">
-      <!-- OVERVIEW SECTION -->
-      <div
-        id="overviewSection"
-        class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
-        style="display: none; background-color: rgba(0,0,0,0.65);"
-      >
-        <h2 class="text-3xl font-extrabold text-center mb-6" style="color: #18FFF7;">
-          Token Overviews
-        </h2>
-        <p class="text-sm text-center text-gray-400 mb-8">
-          Below are all Legion ICOs and their current ROI (in %):
-        </p>
-
-        <!-- List of Tokens on Overview -->
-        <div id="overviewList" class="space-y-4"></div>
-      </div>
-
-      <!-- MAIN SALE CONTAINER -->
-      <div 
-        id="mainSaleContainer"
-        class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-2xl"
-        style="background-color: rgba(0,0,0,0.65);"
-      >
-        <h1 id="saleTitle" class="text-3xl font-extrabold text-center mb-2" style="color: #18FFF7;">
-          Fuel
-        </h1>
-        <p class="text-sm text-center text-gray-400">
-          Status: <span id="saleStatus" class="badge-live">Live</span>
-        </p>
-        <p class="text-sm text-center text-gray-400 mt-4 mb-8">
-          Enter your initial approval amount to calculate your current value for 
-          <span id="tokenName">Fuel Token</span>
-        </p>
-
-        <!-- ROI Form -->
-        <form onsubmit="calculateROI(event)">
-          <div class="mb-6">
-            <label 
-              for="investment" 
-              class="block text-gray-200 text-center font-semibold"
-            >
-              Initial Investment ($USD):
-            </label>
-            <input 
-              type="number" 
-              id="investment" 
-              class="w-full p-3 bg-gray-800 rounded text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
-              placeholder="Enter your investment"
-              min="0"
-              step="any"
-            >
-          </div>
-          <p class="text-sm text-center mb-6">
-            <strong>Seed Round Price:</strong> <span id="seedPrice">$0.02</span>
-          </p>
-
-          <button 
-            id="calculateButton" 
-            type="submit" 
-            class="w-full py-3 rounded font-bold text-white shadow-md disabled-button"
-            style="background-color: #32CD32;"
-          >
-            Calculate
-          </button>
-        </form>
-
-        <!-- Results -->
-        <div id="results" class="mt-8 p-6 bg-gray-800 bg-opacity-80 rounded text-center"></div>
-      </div>
     </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-gray-900 text-gray-300 py-8">
-      <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-        
-        <!-- Built By Section -->
-        <div class="flex items-center mb-6 md:mb-0">
-          <!-- Optional: Add an Icon or Logo -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          
-          <div>
-            <p class="text-xl font-semibold text-white">Built by</p>
-            <a href="https://x.com/Dustybeerbong" target="_blank" class="text-pink-400 hover:text-pink-300 transition-colors duration-200">
-              Sadpepe.exe
-            </a>
-          </div>
-        </div>
-        
-        <!-- Additional Footer Content -->
-        <div class="text-center md:text-right">
-          <p class="text-sm">
-            Price data provided by 
-            <a href="https://coingecko.com" target="_blank" class="text-blue-400 hover:underline">
-              CoinGecko
-            </a>.
-          </p>
-          <p class="mt-2 text-sm">
-            <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
-            <em>not</em> offer financial or trading advice. This website is purely for informational 
-            purposes to assist in tracking prior ICO performance. Always conduct your own 
-            research before making any investment decisions.
-          </p>
-        </div>
-      </div>
-    </footer>
   </div>
 
-  <!-- Modal for Wallet Address (Optional) -->
+  <!-- FOOTER -->
+  <footer class="bg-gradient-to-r from-red-700 via-black to-red-900 text-gray-300 py-8">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+      
+      <!-- Built By Section -->
+      <div class="flex items-center mb-6 md:mb-0">
+        <!-- Icon or Logo -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-300 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        
+        <div>
+          <p class="text-xl font-semibold text-white">Built by</p>
+          <a href="https://x.com/Dustybeerbong" target="_blank" class="text-red-300 hover:text-red-200 transition-colors duration-200">
+            Sadpepe.exe
+          </a>
+        </div>
+      </div>
+      
+      <!-- Additional Footer Content -->
+      <div class="text-center md:text-right">
+        <p class="text-sm">
+          Price data provided by 
+          <a href="https://coingecko.com" target="_blank" class="text-blue-300 hover:underline">
+            CoinGecko
+          </a>.
+        </p>
+        <p class="mt-2 text-sm">
+          <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
+          <em>not</em> offer financial or trading advice. This website is purely for informational 
+          purposes to assist in tracking prior ICO performance. Always conduct your own 
+          research before making any investment decisions.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal for Wallet Address -->
   <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <!-- Modal Content -->
     <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
-      <h2 class="text-xl font-semibold text-white mb-4"></h2>
-      <p class="text-gray-300 mb-4">If you're feeling generous, i'd love a nice cold drink:</p>
+      <h2 class="text-xl font-semibold text-white mb-4">Support Us</h2>
+      <p class="text-gray-300 mb-4">If you're feeling generous, I'd love a nice cold drink:</p>
       <div class="flex flex-wrap items-center bg-gray-700 p-2 rounded">
         <span id="walletAddress" class="text-gray-200 mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
         <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
@@ -333,301 +413,272 @@
 
   <!-- Main Script -->
   <script>
-    // Mobile menu toggle
-    const mobileMenuToggle = document.getElementById("mobileMenuToggle");
-    const navTabs = document.getElementById("navTabs");
-    mobileMenuToggle.addEventListener("click", () => {
-      navTabs.classList.toggle("hidden");
-    });
-
     // All tokens
     const sales = {
       fuel: {
         title: "Fuel",
         tokenName: "Fuel Token",
         seedPrice: 0.02,
+        tradingDate: "2024-12-19",
         isTradable: true,
         fontColor: "#32CD32",
         buttonColor: "#32CD32",
         status: "Live",
-        statusClass: "badge-live"
+        statusClass: "badge-live",
+        nameClass: "token-fuel"
       },
       almanak: {
         title: "Almanak",
         tokenName: "Almanak Token",
-        seedPrice: "Pending TGE",
+        seedPrice: 0.05,
+        tradingDate: "TBD",
         isTradable: false,
-        fontColor: "#FFFFFF",
+        fontColor: "#1E90FF",
         buttonColor: "#4A5568",
         status: "Pending TGE",
-        statusClass: "badge-soon"
+        statusClass: "badge-soon",
+        nameClass: "token-almanak"
       },
       pulse: {
         title: "Pulse",
         tokenName: "Pulse Token",
-        seedPrice: "Pending TGE",
+        seedPrice: 0.03,
+        tradingDate: "TBD",
         isTradable: false,
-        fontColor: "#0000FF",
+        fontColor: "#FF1493",
         buttonColor: "#1E90FF",
         status: "Pending TGE",
-        statusClass: "badge-soon"
+        statusClass: "badge-soon",
+        nameClass: "token-pulse"
       },
       silencio: {
         title: "Silencio",
         tokenName: "Silencio Token",
-        seedPrice: "Pending TGE",
+        seedPrice: 0.0006, /* Updated Seed Price */
+        tradingDate: "Q1 2025", /* Updated Trading Date */
         isTradable: false,
-        fontColor: "#87CEEB",
+        fontColor: "#00CED1",
         buttonColor: "#4682B4",
         status: "Pending TGE",
-        statusClass: "badge-soon"
+        statusClass: "badge-soon",
+        nameClass: "token-silencio"
       },
       enclave: {
         title: "Enclave",
         tokenName: "Enclave Token",
-        seedPrice: "Upcoming ICO",
+        seedPrice: 0.06,
+        tradingDate: "TBD",
         isTradable: false,
-        fontColor: "#FFFFFF",
-        buttonColor: "#ADD8E6",
+        fontColor: "#FFD700",
+        buttonColor: "#FF8C00",
         status: "Upcoming ICO",
-        statusClass: "badge-ico"
+        statusClass: "badge-ico",
+        nameClass: "token-enclave"
       },
       corn: {
         title: "Corn",
         tokenName: "Corn Token",
-        seedPrice: "Upcoming ICO",
+        seedPrice: 0.01,
+        tradingDate: "TBD",
         isTradable: false,
         fontColor: "#FFA500",
         buttonColor: "#FF8C00",
         status: "Upcoming ICO",
-        statusClass: "badge-ico"
+        statusClass: "badge-ico",
+        nameClass: "token-corn"
       }
     };
 
-    // Start with Overview
-    let currentSale = 'overview';
+    // Cache for data
+    const CACHE_TTL = 120000; // 2 minutes
+    let cachedData = {}; // Object to hold cached data per token
 
-    // Cache for Fuel
-    const CACHE_TTL = 120000; 
-    let cachedFuelData = null;
-    let cachedFuelTimestamp = null;
 
-    // Switch pages
-    function switchSale(sale) {
-      currentSale = sale;
-      document.querySelectorAll(".sale-tab").forEach((tab) => tab.classList.remove("active-tab"));
-
-      if (sale === 'overview') {
-        const overviewTab = document.querySelector('[onclick="switchSale(\'overview\')"]');
-        if (overviewTab) overviewTab.classList.add("active-tab");
-
-        // Show overview
-        document.getElementById("mainSaleContainer").style.display = "none";
-        document.getElementById("overviewSection").style.display = "block";
-
-        showOverview();
-        return;
-      } else {
-        // Show sale container
-        document.getElementById("overviewSection").style.display = "none";
-        document.getElementById("mainSaleContainer").style.display = "block";
-      }
-
-      // Normal token logic
-      const saleData = sales[sale];
-      if (!saleData) return;
-
-      const saleTab = document.querySelector(`[onclick="switchSale('${sale}')"]`);
-      if (saleTab) saleTab.classList.add("active-tab");
-
-      document.getElementById("saleTitle").textContent = saleData.title;
-      document.getElementById("tokenName").textContent = saleData.tokenName;
-
-      // Display seed price
-      if (typeof saleData.seedPrice === "string") {
-        document.getElementById("seedPrice").textContent = saleData.seedPrice;
-      } else {
-        document.getElementById("seedPrice").textContent = `$${saleData.seedPrice.toFixed(4)}`;
-      }
-
-      // Display status
-      const saleStatus = document.getElementById("saleStatus");
-      saleStatus.textContent = saleData.status;
-      saleStatus.className = saleData.statusClass;
-
-      // Enable or disable the Calculate button
-      const calculateButton = document.getElementById("calculateButton");
-      if (!saleData.isTradable) {
-        calculateButton.disabled = true;
-        calculateButton.classList.add("disabled-button");
-        calculateButton.classList.remove("bg-red-600");
-      } else {
-        calculateButton.disabled = false;
-        calculateButton.classList.remove("disabled-button");
-        calculateButton.classList.add("bg-red-600");
-      }
-
-      document.getElementById("saleTitle").style.color = saleData.fontColor;
-      calculateButton.style.backgroundColor = saleData.buttonColor;
-
-      // Reset results
-      document.getElementById("results").style.display = "none";
-      document.getElementById("investment").value = "";
-    }
-
-    // ROI calculation
-    async function calculateROI(event) {
-      event.preventDefault();
-
-      const investment = parseFloat(document.getElementById("investment").value);
-      const saleData = sales[currentSale];
-
-      if (isNaN(investment) || investment <= 0) {
-        alert("Please enter a valid investment amount.");
-        return;
-      }
-
-      // If not tradable
-      if (!saleData.isTradable) {
-        document.getElementById("results").style.display = "block";
-        document.getElementById("results").innerHTML = 
-          `<p class="text-lg text-gray-400">
-            Current Token Price: <span class="text-white">Not Available</span>
-          </p>
-          <p class="text-lg text-gray-400">
-            Current Value: <span class="text-white">Not Applicable</span>
-          </p>`;
-        return;
-      }
-
-      try {
-        // Show loading indicator
-        document.getElementById("results").style.display = "block";
-        document.getElementById("results").innerHTML = `<p class="text-lg text-gray-400">Calculating...</p>`;
-
-        const response = await fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment, round_price: saleData.seedPrice }),
-        });
-        const data = await response.json();
-        if (data.error) {
-          alert(data.error);
-          document.getElementById("results").innerHTML = `<p class="text-lg text-red-500">Error: ${data.error}</p>`;
-        } else {
-          document.getElementById("results").innerHTML = 
-            `<p class="text-lg text-gray-400">
-              Initial Investment: <span class="text-white">$${data.initial_investment.toFixed(2)}</span>
-            </p>
-            <p class="text-lg text-gray-400">
-              Current Token Price: <span class="text-white">$${data.current_price.toFixed(4)}</span>
-            </p>
-            <p class="text-2xl font-bold mt-4" style="color:${saleData.fontColor}">
-              Current Value: $${data.roi_value.toFixed(2)}
-            </p>`;
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred while calculating ROI.");
-        document.getElementById("results").innerHTML = `<p class="text-lg text-red-500">An unexpected error occurred.</p>`;
-      }
-    }
-
-    // Show overview with prioritized Fuel
-    function showOverview() {
+    async function showOverview() {
       const overviewList = document.getElementById("overviewList");
-      overviewList.innerHTML = '';
+      overviewList.innerHTML = '<tr id="loadingRow"><td colspan="6" class="text-center text-gray-400">Loading...</td></tr>';
 
-      // Prioritize Fuel
-      const fuelData = sales['fuel'];
-      if (fuelData.isTradable) {
-        fetchFuelROI(fuelData, () => {
-          // After Fuel is added, add other tokens
-          addOtherTokensToOverview();
-        });
-      } else {
-        // If Fuel is not tradable for some reason, skip to others
-        addOtherTokensToOverview();
-      }
-    }
+      // Define the order of tokens with Fuel first
+      const orderedTokens = ['fuel', 'almanak', 'pulse', 'silencio', 'enclave', 'corn'];
 
-    function fetchFuelROI(fuelData, callback) {
-      // Use cache if fresh
-      if (cachedFuelData && cachedFuelTimestamp && Date.now() - cachedFuelTimestamp < CACHE_TTL) {
-        displayFuelROI(cachedFuelData, fuelData);
-        if (typeof callback === 'function') callback();
-      } else {
-        fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ investment: 1, round_price: fuelData.seedPrice }), // Investment of 1 for ROI
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (!data.error) {
-            cachedFuelData = data;
-            cachedFuelTimestamp = Date.now();
-            displayFuelROI(data, fuelData);
-          } else {
-            addOverviewItem(fuelData.title, "Error", "text-red-500");
-          }
-          if (typeof callback === 'function') callback();
-        })
-        .catch(() => {
-          addOverviewItem(fuelData.title, "Error", "text-red-500");
-          if (typeof callback === 'function') callback();
-        });
-      }
-    }
-
-    // Display Fuel ROI in overview
-    function displayFuelROI(data, fuelData) {
-      const roiPercentage = (data.current_price / fuelData.seedPrice) * 100;
-      let roiClass = 'text-green-400';
-      if (roiPercentage < 0) roiClass = 'text-red-500';
-      addOverviewItem(fuelData.title, `${roiPercentage.toFixed(2)}%`, roiClass);
-    }
-
-    // Add other tokens to overview
-    function addOtherTokensToOverview() {
-      const overviewList = document.getElementById("overviewList");
-      const otherTokens = Object.keys(sales).filter(token => token !== 'fuel');
-
-      otherTokens.forEach((tokenKey) => {
+      for (const tokenKey of orderedTokens) {
         const tokenData = sales[tokenKey];
-        if (!tokenData) return;
+        if (!tokenData) continue;
 
-        // Determine the color based on status
-        let statusColor = 'text-gray-400'; // Default
-        if (tokenData.status === "Pending TGE") {
-          statusColor = 'text-blue-400';
-        } else if (tokenData.status === "Trading Soon") {
-          statusColor = 'text-blue-400'; // As per user request
-        } else if (tokenData.status === "Upcoming ICO") {
-          statusColor = 'text-orange-400';
+        if (tokenData.isTradable) {
+          try {
+            const data = await fetchTokenData(tokenKey, tokenData);
+            displayTokenData(tokenKey, tokenData, data);
+          } catch (error) {
+            // On error, display N/A
+            addOverviewItem(
+              tokenData.title,
+              `${tokenData.status} | Error`,
+              "TBD",
+              "Error",
+              "Error",
+              "Error",
+              tokenData.statusClass,
+              tokenData.nameClass
+            );
+          }
+        } else {
+          // For non-tradable tokens, display TBD for ICO Price and N/A for others
+          addOverviewItem(
+            tokenData.title,
+            `${tokenData.status} | ${tokenData.tradingDate}`,
+            "TBD",
+            "N/A",
+            "N/A",
+            "N/A",
+            tokenData.statusClass,
+            tokenData.nameClass
+          );
         }
+      }
 
-        addOverviewItem(tokenData.title, tokenData.status, statusColor);
+      // Remove loading row after data is loaded
+      const loadingRow = document.getElementById("loadingRow");
+      if (loadingRow) {
+        loadingRow.remove();
+      }
+    }
+
+    // Fetch token data with caching
+    async function fetchTokenData(tokenKey, tokenData) {
+      // Use cache if fresh
+      if (cachedData[tokenKey] && (Date.now() - cachedData[tokenKey].timestamp) < CACHE_TTL) {
+        return cachedData[tokenKey].data;
+      }
+
+      // Replace '/calculate' with the actual API endpoint if necessary
+      const response = await fetch("/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ investment: 1, round_price: tokenData.seedPrice }),
       });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error('API error');
+      }
+
+      // Cache the data
+      cachedData[tokenKey] = {
+        data: data,
+        timestamp: Date.now()
+      };
+
+      return data;
+    }
+
+    function displayTokenData(tokenKey, tokenData, data) {
+      // data should contain current_price
+      const currentPrice = data.current_price;
+      const seedPrice = tokenData.seedPrice;
+
+      // Calculate ROI (%)
+      const roi = (currentPrice / seedPrice) * 100;
+
+      // Calculate "If you invested $1000 you would have"
+      const tokensBought = 1000 / seedPrice;
+      const investmentValue = tokensBought * currentPrice;
+
+      // Determine ROI class
+      let roiClass = null;
+      if (roi > 0) {
+        roiClass = 'roi-positive';
+      } else if (roi < 0) {
+        roiClass = 'roi-negative';
+      }
+
+      // Format numbers to 2 decimal places
+      const formattedCurrentPrice = currentPrice.toFixed(4);
+      const formattedROI = roi.toFixed(2) + '%';
+      const formattedInvestment = '$' + investmentValue.toFixed(2);
+
+      // Add to overview
+      addOverviewItem(
+        tokenData.title,
+        `${tokenData.status} | ${tokenData.tradingDate}`,
+        `$${seedPrice.toFixed(2)}`,
+        `$${formattedCurrentPrice}`, // This will now be "Token Price"
+        formattedROI,
+        formattedInvestment,
+        roiClass,
+        tokenData.nameClass
+      );
     }
 
     // Add an overview row
-    function addOverviewItem(tokenName, valueText, colorClass) {
+    function addOverviewItem(tokenName, statusWithDate, icoPrice, tokenPrice, roi, investment, roiClass, nameClass) {
       const overviewList = document.getElementById("overviewList");
-      const row = document.createElement('div');
-      row.className = "flex flex-col md:flex-row justify-between items-center px-4 py-3 bg-gray-800 bg-opacity-75 rounded transition hover:bg-gray-700";
+      const row = document.createElement('tr');
 
-      const nameEl = document.createElement('span');
-      nameEl.className = "font-normal text-lg"; // Changed from "font-semibold" to "font-normal"
+      // Token Name
+      const nameEl = document.createElement('td');
       nameEl.textContent = tokenName;
-
-      const valueEl = document.createElement('span');
-      valueEl.className = "text-lg " + (colorClass || "text-gray-400"); // Removed "font-bold"
-      valueEl.textContent = valueText;
-
+      if (nameClass) {
+        nameEl.classList.add(nameClass);
+      }
       row.appendChild(nameEl);
-      row.appendChild(valueEl);
+
+      // Status with Trading Date
+      const statusEl = document.createElement('td');
+      // Split status and date
+      const [status, date] = statusWithDate.split(' | ');
+      const badge = document.createElement('span');
+      badge.className = sales[getTokenKey(tokenName)].statusClass;
+      badge.textContent = status;
+      statusEl.appendChild(badge);
+      
+      // Add the date below the badge
+      if (date && date !== "Error") {
+        badge.title = `Trading Date: ${date}`;
+        const dateText = document.createElement('div');
+        dateText.className = "text-xs text-gray-400 mt-1";
+        dateText.textContent = date;
+        statusEl.appendChild(dateText);
+      }
+      
+      row.appendChild(statusEl);
+
+      // ICO Price
+      const icoEl = document.createElement('td');
+      icoEl.textContent = icoPrice;
+      row.appendChild(icoEl);
+
+      // Token Price (replacing Current Price)
+      const tokenPriceEl = document.createElement('td');
+      tokenPriceEl.textContent = tokenPrice;
+      row.appendChild(tokenPriceEl);
+
+      // ROI
+      const roiEl = document.createElement('td');
+      if (roiClass === 'roi-positive') {
+        roiEl.classList.add('roi-positive');
+      } else if (roiClass === 'roi-negative') {
+        roiEl.classList.add('roi-negative');
+      }
+      roiEl.textContent = roi;
+      row.appendChild(roiEl);
+
+      // If you invested $1000
+      const investmentEl = document.createElement('td');
+      investmentEl.textContent = investment;
+      row.appendChild(investmentEl);
+
       overviewList.appendChild(row);
+    }
+
+    // Helper function to get token key by name
+    function getTokenKey(name) {
+      return Object.keys(sales).find(key => sales[key].title === name);
     }
 
     // ------------
@@ -636,11 +687,15 @@
     function supportSite() {
       const modal = document.getElementById('walletModal');
       modal.classList.remove('hidden');
+      // Set focus to the modal for accessibility
+      modal.querySelector('button').focus();
     }
 
     function closeModal() {
       const modal = document.getElementById('walletModal');
       modal.classList.add('hidden');
+      // Return focus to the support button
+      document.querySelector('.support-button').focus();
     }
 
     function copyWalletAddress() {
@@ -652,8 +707,10 @@
       });
     }
 
-    // Initialize page
-    switchSale(currentSale);
+    // Initialize page on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      showOverview();
+    });
   </script>
 </body>
 </html>
