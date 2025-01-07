@@ -46,7 +46,6 @@
       background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
       background-size: 400% 400%;
       /* Static Gradient: No animation for a static look */
-      /* Removed animation for static gradient */
       font-family: 'Orbitron', sans-serif; /* Orbitron as primary font */
       color: #FFFFFF;
       display: flex;
@@ -62,8 +61,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size: 50px 50px;
       pointer-events: none;
       z-index: 1;
@@ -263,6 +262,7 @@
       -webkit-text-fill-color: transparent;
       /* Removed animation for static gradient */
       text-shadow: 0 0 10px rgba(255, 154, 158, 0.7), 0 0 20px rgba(250, 208, 196, 0.7), 0 0 30px rgba(250, 208, 196, 0.7);
+      text-align: center; /* Ensure text is centered */
     }
     .modern-header hr {
       width: 33%;
@@ -273,6 +273,7 @@
       font-size: 1.25rem;
       color: #D1D5DB; /* Tailwind's gray-300 */
       text-shadow: 0 0 5px rgba(0,0,0,0.5);
+      text-align: center; /* Ensure text is centered */
     }
 
     /* Responsive Typography */
@@ -320,9 +321,6 @@
             Legion ICO Tracker
           </h2>
           <hr>
-          <p>
-            Below are all current and upcoming Legion ICOs
-          </p>
         </div>
 
         <!-- Overview Table -->
@@ -459,8 +457,8 @@
       silencio: {
         title: "Silencio",
         tokenName: "Silencio Token",
-        seedPrice: 0.04,
-        tradingDate: "TBD",
+        seedPrice: 0.0006, /* Updated Seed Price */
+        tradingDate: "Q1 2025", /* Updated Trading Date */
         isTradable: false,
         fontColor: "#00CED1",
         buttonColor: "#4682B4",
