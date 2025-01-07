@@ -42,23 +42,17 @@
       height: 100%;
     }
     body {
-      /* Subtler Vaporwave Background */
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4);
-      background-size: 600% 600%;
-      animation: gradientAnimation 16s ease infinite;
+      /* Night-Time 80s Vaporwave Background */
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      /* Static Gradient: No animation for a static look */
+      /* Removed animation for static gradient */
       font-family: 'Orbitron', sans-serif; /* Orbitron as primary font */
       color: #FFFFFF;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow-x: hidden;
-    }
-
-    /* Gradient Animation */
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     /* Overlay Grid */
@@ -68,8 +62,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
       background-size: 50px 50px;
       pointer-events: none;
       z-index: 1;
@@ -80,6 +74,9 @@
       position: relative;
       z-index: 2;
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     /* Status badges */
@@ -261,10 +258,10 @@
       font-weight: 800;
       margin-bottom: 1rem;
       background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4);
-      background-size: 600% 600%;
+      background-size: 400% 400%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: gradientAnimation 16s ease infinite;
+      /* Removed animation for static gradient */
       text-shadow: 0 0 10px rgba(255, 154, 158, 0.7), 0 0 20px rgba(250, 208, 196, 0.7), 0 0 30px rgba(250, 208, 196, 0.7);
     }
     .modern-header hr {
@@ -320,10 +317,12 @@
         <!-- Modern Header -->
         <div class="modern-header text-center mb-8">
           <h2>
-           Legion ICO Tracker
+            Legion ICO Tracker
           </h2>
           <hr>
-     
+          <p>
+            Below are all current and upcoming Legion ICOs
+          </p>
         </div>
 
         <!-- Overview Table -->
@@ -333,7 +332,7 @@
               <tr>
                 <th>Token</th>
                 <th>Status</th>
-                <th>ICO Price ($)</th>
+                <th>Seed Price</th>
                 <th>Token Price</th> 
                 <th>ROI (%)</th>
                 <th>If you invested $1000</th>
