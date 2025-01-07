@@ -81,253 +81,120 @@
     }
 
     /* Status badges */
+    .badge {
+      @apply px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap;
+    }
+
     .badge-live {
-      background-color: #32CD32; /* Green */
-      color: white;
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      display: inline-block;
-      margin-top: 0.5rem;
-      box-shadow: 0 0 5px #32CD32;
-      font-weight: bold; /* Bold status text */
-      white-space: nowrap; /* Prevent text wrapping */
+      @apply bg-green-500 text-white shadow-green-500;
     }
+
     .badge-soon {
-      background-color: #FFB347; /* Warm Yellow */
-      color: white;
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      display: inline-block;
-      margin-top: 0.5rem;
-      box-shadow: 0 0 5px #FFB347;
-      font-weight: bold; /* Bold status text */
-      white-space: nowrap; /* Prevent text wrapping */
+      @apply bg-yellow-500 text-white shadow-yellow-500;
     }
+
     .badge-ico {
-      background-color: #00BFFF; /* Deep Sky Blue */
-      color: white;
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      display: inline-block;
-      margin-top: 0.5rem;
-      box-shadow: 0 0 5px #00BFFF;
-      font-weight: bold; /* Bold status text */
-      white-space: nowrap; /* Prevent text wrapping */
+      @apply bg-blue-500 text-white shadow-blue-500;
     }
 
     /* Support Button */
     .support-button {
-      border: 2px solid #FF4B5C;
-      color: #FF4B5C;
-      background: transparent;
-      transition: all 0.3s ease;
+      @apply border-2 border-pink-500 text-pink-500 bg-transparent transition-all duration-300;
     }
     .support-button:hover {
-      background-color: #FF4B5C;
-      color: #FFFFFF;
-      box-shadow: 0 0 10px #FF4B5C;
+      @apply bg-pink-500 text-white shadow-lg;
     }
 
-    /* Numeric input without spinners */
-    input[type=number]::-webkit-outer-spin-button,
-    input[type=number]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    /* Firefox */
-    input[type=number] {
-      -moz-appearance: textfield;
+    /* Token Name Styles */
+    .token-name {
+      @apply font-bold;
     }
 
-    /* Smooth dropdown transition */
-    .transition-height {
-      transition: max-height 0.3s ease-in-out;
-    }
-
-    /* Table styles for Overview */
-    .overview-table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .overview-table th, .overview-table td {
-      padding: 1rem; /* Reduced padding for mobile */
-      text-align: left;
-      border-bottom: 1px solid #FF4B5C;
-      text-shadow: 0 0 5px rgba(0,0,0,0.5);
-      font-size: 0.875rem; /* Slightly smaller font for mobile */
-    }
-
-    .overview-table th {
-      background-color: #8B0000; /* Deeper Red */
-      color: #FFFFFF;
-      font-size: 1rem; /* Adjusted for better scaling */
-      text-transform: uppercase;
-      white-space: nowrap; /* Prevent header text wrapping */
-    }
-
-    /* Ensure Status column is wide enough */
-    .overview-table th:nth-child(2),
-    .overview-table td:nth-child(2) {
-      min-width: 100px; /* Reduced min-width for mobile */
-      white-space: nowrap; /* Prevent wrapping */
-    }
-
-    .overview-table tr:hover {
-      background-color: rgba(255, 75, 92, 0.2);
-    }
-
-    .overview-table td {
-      color: #FFFFFF;
-      font-size: 0.875rem; /* Adjusted for better scaling */
-    }
-
-    .overview-table .roi-positive {
-      color: #00FF7F; /* Neon Green */
-      font-weight: bold;
-    }
-
-    .overview-table .roi-negative {
-      color: #FF4500; /* Neon Red-Orange */
-      font-weight: bold;
-    }
-
-    /* Token Name Colors */
     .token-fuel {
-      color: #32CD32; /* Lime Green */
-      font-weight: bold;
+      @apply text-green-400;
     }
     .token-almanak {
-      color: #1E90FF; /* Dodger Blue */
-      font-weight: bold;
+      @apply text-blue-400;
     }
     .token-pulse {
-      color: #FF1493; /* Deep Pink */
-      font-weight: bold;
+      @apply text-pink-400;
     }
     .token-silencio {
-      color: #00CED1; /* Dark Turquoise */
-      font-weight: bold;
+      @apply text-teal-400;
     }
     .token-enclave {
-      color: #FFD700; /* Gold */
-      font-weight: bold;
+      @apply text-yellow-400;
     }
     .token-corn {
-      color: #FFA500; /* Orange */
-      font-weight: bold;
+      @apply text-orange-400;
     }
 
     /* Footer Styles */
     footer {
-      background: linear-gradient(135deg, #FF4B5C 0%, #2F2F2F 100%);
-      color: #FFFFFF;
+      @apply bg-gradient-to-r from-red-700 via-black to-red-900 text-gray-300 py-4 sm:py-6;
       box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-      padding: 1rem; /* Reduced padding for mobile */
     }
 
     /* Modal Styles */
     #walletModal .bg-gray-800 {
-      background-color: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 1rem; /* Reduced padding for mobile */
+      @apply bg-opacity-10 backdrop-blur-lg p-4 sm:p-6 rounded-lg;
     }
 
     /* Button Glow */
     .glow-button {
-      box-shadow: 0 0 10px #FF4B5C, 0 0 20px #FF4B5C, 0 0 30px #FF4B5C;
+      @apply shadow-lg;
     }
 
     /* Support Section */
     .support-section {
-      display: flex;
-      justify-content: center;
-      margin: 1.5rem 0; /* Reduced margin for mobile */
-      width: 100%;
-      padding: 0 1rem; /* Added padding for mobile */
-    }
-
-    /* Ensure footer stays at bottom */
-    .content {
-      flex: 1;
+      @apply flex justify-center my-6 w-full px-4;
     }
 
     /* Simplified Header Styles */
     .modern-header h2 {
-      font-size: 2rem; /* Reduced font size for a plainer look */
-      font-weight: 700; /* Slightly less bold */
-      margin-bottom: 0.5rem;
-      color: #FFFFFF; /* Solid white color */
-      text-align: center; /* Ensure text is centered */
-      /* Removed gradient and text-shadow for plainness */
+      @apply text-2xl sm:text-2.5xl md:text-3.5xl lg:text-4xl font-bold mb-2 text-center text-white;
     }
     .modern-header hr {
-      width: 50%;
-      margin: 0 auto 0.5rem auto;
-      border-top: 2px solid #FF4B5C;
+      @apply w-1/2 border-t-2 border-pink-500 mx-auto my-2;
     }
     .modern-header p {
-      font-size: 1rem;
-      color: #D1D5DB; /* Tailwind's gray-300 */
-      text-align: center; /* Ensure text is centered */
-      /* Removed text-shadow for plainness */
+      @apply text-base sm:text-lg text-center text-gray-300;
     }
 
-    /* Responsive Typography */
-    @media (min-width: 640px) { /* Small screens and up */
-      .modern-header h2 {
-        font-size: 2.5rem;
-      }
-      .modern-header p {
-        font-size: 1.125rem;
-      }
-      .overview-table th, .overview-table td {
-        padding: 1rem 1.5rem;
-        font-size: 0.95rem;
-      }
+    /* Table Styles */
+    .overview-table {
+      @apply w-full border-collapse bg-black bg-opacity-70 rounded-lg overflow-hidden;
     }
 
-    @media (min-width: 768px) { /* Medium screens and up */
-      .modern-header h2 {
-        font-size: 3.5rem;
-      }
-      .modern-header p {
-        font-size: 1.5rem;
-      }
-      .overview-table th, .overview-table td {
-        padding: 1.5rem 2rem;
-        font-size: 1rem;
-      }
-      .support-section {
-        margin: 2rem 0;
-      }
-      footer {
-        padding: 1.5rem;
-      }
+    .overview-table th, .overview-table td {
+      @apply p-4 text-left border-b border-pink-500 text-sm sm:text-base;
     }
 
-    @media (min-width: 1024px) { /* Large screens and up */
-      .modern-header h2 {
-        font-size: 4rem;
-      }
-      .modern-header p {
-        font-size: 1.5rem;
-      }
-      .overview-table th, .overview-table td {
-        padding: 1.5rem 2rem;
-        font-size: 1rem;
-      }
-      .support-section {
-        margin: 2rem 0;
-      }
-      footer {
-        padding: 1.5rem;
+    .overview-table th {
+      @apply bg-red-800 text-white uppercase;
+    }
+
+    .overview-table tr:hover {
+      @apply bg-pink-500 bg-opacity-20;
+    }
+
+    .roi-positive {
+      @apply text-green-400 font-bold;
+    }
+
+    .roi-negative {
+      @apply text-red-400 font-bold;
+    }
+
+    /* Responsive Table Adjustments */
+    @media (max-width: 767px) {
+      .overview-table th:nth-child(3),
+      .overview-table th:nth-child(4),
+      .overview-table th:nth-child(6),
+      .overview-table td:nth-child(3),
+      .overview-table td:nth-child(4),
+      .overview-table td:nth-child(6) {
+        @apply hidden md:table-cell;
       }
     }
   </style>
@@ -361,7 +228,7 @@
         style="background-color: rgba(0,0,0,0.7);"
       >
         <!-- Simplified Header -->
-        <div class="modern-header text-center mb-6">
+        <div class="modern-header mb-6">
           <h2>
             Legion ICO Tracker
           </h2>
@@ -376,12 +243,12 @@
           <table class="overview-table min-w-full">
             <thead>
               <tr>
-                <th class="px-2 sm:px-4">Token</th>
-                <th class="px-2 sm:px-4">Status</th>
-                <th class="px-2 sm:px-4 hidden md:table-cell">ICO Price ($)</th>
-                <th class="px-2 sm:px-4 hidden md:table-cell">Token Price</th>
-                <th class="px-2 sm:px-4">ROI (%)</th>
-                <th class="px-2 sm:px-4 hidden md:table-cell">If you invested $1000</th>
+                <th>Token</th>
+                <th>Status</th>
+                <th class="hidden md:table-cell">ICO Price ($)</th>
+                <th class="hidden md:table-cell">Token Price</th>
+                <th>ROI (%)</th>
+                <th class="hidden md:table-cell">If you invested $1000</th>
               </tr>
             </thead>
             <tbody id="overviewList" class="space-y-4">
@@ -408,7 +275,7 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="bg-gradient-to-r from-red-700 via-black to-red-900 text-gray-300 py-4 sm:py-6">
+  <footer>
     <div class="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
       
       <!-- Built By Section -->
@@ -464,307 +331,179 @@
 
   <!-- Main Script -->
   <script>
-    // All tokens
-    const sales = {
-      fuel: {
+    // All tokens data
+    const tokens = [
+      {
         title: "Fuel",
         tokenName: "Fuel Token",
         seedPrice: 0.02,
         tradingDate: "2024-12-19",
         isTradable: true,
-        fontColor: "#32CD32",
-        buttonColor: "#32CD32",
         status: "Live",
         statusClass: "badge-live",
         nameClass: "token-fuel"
       },
-      almanak: {
+      {
         title: "Almanak",
         tokenName: "Almanak Token",
         seedPrice: 0.05,
         tradingDate: "TBD",
         isTradable: false,
-        fontColor: "#1E90FF",
-        buttonColor: "#4A5568",
         status: "Pending TGE",
         statusClass: "badge-soon",
         nameClass: "token-almanak"
       },
-      pulse: {
+      {
         title: "Pulse",
         tokenName: "Pulse Token",
         seedPrice: 0.03,
         tradingDate: "TBD",
         isTradable: false,
-        fontColor: "#FF1493",
-        buttonColor: "#1E90FF",
         status: "Pending TGE",
         statusClass: "badge-soon",
         nameClass: "token-pulse"
       },
-      silencio: {
+      {
         title: "Silencio",
         tokenName: "Silencio Token",
-        seedPrice: 0.0006, /* Updated Seed Price */
-        tradingDate: "Q1 2025", /* Updated Trading Date */
+        seedPrice: 0.0006, // Updated Seed Price
+        tradingDate: "Q1 2025", // Updated Trading Date
         isTradable: false,
-        fontColor: "#00CED1",
-        buttonColor: "#4682B4",
         status: "Pending TGE",
         statusClass: "badge-soon",
         nameClass: "token-silencio"
       },
-      enclave: {
+      {
         title: "Enclave",
         tokenName: "Enclave Token",
         seedPrice: 0.06,
         tradingDate: "TBD",
         isTradable: false,
-        fontColor: "#FFD700",
-        buttonColor: "#FF8C00",
         status: "Upcoming ICO",
         statusClass: "badge-ico",
         nameClass: "token-enclave"
       },
-      corn: {
+      {
         title: "Corn",
         tokenName: "Corn Token",
         seedPrice: 0.01,
         tradingDate: "TBD",
         isTradable: false,
-        fontColor: "#FFA500",
-        buttonColor: "#FF8C00",
         status: "Upcoming ICO",
         statusClass: "badge-ico",
         nameClass: "token-corn"
       }
-    };
+    ];
 
-    // Cache for data
+    // Cache configuration
     const CACHE_TTL = 120000; // 2 minutes
-    let cachedData = {}; // Object to hold cached data per token
+    let cachedData = {};
 
+    // Function to fetch data with caching
+    async function fetchTokenData(token) {
+      if (cachedData[token.title] && (Date.now() - cachedData[token.title].timestamp) < CACHE_TTL) {
+        return cachedData[token.title].data;
+      }
 
-    async function showOverview() {
+      try {
+        const response = await fetch("/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ investment: 1, round_price: token.seedPrice }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.error) {
+          throw new Error('API error');
+        }
+
+        cachedData[token.title] = {
+          data: data,
+          timestamp: Date.now()
+        };
+
+        return data;
+      } catch (error) {
+        console.error(`Error fetching data for ${token.title}:`, error);
+        return null;
+      }
+    }
+
+    // Function to render the table
+    async function renderTable() {
       const overviewList = document.getElementById("overviewList");
       overviewList.innerHTML = '<tr id="loadingRow"><td colspan="6" class="text-center text-gray-400">Loading...</td></tr>';
 
-      // Define the order of tokens with Fuel first
-      const orderedTokens = ['fuel', 'almanak', 'pulse', 'silencio', 'enclave', 'corn'];
+      // Remove loading indicator after fetching data
+      const removeLoading = () => {
+        const loadingRow = document.getElementById("loadingRow");
+        if (loadingRow) loadingRow.remove();
+      };
 
-      for (const tokenKey of orderedTokens) {
-        const tokenData = sales[tokenKey];
-        if (!tokenData) continue;
+      // Iterate through tokens and create table rows
+      for (const token of tokens) {
+        if (token.isTradable) {
+          const data = await fetchTokenData(token);
+          if (data) {
+            const currentPrice = data.current_price;
+            const roi = ((currentPrice - token.seedPrice) / token.seedPrice) * 100;
+            const investmentValue = (1000 / token.seedPrice) * currentPrice;
 
-        if (tokenData.isTradable) {
-          try {
-            const data = await fetchTokenData(tokenKey, tokenData);
-            displayTokenData(tokenKey, tokenData, data);
-          } catch (error) {
-            // On error, display N/A
-            addOverviewItem(
-              tokenData.title,
-              `${tokenData.status} | Error`,
-              "TBD",
-              "Error",
-              "Error",
-              "Error",
-              tokenData.statusClass,
-              tokenData.nameClass
-            );
+            overviewList.insertAdjacentHTML('beforeend', `
+              <tr>
+                <td class="${token.nameClass}">${token.title}</td>
+                <td>
+                  <span class="${token.statusClass}">${token.status}</span>
+                  ${token.tradingDate !== "Error" ? `<div class="text-xs text-gray-400 mt-1">${token.tradingDate}</div>` : ''}
+                </td>
+                <td class="hidden md:table-cell">$${token.seedPrice.toFixed(4)}</td>
+                <td class="hidden md:table-cell">$${currentPrice.toFixed(4)}</td>
+                <td class="${roi > 0 ? 'roi-positive' : (roi < 0 ? 'roi-negative' : '')}">${roi.toFixed(2)}%</td>
+                <td class="hidden md:table-cell">$${investmentValue.toFixed(2)}</td>
+              </tr>
+            `);
+          } else {
+            overviewList.insertAdjacentHTML('beforeend', `
+              <tr>
+                <td>${token.title}</td>
+                <td>
+                  <span class="${token.statusClass}">${token.status}</span>
+                  <div class="text-xs text-gray-400 mt-1">${token.tradingDate}</div>
+                </td>
+                <td class="hidden md:table-cell">TBD</td>
+                <td class="hidden md:table-cell">Error</td>
+                <td class="">Error</td>
+                <td class="hidden md:table-cell">Error</td>
+              </tr>
+            `);
           }
         } else {
-          // For non-tradable tokens, display TBD for ICO Price and N/A for others
-          addOverviewItem(
-            tokenData.title,
-            `${tokenData.status} | ${tokenData.tradingDate}`,
-            "TBD",
-            "N/A",
-            "N/A",
-            "N/A",
-            tokenData.statusClass,
-            tokenData.nameClass
-          );
+          overviewList.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td class="${token.nameClass}">${token.title}</td>
+              <td>
+                <span class="${token.statusClass}">${token.status}</span>
+                <div class="text-xs text-gray-400 mt-1">${token.tradingDate}</div>
+              </td>
+              <td class="hidden md:table-cell">TBD</td>
+              <td class="hidden md:table-cell">N/A</td>
+              <td class="">N/A</td>
+              <td class="hidden md:table-cell">N/A</td>
+            </tr>
+          `);
         }
       }
 
-      // Remove loading row after data is loaded
-      const loadingRow = document.getElementById("loadingRow");
-      if (loadingRow) {
-        loadingRow.remove();
-      }
+      removeLoading();
     }
 
-    // Fetch token data with caching
-    async function fetchTokenData(tokenKey, tokenData) {
-      // Use cache if fresh
-      if (cachedData[tokenKey] && (Date.now() - cachedData[tokenKey].timestamp) < CACHE_TTL) {
-        return cachedData[tokenKey].data;
-      }
-
-      // Replace '/calculate' with the actual API endpoint if necessary
-      const response = await fetch("/calculate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ investment: 1, round_price: tokenData.seedPrice }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-
-      if (data.error) {
-        throw new Error('API error');
-      }
-
-      // Cache the data
-      cachedData[tokenKey] = {
-        data: data,
-        timestamp: Date.now()
-      };
-
-      return data;
-    }
-
-    function displayTokenData(tokenKey, tokenData, data) {
-      // data should contain current_price
-      const currentPrice = data.current_price;
-      const seedPrice = tokenData.seedPrice;
-
-      // Calculate ROI (%)
-      const roi = (currentPrice / seedPrice) * 100;
-
-      // Calculate "If you invested $1000 you would have"
-      const tokensBought = 1000 / seedPrice;
-      const investmentValue = tokensBought * currentPrice;
-
-      // Determine ROI class
-      let roiClass = null;
-      if (roi > 0) {
-        roiClass = 'roi-positive';
-      } else if (roi < 0) {
-        roiClass = 'roi-negative';
-      }
-
-      // Format numbers to 2 decimal places
-      const formattedCurrentPrice = currentPrice.toFixed(4);
-      const formattedROI = roi.toFixed(2) + '%';
-      const formattedInvestment = '$' + investmentValue.toFixed(2);
-
-      // Add to overview
-      addOverviewItem(
-        tokenData.title,
-        `${tokenData.status} | ${tokenData.tradingDate}`,
-        `$${seedPrice.toFixed(4)}`, /* Adjusted for smaller seed price */
-        `$${formattedCurrentPrice}`, // This will now be "Token Price"
-        formattedROI,
-        formattedInvestment,
-        roiClass,
-        tokenData.nameClass
-      );
-    }
-
-    // Add an overview row
-    function addOverviewItem(tokenName, statusWithDate, icoPrice, tokenPrice, roi, investment, roiClass, nameClass) {
-      const overviewList = document.getElementById("overviewList");
-      const row = document.createElement('tr');
-
-      // Token Name
-      const nameEl = document.createElement('td');
-      nameEl.textContent = tokenName;
-      if (nameClass) {
-        nameEl.classList.add(nameClass);
-      }
-      row.appendChild(nameEl);
-
-      // Status with Trading Date
-      const statusEl = document.createElement('td');
-      // Split status and date
-      const [status, date] = statusWithDate.split(' | ');
-      const badge = document.createElement('span');
-      badge.className = sales[getTokenKey(tokenName)].statusClass;
-      badge.textContent = status;
-      statusEl.appendChild(badge);
-      
-      // Add the date below the badge
-      if (date && date !== "Error") {
-        badge.title = `Trading Date: ${date}`;
-        const dateText = document.createElement('div');
-        dateText.className = "text-xs text-gray-400 mt-1";
-        dateText.textContent = date;
-        statusEl.appendChild(dateText);
-      }
-      
-      row.appendChild(statusEl);
-
-      // ICO Price - Hidden on Mobile
-      const icoEl = document.createElement('td');
-      icoEl.textContent = icoPrice;
-      icoEl.classList.add('hidden', 'md:table-cell');
-      row.appendChild(icoEl);
-
-      // Token Price - Hidden on Mobile
-      const tokenPriceEl = document.createElement('td');
-      tokenPriceEl.textContent = tokenPrice;
-      tokenPriceEl.classList.add('hidden', 'md:table-cell');
-      row.appendChild(tokenPriceEl);
-
-      // ROI
-      const roiEl = document.createElement('td');
-      if (roiClass === 'roi-positive') {
-        roiEl.classList.add('roi-positive');
-      } else if (roiClass === 'roi-negative') {
-        roiEl.classList.add('roi-negative');
-      }
-      roiEl.textContent = roi;
-      row.appendChild(roiEl);
-
-      // If you invested $1000 - Hidden on Mobile
-      const investmentEl = document.createElement('td');
-      investmentEl.textContent = investment;
-      investmentEl.classList.add('hidden', 'md:table-cell');
-      row.appendChild(investmentEl);
-
-      overviewList.appendChild(row);
-    }
-
-    // Helper function to get token key by name
-    function getTokenKey(name) {
-      return Object.keys(sales).find(key => sales[key].title === name);
-    }
-
-    // ------------
-    // Support Site
-    // ------------
-    function supportSite() {
-      const modal = document.getElementById('walletModal');
-      modal.classList.remove('hidden');
-      // Set focus to the modal for accessibility
-      modal.querySelector('button').focus();
-    }
-
-    function closeModal() {
-      const modal = document.getElementById('walletModal');
-      modal.classList.add('hidden');
-      // Return focus to the support button
-      document.querySelector('.support-button').focus();
-    }
-
-    function copyWalletAddress() {
-      const walletAddress = document.getElementById('walletAddress').textContent;
-      navigator.clipboard.writeText(walletAddress).then(() => {
-        alert('Wallet address copied to clipboard!');
-      }).catch(() => {
-        alert('Failed to copy wallet address.');
-      });
-    }
-
-    // Initialize page on DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', () => {
-      showOverview();
-    });
+    // Initialize table on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', renderTable);
   </script>
 </body>
 </html>
