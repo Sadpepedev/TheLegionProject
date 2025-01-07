@@ -37,7 +37,7 @@
     body {
       background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
       color: #FFFFFF;
-      font-family: 'Orbitron', sans-serif; /* Changed to Orbitron */
+      font-family: 'Orbitron', sans-serif; /* Orbitron as primary font */
       margin: 0; /* Remove default margin */
       display: flex;
       flex-direction: column;
@@ -220,6 +220,18 @@
       flex: 1;
     }
 
+    /* Modern Header Styles */
+    .modern-header h2 {
+      text-5xl font-extrabold mb-4 text-transparent bg-gradient-to-r from-red-400 to-pink-600 bg-clip-text animate-pulse;
+    }
+    .modern-header hr {
+      width: 33%;
+      margin: 0 auto 1rem auto;
+      border-top: 2px solid #FF4B5C;
+    }
+    .modern-header p {
+      text-xl text-gray-300;
+    }
   </style>
 
   <!-- Vercel Scripts (Optional, can remove if not using Vercel) -->
@@ -247,12 +259,16 @@
         class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-6xl"
         style="background-color: rgba(0,0,0,0.7);"
       >
-        <h2 class="text-4xl font-extrabold text-center mb-6" style="color: #FFFFFF; text-shadow: 0 0 10px #FF4B5C;">
-          The Official Legion ICO Performance Tracker
-        </h2>
-        <p class="text-lg text-center text-gray-300 mb-8">
-          Below are all current and upcoming Legion ICOs
-        </p>
+        <!-- Modern Header -->
+        <div class="modern-header text-center mb-8">
+          <h2>
+            The Official Legion ICO Performance Tracker
+          </h2>
+          <hr>
+          <p>
+            Below are all current and upcoming Legion ICOs
+          </p>
+        </div>
 
         <!-- Overview Table -->
         <div class="overflow-x-auto">
@@ -262,12 +278,17 @@
                 <th>Token</th>
                 <th>Status</th>
                 <th>ICO Price ($)</th>
-                <th>Token Price</th> 
+                <th>Token Price</th> <!-- Renamed Column -->
                 <th>ROI (%)</th>
                 <th>If you invested $1000</th>
               </tr>
             </thead>
-            <tbody id="overviewList" class="space-y-4"></tbody>
+            <tbody id="overviewList" class="space-y-4">
+              <!-- Loading Indicator -->
+              <tr id="loadingRow">
+                <td colspan="6" class="text-center text-gray-400">Loading...</td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
@@ -276,6 +297,7 @@
           <button
             class="support-button py-2 px-4 text-white rounded glow-button"
             onclick="supportSite()"
+            aria-label="Support the site"
           >
             Support the Site
           </button>
@@ -418,15 +440,15 @@
     };
 
     // Cache for data
-    const CACHE_TTL = 120000; 
-    let cachedData = {}; 
+    const CACHE_TTL = 120000; // 2 minutes
+    let cachedData = {}; // Object to hold cached data per token
 
-    
+    // Show Overview as an async function to process tokens sequentially
     async function showOverview() {
       const overviewList = document.getElementById("overviewList");
-      overviewList.innerHTML = '';
+      overviewList.innerHTML = '<tr id="loadingRow"><td colspan="6" class="text-center text-gray-400">Loading...</td></tr>';
 
-     
+      // Define the order of tokens with Fuel first
       const orderedTokens = ['fuel', 'almanak', 'pulse', 'silencio', 'enclave', 'corn'];
 
       for (const tokenKey of orderedTokens) {
@@ -451,7 +473,7 @@
             );
           }
         } else {
-         
+          // For non-tradable tokens, display TBD for ICO Price and N/A for others
           addOverviewItem(
             tokenData.title,
             `${tokenData.status} | ${tokenData.tradingDate}`,
@@ -463,6 +485,12 @@
             tokenData.nameClass
           );
         }
+      }
+
+      // Remove loading row after data is loaded
+      const loadingRow = document.getElementById("loadingRow");
+      if (loadingRow) {
+        loadingRow.remove();
       }
     }
 
@@ -603,14 +631,21 @@
       return Object.keys(sales).find(key => sales[key].title === name);
     }
 
+    // ------------
+    // Support Site
+    // ------------
     function supportSite() {
       const modal = document.getElementById('walletModal');
       modal.classList.remove('hidden');
+      // Set focus to the modal for accessibility
+      modal.querySelector('button').focus();
     }
 
     function closeModal() {
       const modal = document.getElementById('walletModal');
       modal.classList.add('hidden');
+      // Return focus to the support button
+      document.querySelector('.support-button').focus();
     }
 
     function copyWalletAddress() {
