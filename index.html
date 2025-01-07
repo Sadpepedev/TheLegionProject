@@ -33,18 +33,47 @@
   <style>
     html, body {
       height: 100%;
+      margin: 0;
+      padding: 0;
     }
     body {
-      background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+      /* Vaporwave Background */
+      background: linear-gradient(135deg, #ff6ec4, #7873f5, #2bc0e4);
+      background-size: 600% 600%;
+      animation: gradientAnimation 16s ease infinite;
+      font-family: 'Orbitron', sans-serif;
       color: #FFFFFF;
-      font-family: 'Orbitron', sans-serif; /* Orbitron as primary font */
-      margin: 0; /* Remove default margin */
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    /* Flex container to push footer to bottom */
-    .content {
+    /* Gradient Animation */
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Overlay Grid */
+    .overlay-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      position: relative;
+      z-index: 2;
       flex: 1;
     }
 
@@ -128,6 +157,7 @@
       padding: 1.5rem;
       text-align: left;
       border-bottom: 1px solid #FF4B5C;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
     .overview-table th {
@@ -222,7 +252,15 @@
 
     /* Modern Header Styles */
     .modern-header h2 {
-      text-5xl font-extrabold mb-4 text-transparent bg-gradient-to-r from-red-400 to-pink-600 bg-clip-text animate-pulse;
+      font-size: 3rem; /* Adjusted for better scaling */
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #ff6ec4, #7873f5, #2bc0e4);
+      background-size: 600% 600%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientAnimation 16s ease infinite;
+      text-shadow: 0 0 10px rgba(255, 110, 196, 0.7), 0 0 20px rgba(120, 115, 245, 0.7), 0 0 30px rgba(43, 192, 228, 0.7);
     }
     .modern-header hr {
       width: 33%;
@@ -230,7 +268,25 @@
       border-top: 2px solid #FF4B5C;
     }
     .modern-header p {
-      text-xl text-gray-300;
+      font-size: 1.25rem;
+      color: #D1D5DB; /* Tailwind's gray-300 */
+    }
+
+    /* Additional Gradient Animation for Header */
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Responsive Typography */
+    @media (min-width: 768px) {
+      .modern-header h2 {
+        font-size: 4rem;
+      }
+      .modern-header p {
+        font-size: 1.5rem;
+      }
     }
   </style>
 
@@ -250,8 +306,11 @@
 
 </head>
 <body>
+  <!-- Overlay Grid for Vaporwave Effect -->
+  <div class="overlay-grid"></div>
+
   <!-- MAIN CONTENT -->
-  <div class="content">
+  <div class="content-wrapper content">
     <main>
       <!-- OVERVIEW SECTION -->
       <div
@@ -278,7 +337,7 @@
                 <th>Token</th>
                 <th>Status</th>
                 <th>ICO Price ($)</th>
-                <th>Token Price</th> <!-- Renamed Column -->
+                <th>Token Price</th> 
                 <th>ROI (%)</th>
                 <th>If you invested $1000</th>
               </tr>
@@ -443,7 +502,7 @@
     const CACHE_TTL = 120000; // 2 minutes
     let cachedData = {}; // Object to hold cached data per token
 
-    // Show Overview as an async function to process tokens sequentially
+
     async function showOverview() {
       const overviewList = document.getElementById("overviewList");
       overviewList.innerHTML = '<tr id="loadingRow"><td colspan="6" class="text-center text-gray-400">Loading...</td></tr>';
