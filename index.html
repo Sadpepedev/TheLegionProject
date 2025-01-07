@@ -376,12 +376,12 @@
           <table class="overview-table min-w-full">
             <thead>
               <tr>
-                <th>Token</th>
-                <th>Status</th>
-                <th>ICO Price ($)</th>
-                <th>Token Price</th> 
-                <th>ROI (%)</th>
-                <th>If you invested $1000</th>
+                <th class="px-2 sm:px-4">Token</th>
+                <th class="px-2 sm:px-4">Status</th>
+                <th class="px-2 sm:px-4 hidden md:table-cell">ICO Price ($)</th>
+                <th class="px-2 sm:px-4 hidden md:table-cell">Token Price</th>
+                <th class="px-2 sm:px-4">ROI (%)</th>
+                <th class="px-2 sm:px-4 hidden md:table-cell">If you invested $1000</th>
               </tr>
             </thead>
             <tbody id="overviewList" class="space-y-4">
@@ -396,7 +396,7 @@
         <!-- Support the Site Button -->
         <div class="support-section">
           <button
-            class="support-button py-2 px-4 text-white rounded glow-button text-sm md:text-base"
+            class="support-button py-2 px-4 text-white rounded glow-button text-sm sm:text-base"
             onclick="supportSite()"
             aria-label="Support the site"
           >
@@ -634,7 +634,7 @@
       const seedPrice = tokenData.seedPrice;
 
       // Calculate ROI (%)
-      const roi = ((currentPrice - seedPrice) / seedPrice) * 100;
+      const roi = (currentPrice / seedPrice) * 100;
 
       // Calculate "If you invested $1000 you would have"
       const tokensBought = 1000 / seedPrice;
@@ -699,14 +699,16 @@
       
       row.appendChild(statusEl);
 
-      // ICO Price
+      // ICO Price - Hidden on Mobile
       const icoEl = document.createElement('td');
       icoEl.textContent = icoPrice;
+      icoEl.classList.add('hidden', 'md:table-cell');
       row.appendChild(icoEl);
 
-      // Token Price (replacing Current Price)
+      // Token Price - Hidden on Mobile
       const tokenPriceEl = document.createElement('td');
       tokenPriceEl.textContent = tokenPrice;
+      tokenPriceEl.classList.add('hidden', 'md:table-cell');
       row.appendChild(tokenPriceEl);
 
       // ROI
@@ -719,9 +721,10 @@
       roiEl.textContent = roi;
       row.appendChild(roiEl);
 
-      // If you invested $1000
+      // If you invested $1000 - Hidden on Mobile
       const investmentEl = document.createElement('td');
       investmentEl.textContent = investment;
+      investmentEl.classList.add('hidden', 'md:table-cell');
       row.appendChild(investmentEl);
 
       overviewList.appendChild(row);
