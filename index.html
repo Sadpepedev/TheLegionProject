@@ -31,17 +31,22 @@
   >
   
   <style>
-    html, body {
-      height: 100%;
+    /* Global CSS Reset */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
     }
     body {
-      /* Vaporwave Background */
-      background: linear-gradient(135deg, #ff6ec4, #7873f5, #2bc0e4);
+      /* Subtler Vaporwave Background */
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4);
       background-size: 600% 600%;
       animation: gradientAnimation 16s ease infinite;
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Orbitron', sans-serif; /* Orbitron as primary font */
       color: #FFFFFF;
       display: flex;
       flex-direction: column;
@@ -63,8 +68,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size: 50px 50px;
       pointer-events: none;
       z-index: 1;
@@ -255,12 +260,12 @@
       font-size: 3rem; /* Adjusted for better scaling */
       font-weight: 800;
       margin-bottom: 1rem;
-      background: linear-gradient(90deg, #ff6ec4, #7873f5, #2bc0e4);
+      background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4);
       background-size: 600% 600%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: gradientAnimation 16s ease infinite;
-      text-shadow: 0 0 10px rgba(255, 110, 196, 0.7), 0 0 20px rgba(120, 115, 245, 0.7), 0 0 30px rgba(43, 192, 228, 0.7);
+      text-shadow: 0 0 10px rgba(255, 154, 158, 0.7), 0 0 20px rgba(250, 208, 196, 0.7), 0 0 30px rgba(250, 208, 196, 0.7);
     }
     .modern-header hr {
       width: 33%;
@@ -270,13 +275,7 @@
     .modern-header p {
       font-size: 1.25rem;
       color: #D1D5DB; /* Tailwind's gray-300 */
-    }
-
-    /* Additional Gradient Animation for Header */
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
     /* Responsive Typography */
@@ -315,18 +314,16 @@
       <!-- OVERVIEW SECTION -->
       <div
         id="overviewSection"
-        class="container mx-auto mt-12 px-6 py-8 rounded-lg shadow-lg max-w-6xl"
+        class="container mx-auto px-6 py-8 rounded-lg shadow-lg max-w-6xl"
         style="background-color: rgba(0,0,0,0.7);"
       >
         <!-- Modern Header -->
         <div class="modern-header text-center mb-8">
           <h2>
-            The Official Legion ICO Performance Tracker
+           Legion ICO Tracker
           </h2>
           <hr>
-          <p>
-            Below are all current and upcoming Legion ICOs
-          </p>
+     
         </div>
 
         <!-- Overview Table -->
