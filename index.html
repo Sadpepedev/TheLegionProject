@@ -77,6 +77,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center; /* Center horizontally */
+      padding: 1rem; /* Added padding for mobile spacing */
     }
 
     /* Status badges */
@@ -156,16 +157,17 @@
     }
 
     .overview-table th, .overview-table td {
-      padding: 1.5rem;
+      padding: 1rem; /* Reduced padding for mobile */
       text-align: left;
       border-bottom: 1px solid #FF4B5C;
       text-shadow: 0 0 5px rgba(0,0,0,0.5);
+      font-size: 0.875rem; /* Slightly smaller font for mobile */
     }
 
     .overview-table th {
       background-color: #8B0000; /* Deeper Red */
       color: #FFFFFF;
-      font-size: 1.1rem;
+      font-size: 1rem; /* Adjusted for better scaling */
       text-transform: uppercase;
       white-space: nowrap; /* Prevent header text wrapping */
     }
@@ -173,7 +175,7 @@
     /* Ensure Status column is wide enough */
     .overview-table th:nth-child(2),
     .overview-table td:nth-child(2) {
-      min-width: 150px; /* Adjust as needed */
+      min-width: 100px; /* Reduced min-width for mobile */
       white-space: nowrap; /* Prevent wrapping */
     }
 
@@ -183,7 +185,7 @@
 
     .overview-table td {
       color: #FFFFFF;
-      font-size: 1rem;
+      font-size: 0.875rem; /* Adjusted for better scaling */
     }
 
     .overview-table .roi-positive {
@@ -227,12 +229,14 @@
       background: linear-gradient(135deg, #FF4B5C 0%, #2F2F2F 100%);
       color: #FFFFFF;
       box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+      padding: 1rem; /* Reduced padding for mobile */
     }
 
     /* Modal Styles */
     #walletModal .bg-gray-800 {
       background-color: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
+      padding: 1rem; /* Reduced padding for mobile */
     }
 
     /* Button Glow */
@@ -244,7 +248,9 @@
     .support-section {
       display: flex;
       justify-content: center;
-      margin: 2rem 0;
+      margin: 1.5rem 0; /* Reduced margin for mobile */
+      width: 100%;
+      padding: 0 1rem; /* Added padding for mobile */
     }
 
     /* Ensure footer stays at bottom */
@@ -254,32 +260,74 @@
 
     /* Simplified Header Styles */
     .modern-header h2 {
-      font-size: 2.5rem; /* Reduced font size for a plainer look */
+      font-size: 2rem; /* Reduced font size for a plainer look */
       font-weight: 700; /* Slightly less bold */
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       color: #FFFFFF; /* Solid white color */
       text-align: center; /* Ensure text is centered */
       /* Removed gradient and text-shadow for plainness */
     }
     .modern-header hr {
       width: 50%;
-      margin: 0 auto 1rem auto;
+      margin: 0 auto 0.5rem auto;
       border-top: 2px solid #FF4B5C;
     }
     .modern-header p {
-      font-size: 1.25rem;
+      font-size: 1rem;
       color: #D1D5DB; /* Tailwind's gray-300 */
       text-align: center; /* Ensure text is centered */
       /* Removed text-shadow for plainness */
     }
 
     /* Responsive Typography */
-    @media (min-width: 768px) {
+    @media (min-width: 640px) { /* Small screens and up */
+      .modern-header h2 {
+        font-size: 2.5rem;
+      }
+      .modern-header p {
+        font-size: 1.125rem;
+      }
+      .overview-table th, .overview-table td {
+        padding: 1rem 1.5rem;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (min-width: 768px) { /* Medium screens and up */
       .modern-header h2 {
         font-size: 3.5rem;
       }
       .modern-header p {
         font-size: 1.5rem;
+      }
+      .overview-table th, .overview-table td {
+        padding: 1.5rem 2rem;
+        font-size: 1rem;
+      }
+      .support-section {
+        margin: 2rem 0;
+      }
+      footer {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) { /* Large screens and up */
+      .modern-header h2 {
+        font-size: 4rem;
+      }
+      .modern-header p {
+        font-size: 1.5rem;
+      }
+      .overview-table th, .overview-table td {
+        padding: 1.5rem 2rem;
+        font-size: 1rem;
+      }
+      .support-section {
+        margin: 2rem 0;
+      }
+      footer {
+        padding: 1.5rem;
       }
     }
   </style>
@@ -309,25 +357,28 @@
       <!-- OVERVIEW SECTION -->
       <div
         id="overviewSection"
-        class="container mx-auto px-6 py-8 rounded-lg shadow-lg max-w-6xl"
+        class="container mx-auto px-4 py-6 rounded-lg shadow-lg max-w-6xl w-full"
         style="background-color: rgba(0,0,0,0.7);"
       >
         <!-- Simplified Header -->
-        <div class="modern-header text-center mb-8">
+        <div class="modern-header text-center mb-6">
           <h2>
             Legion ICO Tracker
           </h2>
           <hr>
+          <p>
+            Below are all current and upcoming Legion ICOs
+          </p>
         </div>
 
         <!-- Overview Table -->
         <div class="overflow-x-auto">
-          <table class="overview-table">
+          <table class="overview-table min-w-full">
             <thead>
               <tr>
                 <th>Token</th>
                 <th>Status</th>
-                <th>Seed Price</th>
+                <th>ICO Price ($)</th>
                 <th>Token Price</th> 
                 <th>ROI (%)</th>
                 <th>If you invested $1000</th>
@@ -345,7 +396,7 @@
         <!-- Support the Site Button -->
         <div class="support-section">
           <button
-            class="support-button py-2 px-4 text-white rounded glow-button"
+            class="support-button py-2 px-4 text-white rounded glow-button text-sm md:text-base"
             onclick="supportSite()"
             aria-label="Support the site"
           >
@@ -357,33 +408,33 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="bg-gradient-to-r from-red-700 via-black to-red-900 text-gray-300 py-8">
-    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+  <footer class="bg-gradient-to-r from-red-700 via-black to-red-900 text-gray-300 py-4 sm:py-6">
+    <div class="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
       
       <!-- Built By Section -->
-      <div class="flex items-center mb-6 md:mb-0">
+      <div class="flex items-center mb-4 sm:mb-0">
         <!-- Icon or Logo -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-300 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-300 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         
         <div>
-          <p class="text-xl font-semibold text-white">Built by</p>
-          <a href="https://x.com/Dustybeerbong" target="_blank" class="text-red-300 hover:text-red-200 transition-colors duration-200">
+          <p class="text-lg font-semibold text-white">Built by</p>
+          <a href="https://x.com/Dustybeerbong" target="_blank" class="text-red-300 hover:text-red-200 transition-colors duration-200 text-sm sm:text-base">
             Sadpepe.exe
           </a>
         </div>
       </div>
       
       <!-- Additional Footer Content -->
-      <div class="text-center md:text-right">
-        <p class="text-sm">
+      <div class="text-center sm:text-right">
+        <p class="text-xs sm:text-sm">
           Price data provided by 
           <a href="https://coingecko.com" target="_blank" class="text-blue-300 hover:underline">
             CoinGecko
           </a>.
         </p>
-        <p class="mt-2 text-sm">
+        <p class="mt-2 text-xs sm:text-sm">
           <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
           <em>not</em> offer financial or trading advice. This website is purely for informational 
           purposes to assist in tracking prior ICO performance. Always conduct your own 
@@ -396,16 +447,16 @@
   <!-- Modal for Wallet Address -->
   <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <!-- Modal Content -->
-    <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
-      <h2 class="text-xl font-semibold text-white mb-4">Support Us</h2>
-      <p class="text-gray-300 mb-4">If you're feeling generous, I'd love a nice cold drink:</p>
-      <div class="flex flex-wrap items-center bg-gray-700 p-2 rounded">
-        <span id="walletAddress" class="text-gray-200 mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
-        <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
+    <div class="bg-gray-800 rounded-lg p-4 sm:p-6 max-w-sm w-full">
+      <h2 class="text-lg sm:text-xl font-semibold text-white mb-3">Support Us</h2>
+      <p class="text-gray-300 mb-3">If you're feeling generous, I'd love a nice cold drink:</p>
+      <div class="flex flex-col sm:flex-row sm:items-center bg-gray-700 p-2 rounded mb-3">
+        <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
+        <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors text-sm sm:text-base">
           Copy
         </button>
       </div>
-      <button onclick="closeModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">
+      <button onclick="closeModal()" class="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors text-sm sm:text-base">
         Close
       </button>
     </div>
@@ -583,7 +634,7 @@
       const seedPrice = tokenData.seedPrice;
 
       // Calculate ROI (%)
-      const roi = (currentPrice / seedPrice) * 100;
+      const roi = ((currentPrice - seedPrice) / seedPrice) * 100;
 
       // Calculate "If you invested $1000 you would have"
       const tokensBought = 1000 / seedPrice;
@@ -606,7 +657,7 @@
       addOverviewItem(
         tokenData.title,
         `${tokenData.status} | ${tokenData.tradingDate}`,
-        `$${seedPrice.toFixed(2)}`,
+        `$${seedPrice.toFixed(4)}`, /* Adjusted for smaller seed price */
         `$${formattedCurrentPrice}`, // This will now be "Token Price"
         formattedROI,
         formattedInvestment,
