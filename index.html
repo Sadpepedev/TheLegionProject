@@ -160,8 +160,12 @@
     }
 
     /* Modal Styles */
-    #walletModal .bg-gray-800 {
-      background-color: rgba(255, 255, 255, 0.1);
+    #walletModal {
+      z-index: 50; /* Ensures modal is above other content */
+    }
+    
+    #walletModal .modal-content {
+      background-color: rgba(0, 0, 0, 0.8); /* Increased opacity for better visibility */
       backdrop-filter: blur(10px);
       padding: 1rem; /* Reduced padding for mobile */
       border-radius: 0.375rem;
@@ -383,10 +387,10 @@
   </footer>
 
   <!-- Modal for Wallet Address -->
-  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <!-- Modal Content -->
-    <div class="bg-gray-800 rounded-lg p-4 sm:p-6">
-      <h2 class="text-lg sm:text-xl font-semibold text-white mb-3">Support Us</h2>
+    <div class="modal-content">
+      <h2 id="modalTitle" class="text-lg sm:text-xl font-semibold text-white mb-3">Support Us</h2>
       <p class="text-gray-300 mb-3">If you're feeling generous, I'd love a nice cold drink:</p>
       <div class="flex flex-col sm:flex-row sm:items-center bg-gray-700 p-2 rounded mb-3">
         <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
@@ -404,6 +408,7 @@
   <script>
     // Function to open the modal
     function supportSite() {
+      console.log('Opening modal...');
       const modal = document.getElementById('walletModal');
       modal.classList.remove('hidden');
       // Set focus to the modal for accessibility
@@ -412,6 +417,7 @@
 
     // Function to close the modal
     function closeModal() {
+      console.log('Closing modal...');
       const modal = document.getElementById('walletModal');
       modal.classList.add('hidden');
       // Return focus to the support button
