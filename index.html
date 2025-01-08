@@ -252,8 +252,13 @@
               </tr>
             </thead>
             <tbody id="overviewList" class="space-y-4">
-              <!-- Example Row with N/A and TBD -->
-              <tr>
+              <!-- Loading Indicator -->
+              <tr id="loadingRow">
+                <td colspan="6" class="text-center text-gray-400">Loading...</td>
+              </tr>
+
+              <!-- Example Row with Dynamic Data for Fuel (Tradable Token) -->
+              <tr data-tradable="true">
                 <td class="token-fuel token-name">Fuel</td>
                 <td>
                   <span class="badge badge-live">Live</span>
@@ -264,6 +269,8 @@
                 <td class="roi-positive">150.00%</td>
                 <td>$3000.00</td>
               </tr>
+
+              <!-- Example Row with N/A and TBD (Non-Tradable Token) -->
               <tr>
                 <td class="token-almanak token-name">Almanak</td>
                 <td>
@@ -275,6 +282,7 @@
                 <td class="">N/A</td>
                 <td>N/A</td>
               </tr>
+
               <!-- Add new rows below as needed -->
               <tr>
                 <td class="token-pulse token-name">Pulse</td>
@@ -420,6 +428,92 @@
         alert('Failed to copy wallet address.');
       });
     }
+
+    // Function to fetch and update data for tradable tokens
+    async function updateTradableTokens() {
+      // Select all table rows with data-tradable="true"
+      const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
+
+      tradableRows.forEach(async (row) => {
+        const tokenName = row.querySelector('td.token-name').textContent.trim();
+
+        // Example: Fetch data from your API endpoint
+        // Replace '/calculate' with your actual API endpoint
+        try {
+          const response = await fetch('/calculate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ investment: 1, round_price: 0.02 }) // Adjust round_price as needed
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+
+          if (data.error) {
+            throw new Error('API error');
+          }
+
+          // Assume data contains current_price
+          const currentPrice = data.current_price;
+
+          // Calculate ROI (%)
+          const seedPrice = parseFloat(row.querySelector('td:nth-child(3)').textContent.replace('$', ''));
+          const roi = ((currentPrice - seedPrice) / seedPrice) * 100;
+
+          // Calculate "If you invested $1000 you would have"
+          const investmentValue = (1000 / seedPrice) * currentPrice;
+
+          // Update Token Price cell (4th cell)
+          const tokenPriceCell = row.querySelector('td:nth-child(4)');
+          tokenPriceCell.textContent = `$${currentPrice.toFixed(4)}`;
+
+          // Update ROI cell (5th cell)
+          const roiCell = row.querySelector('td:nth-child(5)');
+          roiCell.textContent = `${roi.toFixed(2)}%`;
+
+          // Update ROI class based on value
+          if (roi > 0) {
+            roiCell.classList.add('roi-positive');
+            roiCell.classList.remove('roi-negative');
+          } else if (roi < 0) {
+            roiCell.classList.add('roi-negative');
+            roiCell.classList.remove('roi-positive');
+          } else {
+            roiCell.classList.remove('roi-positive', 'roi-negative');
+          }
+
+          // Update "If you invested $1000" cell (6th cell)
+          const investmentCell = row.querySelector('td:nth-child(6)');
+          investmentCell.textContent = `$${investmentValue.toFixed(2)}`;
+
+        } catch (error) {
+          console.error(`Error updating data for ${tokenName}:`, error);
+          // Optionally, display error indicators in the table
+          const tokenPriceCell = row.querySelector('td:nth-child(4)');
+          tokenPriceCell.textContent = `Error`;
+
+          const roiCell = row.querySelector('td:nth-child(5)');
+          roiCell.textContent = `Error`;
+          roiCell.classList.remove('roi-positive', 'roi-negative');
+
+          const investmentCell = row.querySelector('td:nth-child(6)');
+          investmentCell.textContent = `Error`;
+        }
+      });
+    }
+
+    // Initialize page on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Remove the loading row
+      const loadingRow = document.getElementById('loadingRow');
+      if (loadingRow) loadingRow.remove();
+
+      // Update tradable tokens
+      updateTradableTokens();
+    });
   </script>
 </body>
 </html>
