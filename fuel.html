@@ -72,7 +72,7 @@
       overflow-x: hidden;
     }
 
-    /* Optional grid overlay for aesthetic consistency */
+    /* Grid overlay for aesthetics */
     .overlay-grid {
       position: absolute;
       top: 0;
@@ -98,12 +98,12 @@
       padding: 1rem;
     }
     
-    /* Removed max-width; force full width. */
+    /* Main panel with narrower width and semi-transparent black background */
     .main-panel {
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.7); /* same shading as front page */
-      margin-top: 2rem;
-      margin-bottom: 2rem;
+      max-width: 900px;
+      margin: 2rem auto;
+      width: 100%; 
+      background-color: rgba(0, 0, 0, 0.7);
       border-radius: 0.75rem;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
       padding: 2rem;
@@ -117,16 +117,18 @@
       margin-bottom: 1rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
+
+    /* Titles and headings use a neutral gray instead of pink */
     .sub-panel h3 {
       font-weight: bold;
       margin-bottom: 0.5rem;
+      color: #ccc; /* Neutral gray heading color */
     }
 
-    /* Title and Sale Date styling */
     .token-title {
       font-size: 2rem; 
       font-weight: 700;
-      color: #00ffb9; /* bright aqua-green text */
+      color: #00ffb9; /* bright aqua text remains */
       margin-bottom: 0.5rem;
       text-shadow: 0 0 10px rgba(0,255,185,0.7);
     }
@@ -137,17 +139,17 @@
     }
 
     .highlight {
-      color: #ff87fa; 
+      color: #ccc; /* also a neutral gray */
       font-weight: 700;
     }
 
-    /* Force a larger height for the chart */
+    /* Chart container is shortened to 550px so it doesn't exceed the container. */
     .chart-container {
       background: rgba(255,255,255,0.05);
       border-radius: 0.5rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       margin-top: 2rem;
-      height: 600px; /* You can increase this to 1200px, etc. */
+      height: 550px; 
       width: 100%;
     }
 
@@ -157,18 +159,18 @@
       width: 100%;
     }
 
+    /* Price History heading in neutral color */
     .chart-title {
       font-weight: bold;
       margin-bottom: 0.5rem;
       text-align: center;
       font-size: 1.25rem;
-      color: #ff87fa;
+      color: #ccc; /* neutral gray */
     }
   </style>
 </head>
 <body>
-
-  <!-- Grid overlay for aesthetics -->
+  <!-- Grid overlay -->
   <div class="overlay-grid"></div>
 
   <div class="content-wrapper">
@@ -180,12 +182,12 @@
         <div class="sale-date">Launch Date: 2024-12-19</div>
       </div>
 
-      <!-- Grid with ICO Details & Links -->
+      <!-- ICO Details & Links (grid layout) -->
       <div class="grid md:grid-cols-3 gap-6">
         
-        <!-- ICO Details card -->
+        <!-- ICO Details -->
         <div class="sub-panel md:col-span-2">
-          <h3 class="text-xl text-pink-300 mb-4">ICO Details</h3>
+          <h3 class="text-xl mb-4">ICO Details</h3>
           <p class="mb-2">
             <span class="highlight">Buy Price:</span> $0.02
           </p>
@@ -202,9 +204,9 @@
           </p>
         </div>
 
-        <!-- Links card -->
+        <!-- Links -->
         <div class="sub-panel">
-          <h3 class="text-xl text-pink-300 mb-4">Links</h3>
+          <h3 class="text-xl mb-4">Links</h3>
           <ul class="space-y-2 list-none">
             <li>
               <a 
@@ -234,7 +236,6 @@
         <!-- TradingView Widget BEGIN -->
         <div class="tradingview-widget-container">
           <div class="tradingview-widget-container__widget"></div>
-          
           <script 
             type="text/javascript" 
             src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
@@ -260,8 +261,6 @@
     </div>
   </div>
 
-  <!-- Simple script to fetch current price / ROI from your "/calculate" endpoint,
-       color the current price, AND color the ROI. -->
   <script>
     // The original buy price for Fuel
     const seedRoundPrice = 0.02;
