@@ -38,7 +38,6 @@
     base-uri 'self';
     frame-ancestors 'none';
   ">
-
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
   <!-- Tailwind CSS -->
@@ -51,7 +50,7 @@
   >
 
   <style>
-    /* Reset & root styles */
+    /* ========== 1) Global Reset & Basic Layout ========== */
     * {
       margin: 0;
       padding: 0;
@@ -61,124 +60,159 @@
       height: 100%;
     }
     body {
-      /* Legion wave background */
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      background-size: 400% 400%;
+      /* Tron-like dark background */
+      background-color: #09131b;
+      color: #cfd0d1;
       font-family: 'Orbitron', sans-serif;
-      color: #FFFFFF;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Grid overlay for the wave background */
-    .overlay-grid {
+    /* ========== 2) Tron Grid Overlay ========== */
+    .tron-grid {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 50px 50px;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
       pointer-events: none;
       z-index: 1;
     }
 
+    /* ========== 3) Content Wrapper ========== */
     .content-wrapper {
-      position: relative;
-      z-index: 2;
+      z-index: 2; /* Place above the grid */
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      padding: 1rem;
+      padding: 2rem 1rem;
     }
 
-    /* Main panel: no forced height, but a decent max-width so chart won't be too narrow. */
+    /* ========== 4) Main Panel ========== */
     .main-panel {
-      max-width: 900px;
       width: 100%;
+      max-width: 900px;
       margin: 2rem auto;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 0.75rem;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
       padding: 2rem;
+      border: 1px solid rgba(0,255,238,0.2);
+      border-radius: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.3);
+      transition: border-color 0.3s ease;
+    }
+    .main-panel:hover {
+      border-color: rgba(0,255,238,0.4);
     }
 
-    /* Sub-panels for ICO details / links */
+    /* ========== 5) Section Titles & Sale Date ========== */
+    .token-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00ffee; /* Neon Cyan */
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .sale-date {
+      font-size: 0.9rem;
+      color: #a2a4a5;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ========== 6) Sub-Panels ========== */
     .sub-panel {
-      background-color: rgba(255,255,255,0.05);
+      background-color: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,238,0.2);
       border-radius: 0.5rem;
       padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease;
+    }
+    .sub-panel:hover {
+      background-color: rgba(255,255,255,0.06);
     }
     .sub-panel h3 {
       font-weight: bold;
       margin-bottom: 0.5rem;
-      color: #ccc;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      color: #00ffee;
     }
 
-    /* Title & Launch Date */
-    .token-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #00ffb9;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 10px rgba(0,255,185,0.7);
-    }
-    .sale-date {
-      font-size: 0.9rem;
-      color: #ddd;
-      margin-bottom: 1.5rem;
-    }
-
+    /* ========== 7) Typography Helpers ========== */
     .highlight {
-      color: #ccc; 
+      color: #a4a6a7;
       font-weight: 700;
+      display: inline-block;
+      margin-right: 0.25rem;
     }
 
-    /*
-      Chart container: fixed height so chart won't shrink, 
-      but 'width: 100%' so it matches the parent width.
-    */
+    /* ========== 8) Chart Container & Title ========== */
     .chart-container {
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,238,0.2);
       border-radius: 0.5rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
       margin-top: 2rem;
       width: 100%;
-      height: 600px; /* fixed height for the chart area */
-      overflow: hidden; /* hide any scrollbars if chart tries to expand */
+      height: 600px;
+      overflow: hidden;
+      transition: background-color 0.3s ease;
     }
-
+    .chart-container:hover {
+      background-color: rgba(255,255,255,0.06);
+    }
     .chart-title {
       font-weight: bold;
+      margin-top: 1rem;
       margin-bottom: 0.5rem;
       text-align: center;
       font-size: 1.25rem;
-      color: #ccc;
+      color: #00ffee;
     }
 
-    /*
-      TradingView container sets 'autosize: true' to fill .chart-container's width,
-      but .chart-container's height is 600px, so the chart has a stable aspect ratio.
-    */
-    .tradingview-widget-container {
-      width: 100%;
-      height: 100%;
+    /* ========== 9) Link Styling ========== */
+    a {
+      color: #00afff;
+      text-decoration: underline;
+    }
+    a:hover {
+      color: #37fffc;
+    }
+
+    /* ========== 10) Price Coloring ========== */
+    .text-green-400 {
+      color: #0afc4e !important;
+    }
+    .text-red-400 {
+      color: #ff3860 !important;
+    }
+
+    /* ========== 11) Responsive Grid ========== */
+    @media (min-width: 768px) {
+      .md-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem /* 6 in Tailwind units */;
+      }
+      .md-col-span-2 {
+        grid-column: span 2 / span 2;
+      }
     }
   </style>
 </head>
-<body>
-  <!-- Grid overlay -->
-  <div class="overlay-grid"></div>
 
+<body>
+  <!-- Tron Grid Overlay -->
+  <div class="tron-grid"></div>
+
+  <!-- Content Wrapper -->
   <div class="content-wrapper">
+    <!-- Main Panel -->
     <div class="main-panel">
 
       <!-- Title & Sale Date -->
@@ -187,34 +221,36 @@
         <div class="sale-date">Launch Date: 2024-12-19</div>
       </div>
 
-      <!-- ICO Details & Links -->
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="sub-panel md:col-span-2">
-          <h3 class="text-xl mb-4">ICO Details</h3>
+      <!-- ICO Details & Links (Responsive Layout) -->
+      <div class="md-grid">
+        <!-- ICO Details -->
+        <div class="sub-panel md-col-span-2 mb-6 md:mb-0">
+          <h3>ICO Details</h3>
           <p class="mb-2">
             <span class="highlight">Buy Price:</span> $0.02
           </p>
           <p class="mb-2">
             <span class="highlight">Current Price:</span> 
-            <span id="currentPrice" class="ml-1">Loading...</span>
+            <span id="currentPrice">Loading...</span>
           </p>
           <p class="mb-2">
             <span class="highlight">Current ROI:</span> 
-            <span id="currentROI" class="ml-1">Loading...</span>
+            <span id="currentROI">Loading...</span>
           </p>
           <p>
-            <span class="highlight">ATH Price:</span> $0.08375 On Dec.29th,2024
+            <span class="highlight">ATH Price:</span> $0.08375 (On Dec.29th,2024)
           </p>
         </div>
 
+        <!-- Links -->
         <div class="sub-panel">
-          <h3 class="text-xl mb-4">Links</h3>
+          <h3>Links</h3>
           <ul class="space-y-2 list-none">
             <li>
               <a 
                 href="https://app.fuel.network" 
                 target="_blank"
-                class="underline text-blue-400 hover:text-blue-300"
+                rel="noopener noreferrer"
               >
                 Website
               </a>
@@ -223,7 +259,7 @@
               <a 
                 href="https://twitter.com/fuel_network" 
                 target="_blank"
-                class="underline text-blue-400 hover:text-blue-300"
+                rel="noopener noreferrer"
               >
                 Twitter
               </a>
@@ -232,11 +268,11 @@
         </div>
       </div>
 
-      <!-- Price History -->
+      <!-- Price History Section -->
       <div class="chart-container mt-6">
         <div class="chart-title">Price History</div>
         <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container" style="width: 100%; height: 100%;">
           <div class="tradingview-widget-container__widget"></div>
           <script 
             type="text/javascript" 
@@ -263,6 +299,7 @@
     </div>
   </div>
 
+  <!-- Script -->
   <script>
     // The original buy price for Fuel
     const seedRoundPrice = 0.02;
@@ -285,7 +322,7 @@
         
         // Current Price
         const currentPriceEl = document.getElementById("currentPrice");
-        const currentPrice = data.current_price.toFixed(5); 
+        const currentPrice = data.current_price.toFixed(5);
         currentPriceEl.textContent = `$${currentPrice}`;
         
         // Price color
