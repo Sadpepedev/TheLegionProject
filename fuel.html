@@ -301,7 +301,7 @@
         // ---- ROI ----
         // If data.roi_value = 2.61 for a $1 initial investment,
         // rawRoiPercent = ((2.61 - 1) / 1) * 100 = 161%
-        const rawRoiPercent = ((data.roi_value - data.initial_investment) / data.initial_investment) * 100;
+        const rawRoiPercent = (data.roi_value / data.initial_investment) * 100;
         const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
 
         const currentROIEl = document.getElementById("currentROI");
