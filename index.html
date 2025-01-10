@@ -40,19 +40,35 @@
     }
 
     body {
-      /* Same wave gradient background as your Fuel page */
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      background-size: 400% 400%;
+      /* Dark-themed gradient background with smooth animation */
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background-size: 600% 600%;
+      animation: gradientAnimation 15s ease infinite;
       
       font-family: 'Orbitron', sans-serif; 
-      color: #FFFFFF;
+      color: #E0E0E0;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Grid overlay for the same background pattern */
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Glassmorphism Overlay */
+    .glass-overlay {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+    /* Grid overlay for futuristic pattern */
     .overlay-grid {
       position: absolute;
       top: 0;
@@ -76,161 +92,125 @@
       flex-direction: column;
       justify-content: center;
       align-items: center; /* Center horizontally */
-      padding: 1rem; /* Added padding for mobile spacing */
+      padding: 2rem; /* Increased padding for better spacing */
     }
 
-    /* Make the main container red/black gradient, rounded, and wider */
+    /* Enhanced Container */
     #overviewSection {
-      background: linear-gradient(135deg, #3d0101, #1c0c0c 70%);
-      border-radius: 1rem; /* More rounded corners */
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      
-      /* Tailwind classes for sizing */
-      /* max-w-7xl = wide container on desktop */
-      /* w-full = fill available width */
-      /* px-4, py-6 = spacing, same as before */
-      max-width: 7xl; /* Will be replaced by Tailwind's 'max-w-7xl' utility below */
+      @apply glass-overlay max-w-7xl w-full px-6 py-8;
       margin-bottom: 2rem;
-      padding: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
+    #overviewSection:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Modern Header */
     .modern-header h2 {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #ffffff;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 10px rgba(255,255,255,0.7);
+      @apply text-4xl font-extrabold text-gradient bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-4;
     }
 
     .modern-header hr {
-      border-color: #ff87fa; 
-      width: 40%;
-      margin: 0 auto;
+      @apply border-pink-400 w-1/3 mx-auto my-4;
     }
 
-    /* Table styles remain mostly the same, just some subtle changes if desired */
+    /* Table Styles */
     .overview-table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: rgba(255, 255, 255, 0.05); /* translucent overlay */
-      border-radius: 0.5rem;
-      overflow: hidden;
+      @apply w-full table-auto bg-transparent border-separate space-y-4 text-sm;
     }
 
     .overview-table th, .overview-table td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid #FF4B5C;
-      font-size: 0.875rem;
+      @apply px-6 py-4 text-left;
     }
 
     .overview-table th {
-      background-color: rgba(0,0,0,0.7);
-      color: #FFFFFF;
-      text-transform: uppercase;
-      white-space: nowrap;
+      @apply bg-transparent text-pink-400 uppercase tracking-wider;
     }
 
-    .overview-table tr:hover {
-      background-color: rgba(255, 75, 92, 0.15);
+    .overview-table tbody tr {
+      @apply bg-transparent border-b border-gray-700 hover:bg-gray-800 transition-colors duration-300;
     }
 
+    .overview-table tbody tr:last-child {
+      @apply border-none;
+    }
+
+    .overview-table a {
+      @apply text-pink-300 underline hover:text-pink-200 transition-colors;
+    }
+
+    /* ROI Styles */
     .roi-positive {
-      color: #0ad82c; /* Neon Green */
-      font-weight: bold;
+      @apply text-green-400 font-semibold;
     }
 
     .roi-negative {
-      color: #FF4500; /* Neon Red-Orange */
-      font-weight: bold;
+      @apply text-red-500 font-semibold;
     }
 
-    /* Badge styling with a bit more glow */
+    /* Badge Styling */
     .badge {
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      display: inline-block;
-      margin-top: 0.5rem;
-      font-weight: bold;
-      white-space: nowrap;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      @apply px-3 py-1 rounded-full text-xs font-bold uppercase;
     }
     .badge-live {
-      background-color: #32CD32;
-      color: white;
-      box-shadow: 0 0 10px #32CD32;
+      @apply bg-green-500 text-white shadow-lg shadow-green-500/50;
     }
     .badge-soon {
-      background-color: #FFB347;
-      color: white;
-      box-shadow: 0 0 10px #FFB347;
+      @apply bg-yellow-500 text-white shadow-lg shadow-yellow-500/50;
     }
     .badge-ico {
-      background-color: #00BFFF;
-      color: white;
-      box-shadow: 0 0 10px #00BFFF;
-    }
-
-    /* Token Name Colors remain the same */
-    .token-name {
-      font-weight: bold;
-    }
-    .token-fuel {
-      color: #32CD32; 
-    }
-    .token-almanak {
-      color: #434444; 
-    }
-    .token-pulse {
-      color: #0e4b85; 
-    }
-    .token-silencio {
-      color: #4086d6; 
-    }
-    .token-enclave {
-      color: #89CFF0; 
-    }
-    .token-corn {
-      color: #FFA500; 
+      @apply bg-blue-500 text-white shadow-lg shadow-blue-500/50;
     }
 
     /* Support Button */
     .support-button {
-      border: 2px solid #FF4B5C;
-      color: #FF4B5C;
-      background: transparent;
-      transition: all 0.3s ease;
-      padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      box-shadow: 0 0 10px #FF4B5C;
-    }
-    .support-button:hover {
-      background-color: #FF4B5C;
-      color: #FFFFFF;
-      box-shadow: 0 0 20px #FF4B5C;
+      @apply border-2 border-pink-400 text-pink-400 bg-transparent hover:bg-pink-500 hover:text-white transition-all duration-300 px-6 py-3 rounded-full shadow-lg shadow-pink-400/50;
     }
 
-    /* Footer Styles remain the same */
+    /* Footer Styles */
     footer {
-      background: linear-gradient(135deg, #FF4B5C 0%, #2F2F2F 100%);
-      color: #FFFFFF;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-      padding: 1rem; 
+      @apply bg-transparent text-gray-300 py-6;
     }
 
-    /* Modal remains the same */
+    footer .container {
+      @apply glass-overlay flex flex-col sm:flex-row justify-between items-center;
+    }
+
+    footer a {
+      @apply text-pink-400 hover:text-pink-300 transition-colors;
+    }
+
+    /* Modal Styles */
     #walletModal {
-      z-index: 50; 
+      @apply fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50;
     }
     #walletModal .modal-content {
-      background-color: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      padding: 1rem;
-      border-radius: 0.375rem;
+      @apply glass-overlay p-6 rounded-lg w-11/12 max-w-md;
     }
 
-    /* Responsive hide columns remains the same */
+    #walletModal h2 {
+      @apply text-2xl font-bold text-white mb-4;
+    }
+
+    #walletModal p {
+      @apply text-gray-300 mb-4;
+    }
+
+    #walletModal .wallet-info {
+      @apply flex flex-col sm:flex-row sm:items-center bg-gray-800 p-4 rounded mb-4;
+    }
+
+    #walletModal .wallet-info span {
+      @apply text-gray-200 mb-2 sm:mb-0 sm:mr-4 break-all;
+    }
+
+    #walletModal button {
+      @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors;
+    }
+
+    /* Responsive Adjustments */
     @media (max-width: 767px) {
       .overview-table th:nth-child(3),
       .overview-table th:nth-child(4),
@@ -238,7 +218,7 @@
       .overview-table td:nth-child(3),
       .overview-table td:nth-child(4),
       .overview-table td:nth-child(6) {
-        display: none;
+        @apply hidden;
       }
     }
   </style>
@@ -248,20 +228,20 @@
   <!-- Grid Overlay -->
   <div class="overlay-grid"></div>
 
-  <div class="content-wrapper content">
+  <div class="content-wrapper">
     <main>
       
-      <!-- Container now uses Tailwind classes to make it wider on desktop -->
+      <!-- Enhanced Container -->
       <div
         id="overviewSection"
-        class="container mx-auto px-4 py-6 w-full max-w-7xl"
+        class="container mx-auto"
       >
-        <div class="modern-header text-center mb-6">
+        <div class="modern-header text-center">
           <h2>Legion ICO Tracker</h2>
           <hr>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mt-6">
           <table class="overview-table">
             <thead>
               <tr>
@@ -287,14 +267,14 @@
                   <a 
                     href="fuel.html" 
                     target="_blank" 
-                    class="underline hover:text-green-300"
+                    rel="noopener noreferrer"
                   >
                     Fuel
                   </a>
                 </td>
                 <td>
                   <span class="badge badge-live">Live</span>
-                  <div class="text-xs text-white-400 mt-1">2024-12-19</div>
+                  <div class="text-xs text-gray-400 mt-1">2024-12-19</div>
                 </td>
                 <td>$0.02</td>
                 <td>$0.05</td>
@@ -307,7 +287,7 @@
                 <td class="token-almanak token-name">Almanak</td>
                 <td>
                   <span class="badge badge-soon">Pending TGE</span>
-                  <div class="text-xs text-white-400 mt-1">Q1 2025</div>
+                  <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
                 </td>
                 <td>TBD</td>
                 <td>--</td>
@@ -320,7 +300,7 @@
                 <td class="token-pulse token-name">Pulse</td>
                 <td>
                   <span class="badge badge-soon">Pending TGE</span>
-                  <div class="text-xs text-white-400 mt-1">TBD</div>
+                  <div class="text-xs text-gray-400 mt-1">TBD</div>
                 </td>
                 <td>TBD</td>
                 <td>--</td>
@@ -333,7 +313,7 @@
                 <td class="token-silencio token-name">Silencio</td>
                 <td>
                   <span class="badge badge-soon">Pending TGE</span>
-                  <div class="text-xs text-white-400 mt-1">Q1 2025</div>
+                  <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
                 </td>
                 <td>$0.0006</td>
                 <td>--</td>
@@ -346,7 +326,7 @@
                 <td class="token-enclave token-name">Enclave</td>
                 <td>
                   <span class="badge badge-soon">Pending TGE</span>
-                  <div class="text-xs text-white-400 mt-1">Q4 2025</div>
+                  <div class="text-xs text-gray-400 mt-1">Q4 2025</div>
                 </td>
                 <td>TBD</td>
                 <td>--</td>
@@ -359,7 +339,7 @@
                 <td class="token-corn token-name">Corn</td>
                 <td>
                   <span class="badge badge-ico">Upcoming ICO</span>
-                  <div class="text-xs text-white-400 mt-1">Q1 2025</div>
+                  <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
                 </td>
                 <td>TBD</td>
                 <td>--</td>
@@ -372,9 +352,9 @@
         </div>
 
         <!-- Support the Site Button -->
-        <div class="flex justify-center my-6 w-full px-4">
+        <div class="flex justify-center my-8">
           <button
-            class="support-button text-sm py-2 px-4 rounded hover:bg-pink-500 hover:text-white transition-all duration-300"
+            class="support-button text-sm sm:text-base"
             onclick="supportSite()"
             aria-label="Support the site"
           >
@@ -392,7 +372,7 @@
       <!-- Built By -->
       <div class="flex items-center mb-4 sm:mb-0">
         <svg xmlns="http://www.w3.org/2000/svg" 
-             class="h-6 w-6 text-pink-300 mr-2" 
+             class="h-6 w-6 text-pink-300 mr-2 animate-pulse" 
              fill="none" viewBox="0 0 24 24" 
              stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" 
@@ -401,6 +381,7 @@
         <div>
           <p class="text-lg font-semibold text-white">Built by</p>
           <a href="https://x.com/Dustybeerbong" target="_blank" 
+             rel="noopener noreferrer"
              class="text-pink-300 hover:text-pink-200 transition-colors duration-200 text-sm sm:text-base">
             Sadpepe.exe
           </a>
@@ -411,6 +392,7 @@
         <p class="text-xs sm:text-sm">
           Price data provided by 
           <a href="https://coingecko.com" target="_blank" 
+             rel="noopener noreferrer"
              class="text-blue-300 hover:underline">
             CoinGecko
           </a>.
@@ -425,45 +407,41 @@
     </div>
   </footer>
 
-  <!-- MODAL (unchanged) -->
-  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <!-- MODAL -->
+  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-content">
-      <h2 id="modalTitle" class="text-lg sm:text-xl font-semibold text-white mb-3">Support Us</h2>
-      <p class="text-gray-300 mb-3">
-        If you're feeling generous, I'd love a nice cold drink:
-      </p>
-      <div class="flex flex-col sm:flex-row sm:items-center bg-gray-700 p-2 rounded mb-3">
-        <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">
-          0x62f1F6bFE3A798d5023608ac0a9c8a9538276283
-        </span>
+      <h2 id="modalTitle">Support Us</h2>
+      <p>If you're feeling generous, I'd love a nice cold drink:</p>
+      <div class="wallet-info">
+        <span id="walletAddress">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
         <button onclick="copyWalletAddress()" 
-                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors text-sm sm:text-base">
+                class="mt-2 sm:mt-0">
           Copy
         </button>
       </div>
       <button onclick="closeModal()" 
-              class="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors text-sm sm:text-base">
+              class="w-full sm:w-auto mt-4 sm:mt-0 bg-red-500 hover:bg-red-600">
         Close
       </button>
     </div>
   </div>
 
-  <!-- Existing Scripts (Unchanged) -->
+  <!-- Scripts -->
   <script>
     // Function to open the modal
     function supportSite() {
-      console.log('Opening modal...');
       const modal = document.getElementById('walletModal');
       modal.classList.remove('hidden');
       modal.querySelector('button').focus();
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
     }
 
     // Function to close the modal
     function closeModal() {
-      console.log('Closing modal...');
       const modal = document.getElementById('walletModal');
       modal.classList.add('hidden');
       document.querySelector('.support-button').focus();
+      document.body.style.overflow = 'auto'; // Restore background scrolling
     }
 
     // Function to copy wallet address
@@ -476,7 +454,7 @@
       });
     }
 
-    // Function to fetch and update data for tradable tokens (unchanged)
+    // Function to fetch and update data for tradable tokens
     async function updateTradableTokens() {
       const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
 
