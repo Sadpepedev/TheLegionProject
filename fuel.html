@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Fuel Token Details</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    object-src 'none';
+    base-uri 'self';
+    frame-ancestors 'none';
+  ">
+  
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  
+  <!-- Google Fonts -->
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" 
+    rel="stylesheet"
+  >
+  
+  <style>
+    /* Global CSS Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      
+      font-family: 'Orbitron', sans-serif; 
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .overlay-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; /* Center horizontally */
+      padding: 1rem; /* Added padding for mobile spacing */
+    }
+
+    /* Link Styles */
+    .official-links a {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #1DA1F2; /* Twitter Blue */
+      text-decoration: underline;
+    }
+
+    .official-links a:hover {
+      color: #0d95e8;
+    }
+  </style>
+</head>
+<body>
+  <!-- Optional grid overlay for aesthetic consistency -->
+  <div class="overlay-grid"></div>
+
+  <div class="content-wrapper">
+    <main class="max-w-4xl w-full bg-black bg-opacity-70 rounded-lg p-6">
+      <h1 class="text-3xl font-bold text-center mb-6 text-green-400">
+        Fuel Token Price History
+      </h1>
+
+      <!-- TradingView Widget BEGIN -->
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget" style="height:500px; width:100%;"></div>
+        <div class="tradingview-widget-copyright">
+          <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+            <span class="blue-text">Track all markets on TradingView</span>
+          </a>
+        </div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+        {
+          "autosize": true,
+          "symbol": "BYBIT:FUELUSDT",
+          "interval": "D",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "allow_symbol_change": true,
+          "calendar": false,
+          "support_host": "https://www.tradingview.com"
+        }
+        </script>
+      </div>
+      <!-- TradingView Widget END -->
+
+      <!-- Official Links -->
+      <section class="official-links mt-6">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Official Links</h2>
+        <ul class="space-y-2">
+          <li>
+            <a 
+              href="https://app.fuel.network" 
+              class="underline text-blue-400 hover:text-blue-300" 
+              target="_blank"
+            >
+              Fuel Website
+            </a>
+          </li>
+          <li>
+            <a 
+              href="https://twitter.com/fuel_network" 
+              class="underline text-blue-400 hover:text-blue-300" 
+              target="_blank"
+            >
+              Fuel Twitter
+            </a>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+
