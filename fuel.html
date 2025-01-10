@@ -50,7 +50,7 @@
   >
 
   <style>
-    /* ========== 1) Global Reset & Basic Layout ========== */
+  
     * {
       margin: 0;
       padding: 0;
@@ -70,7 +70,7 @@
       overflow-x: hidden;
     }
 
-    /* ========== 2) Tron Grid Overlay ========== */
+  
     .tron-grid {
       position: absolute;
       top: 0;
@@ -85,7 +85,7 @@
       z-index: 1;
     }
 
-    /* ========== 3) Content Wrapper ========== */
+ 
     .content-wrapper {
       z-index: 2; /* Place above the grid */
       flex: 1;
@@ -95,7 +95,7 @@
       padding: 2rem 1rem;
     }
 
-    /* ========== 4) Main Panel ========== */
+
     .main-panel {
       width: 100%;
       max-width: 900px;
@@ -110,7 +110,7 @@
       border-color: rgba(0,255,238,0.4);
     }
 
-    /* ========== 5) Section Titles & Sale Date ========== */
+    
     .token-title {
       font-size: 2rem;
       font-weight: 700;
@@ -125,7 +125,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* ========== 6) Sub-Panels ========== */
+
     .sub-panel {
       background-color: rgba(255,255,255,0.03);
       border: 1px solid rgba(0,255,238,0.2);
@@ -144,7 +144,7 @@
       color: #00ffee;
     }
 
-    /* ========== 7) Typography Helpers ========== */
+ 
     .highlight {
       color: #a4a6a7;
       font-weight: 700;
@@ -152,7 +152,7 @@
       margin-right: 0.25rem;
     }
 
-    /* ========== 8) Chart Container & Title ========== */
+
     .chart-container {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(0,255,238,0.2);
@@ -175,7 +175,7 @@
       color: #00ffee;
     }
 
-    /* ========== 9) Link Styling ========== */
+
     a {
       color: #00afff;
       text-decoration: underline;
@@ -184,7 +184,6 @@
       color: #37fffc;
     }
 
-    /* ========== 10) Price Coloring ========== */
     .text-green-400 {
       color: #0afc4e !important;
     }
@@ -192,7 +191,7 @@
       color: #ff3860 !important;
     }
 
-    /* ========== 11) Responsive Grid ========== */
+
     @media (min-width: 768px) {
       .md-grid {
         display: grid;
@@ -306,7 +305,7 @@
 
     async function fetchFuelData() {
       try {
-        // We'll assume your API wants { investment: 1 }
+        
         const response = await fetch("/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -335,8 +334,8 @@
         }
 
         // ROI
-        // If data.roi_value = e.g. 2.52 => 252% => (2.52-1)*100
-        const rawRoiPercent = ((data.roi_value - data.initial_investment) / data.initial_investment) * 100;
+       
+        const rawRoiPercent = (data.roi_value / data.initial_investment) * 100;
         const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
         const currentROIEl = document.getElementById("currentROI");
         currentROIEl.textContent = formattedRoi;
