@@ -72,7 +72,7 @@
       overflow-x: hidden;
     }
 
-    /* Optional grid overlay for aesthetic consistency */
+    /* Grid overlay for aesthetics */
     .overlay-grid {
       position: absolute;
       top: 0;
@@ -97,20 +97,23 @@
       align-items: center;
       padding: 1rem;
     }
-    
-    /* Main panel: narrower width, plus min-height so it stays taller than the chart */
+
+    /* 
+      .main-panel: Let it auto-size to fit content (the chart).
+      Remove fixed/min heights. 
+    */
     .main-panel {
-      max-width: 900px;
-      margin: 2rem auto;
-      width: 100%; 
-      background-color: rgba(0, 0, 0, 0.7);
+      max-width: 900px;    /* a narrower width if you want to match landing page */
+      width: 100%;
+      margin: 2rem auto;   /* center horizontally */
+      background-color: rgba(0,0,0,0.7);
       border-radius: 0.75rem;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
       padding: 2rem;
-      min-height: 800px; /* Ensure container is taller than the chart below */
+      /* height: auto (default) => it expands as needed. */
     }
 
-    /* Sub-panels (cards) for details, links, etc. */
+    /* Sub-panels for ICO Details / Links */
     .sub-panel {
       background-color: rgba(255,255,255,0.05);
       border-radius: 0.5rem;
@@ -124,9 +127,9 @@
       color: #ccc; /* neutral heading color */
     }
 
-    /* Title and Sale Date styling */
+    /* Titles & styling */
     .token-title {
-      font-size: 2rem; 
+      font-size: 2rem;
       font-weight: 700;
       color: #00ffb9; 
       margin-bottom: 0.5rem;
@@ -137,24 +140,22 @@
       color: #ddd;
       margin-bottom: 1.5rem;
     }
-
     .highlight {
       color: #ccc; 
       font-weight: 700;
     }
 
-    /* Chart container is 600px tall; container behind has min-height:700px */
+    /* 
+      .chart-container: no forced height or min-height here either.
+      Let the child (iframe/TradingView) define the size. 
+    */
     .chart-container {
       background: rgba(255,255,255,0.05);
       border-radius: 0.5rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       margin-top: 2rem;
-      height: 600px;  
       width: 100%;
-    }
-    .tradingview-widget-container {
-      height: 100%;
-      width: 100%;
+      /* height: auto => automatically adjusts. */
     }
 
     .chart-title {
@@ -162,16 +163,17 @@
       margin-bottom: 0.5rem;
       text-align: center;
       font-size: 1.25rem;
-      color: #ccc; /* neutral color */
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <!-- Grid overlay for aesthetics -->
+  <!-- Grid overlay -->
   <div class="overlay-grid"></div>
 
   <div class="content-wrapper">
     <div class="main-panel">
+
       <!-- Title & Sale Date -->
       <div class="text-center mb-8">
         <h1 class="token-title">Fuel Network</h1>
@@ -180,8 +182,6 @@
 
       <!-- ICO Details & Links -->
       <div class="grid md:grid-cols-3 gap-6">
-        
-        <!-- ICO Details -->
         <div class="sub-panel md:col-span-2">
           <h3 class="text-xl mb-4">ICO Details</h3>
           <p class="mb-2">
@@ -199,8 +199,6 @@
             <span class="highlight">ATH Price:</span> $0.08375 On Dec.29th,2024
           </p>
         </div>
-
-        <!-- Links -->
         <div class="sub-panel">
           <h3 class="text-xl mb-4">Links</h3>
           <ul class="space-y-2 list-none">
@@ -229,16 +227,19 @@
       <!-- Price History / TradingView Chart -->
       <div class="chart-container mt-6">
         <div class="chart-title">Price History</div>
+
         <!-- TradingView Widget BEGIN -->
         <div class="tradingview-widget-container">
+
           <div class="tradingview-widget-container__widget"></div>
           <script 
             type="text/javascript" 
-            src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
+            src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
             async
           >
           {
-            "autosize": true,
+            "width": "100%",        /* Instead of "autosize": true */
+            "height": "600",        /* Explicitly set a chart height here */
             "symbol": "BYBIT:FUELUSDT",
             "interval": "60",
             "timezone": "Etc/UTC",
@@ -253,12 +254,11 @@
         </div>
         <!-- TradingView Widget END -->
       </div>
-
     </div>
   </div>
 
-  <!-- ROI & Price Fetch Logic -->
   <script>
+    // The original buy price for Fuel
     const seedRoundPrice = 0.02;
 
     async function fetchFuelData() {
@@ -280,6 +280,8 @@
         const currentPriceEl = document.getElementById("currentPrice");
         const currentPrice = data.current_price.toFixed(5); 
         currentPriceEl.textContent = `$${currentPrice}`;
+        
+        // Price color
         const numericPrice = parseFloat(currentPrice);
         currentPriceEl.classList.remove("text-green-400", "text-red-400");
         if (numericPrice >= seedRoundPrice) {
@@ -289,7 +291,7 @@
         }
 
         // ROI
-        const rawRoiPercent = (data.roi_value / data.initial_investment) * 100;
+        const rawRoiPercent = (data.roi_value  / data.initial_investment) * 100;
         const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
         const currentROIEl = document.getElementById("currentROI");
         currentROIEl.textContent = formattedRoi;
