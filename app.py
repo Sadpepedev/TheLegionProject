@@ -87,7 +87,7 @@ def get_token_price():
         response = session.get(COINGECKO_API_URL, params=params, headers=headers, timeout=10)
         response.raise_for_status()  # Raise HTTPError for bad responses
         data = response.json()
-        logging.debug(f"API Response: {data}")  # Detailed debug log
+        logging.debug(f"API Response: {data}")
         price = data.get(TOKEN_CONTRACT_ADDRESS.lower(), {}).get("usd")  # Ensure contract address is lowercase
         if price is not None:
             logging.info(f"Fetched token price: ${price}")
@@ -105,8 +105,6 @@ def get_token_price():
 def home():
     """
     Serve the index.html file from the root directory.
-    Returns:
-        HTML: The index.html file content.
     """
     try:
         logging.info("Serving index.html from the root directory.")
@@ -118,17 +116,31 @@ def home():
         logging.error(f"Error serving index.html: {e}", exc_info=True)
         return "An error occurred while loading the page.", 500
 
+
+@app.route("/fuel.html")
+def serve_fuel():
+    """
+    Serve the fuel.html file from the root directory.
+    """
+    try:
+        logging.info("Serving fuel.html from the root directory.")
+        return send_from_directory(".", "fuel.html")
+    except FileNotFoundError:
+        logging.error("fuel.html not found in the root directory.")
+        return "fuel.html not found.", 404
+    except Exception as e:
+        logging.error(f"Error serving fuel.html: {e}", exc_info=True)
+        return "An error occurred while loading the page.", 500
+
+
 @app.route("/calculate", methods=["POST"])
 @limiter.limit("10 per minute")  # Example rate limit
 def calculate():
     """
     Handle the ROI calculation based on user input.
-    Returns:
-        JSON: ROI calculation results.
     """
     try:
         logging.info("Received request to /calculate")
-        # Parse user input
         data = request.get_json()
         investment_input = data.get("investment")
         
@@ -144,9 +156,7 @@ def calculate():
             logging.error(f"Invalid investment input: {e}")
             return jsonify({"error": str(e)}), 400
 
-        # Fetch the current token price
         current_price = get_token_price()
-
         if current_price is None:
             logging.error("Failed to fetch current token price.")
             return jsonify({"error": "Failed to fetch current token price."}), 500
@@ -155,18 +165,21 @@ def calculate():
         tokens_purchased = initial_investment / SEED_ROUND_PRICE
         roi_value = tokens_purchased * current_price
 
-        # Log calculation details
-        logging.info(f"ROI Calculation - Investment: ${initial_investment}, "
-                     f"Tokens Purchased: {tokens_purchased}, Current Price: ${current_price}, ROI: ${roi_value}")
+        logging.info(
+            f"ROI Calculation - Investment: ${initial_investment}, "
+            f"Tokens Purchased: {tokens_purchased}, Current Price: ${current_price}, ROI: ${roi_value}"
+        )
 
         return jsonify({
             "initial_investment": initial_investment,
             "current_price": current_price,
             "roi_value": roi_value
         })
+
     except Exception as e:
         logging.error(f"Error in calculate route: {e}", exc_info=True)
         return jsonify({"error": "An internal error occurred."}), 500
+
 
 if __name__ == "__main__":
     # Run the Flask application
