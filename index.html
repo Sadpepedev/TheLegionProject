@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Track Legion ICO Performance</title>
   
-  
-  
-  <!-- Content-Security-Policy -->
+  <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com;
+    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     object-src 'none';
@@ -19,11 +17,11 @@
   ">
   
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  
 
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  
+  <!-- Google Fonts -->
   <link 
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" 
     rel="stylesheet"
@@ -53,7 +51,6 @@
       overflow-x: hidden;
     }
 
-    
     .overlay-grid {
       position: absolute;
       top: 0;
@@ -206,7 +203,6 @@
       font-weight: bold;
     }
 
-    
     @media (max-width: 767px) {
       .overview-table th:nth-child(3),
       .overview-table th:nth-child(4),
@@ -260,7 +256,16 @@
 
               
               <tr data-tradable="true">
-                <td class="token-fuel token-name">Fuel</td>
+                <!-- Make the token name "Fuel" clickable -->
+                <td class="token-fuel token-name">
+                  <a 
+                    href="fuel.html" 
+                    target="_blank" 
+                    class="underline hover:text-green-300"
+                  >
+                    Fuel
+                  </a>
+                </td>
                 <td>
                   <span class="badge badge-live">Live</span>
                   <div class="text-xs text-white-400 mt-1">2024-12-19</div>
