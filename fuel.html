@@ -2,34 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Fuel Token Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fuel Network</title>
 
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 
-      'self' 
-      'unsafe-inline' 
+      'self'
+      'unsafe-inline'
       'unsafe-eval'
       https://cdn.tailwindcss.com
       https://fonts.googleapis.com
       https://fonts.gstatic.com
       https://s3.tradingview.com
       https://www.tradingview.com;
-    style-src 
+    style-src
       'self'
       'unsafe-inline'
       https://fonts.googleapis.com;
-    font-src 
+    font-src
       'self'
       https://fonts.gstatic.com;
     frame-src
       'self'
       https://www.tradingview-widget.com
       https://www.tradingview.com
-      https://s3.tradingview.com
-      data:;
+      https://s3.tradingview.com;
     connect-src
       'self'
       https://*.tradingview.com
@@ -50,27 +49,47 @@
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
     rel="stylesheet"
   >
-  
+
   <style>
-    /* Basic styling for demo */
+    /* Reset and root styling */
     * {
-      margin: 0; 
-      padding: 0; 
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
     html, body {
       height: 100%;
     }
     body {
+      /* Same wave gradient from index.html */
       background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
       background-size: 400% 400%;
       font-family: 'Orbitron', sans-serif;
-      color: #fff;
+      color: #FFFFFF;
       display: flex;
       flex-direction: column;
+      position: relative;
       overflow-x: hidden;
     }
+
+    /* Same grid overlay as front page */
+    .overlay-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
     .content-wrapper {
+      position: relative;
+      z-index: 2;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -78,64 +97,221 @@
       align-items: center;
       padding: 1rem;
     }
-    .chart-container {
+    
+    /* Main container uses semi-transparent black (like the front page) */
+    .main-panel {
+      max-width: 1200px;
       width: 100%;
-      max-width: 800px;
-      height: 600px; /* Adjust as needed */
-      margin: auto;
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: rgba(0,0,0,0.7); /* matches front page shading */
+      padding: 2rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* Sub-panels (cards) for details, links, etc. */
+    .sub-panel {
+      background-color: rgba(255,255,255,0.05);
       border-radius: 0.5rem;
       padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .sub-panel h3 {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Title and Sale Date styling */
+    .token-title {
+      font-size: 2rem; 
+      font-weight: 700;
+      color: #00ffb9; /* bright aqua-green text */
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px rgba(0,255,185,0.7);
+    }
+    .sale-date {
+      font-size: 0.9rem;
+      color: #ddd;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight {
+      color: #ff87fa; 
+      font-weight: 700;
+    }
+
+    /* Price History container */
+    .chart-container {
+      background: rgba(255,255,255,0.05);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      margin-top: 2rem;
+    }
+
+    .chart-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-size: 1.25rem;
+      color: #ff87fa;
     }
   </style>
 </head>
-
 <body>
-  <div class="content-wrapper">
-    <h1 class="text-3xl font-bold text-center mb-6 text-green-400">
-      Fuel Token Price History
-    </h1>
 
-    <!-- Chart Container -->
-    <div class="chart-container">
-      <!-- TradingView Widget BEGIN -->
-      <div class="tradingview-widget-container" style="height:100%;width:100%;">
-        <div 
-          class="tradingview-widget-container__widget" 
-          style="height:100%; width:100%;"
-        ></div>
-        
-        <div class="tradingview-widget-copyright">
-          <a 
-            href="https://www.tradingview.com/" 
-            rel="noopener nofollow" 
-            target="_blank"
-          >
-            <span class="blue-text">Track all markets on TradingView</span>
-          </a>
-        </div>
-        
-        <script 
-          type="text/javascript" 
-          src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
-          async
-        >
-        {
-          "autosize": true,
-          "symbol": "BYBIT:FUELUSDT",
-          "interval": "D",
-          "timezone": "Etc/UTC",
-          "theme": "dark",
-          "style": "1",
-          "locale": "en",
-          "allow_symbol_change": true,
-          "calendar": false,
-          "support_host": "https://www.tradingview.com"
-        }
-        </script>
+  <!-- Grid overlay for aesthetics -->
+  <div class="overlay-grid"></div>
+
+  <div class="content-wrapper">
+    <div class="main-panel">
+
+      <!-- Title & Sale Date -->
+      <div class="text-center mb-8">
+        <h1 class="token-title">Fuel Network</h1>
+        <div class="sale-date">Launch Date: 2024-12-19</div>
       </div>
-      <!-- TradingView Widget END -->
+
+      <!-- Grid with ICO Details & Links -->
+      <div class="grid md:grid-cols-3 gap-6">
+        
+        <!-- Investment Details card -->
+        <div class="sub-panel md:col-span-2">
+          <h3 class="text-xl text-pink-300 mb-4">ICO Details</h3>
+          <p class="mb-2">
+            <span class="highlight">Buy Price:</span> $0.02
+          </p>
+          <p class="mb-2">
+            <span class="highlight">Current Price:</span> 
+            <span id="currentPrice" class="ml-1">Loading...</span>
+          </p>
+          <p class="mb-2">
+            <span class="highlight">Current ROI:</span> 
+            <span id="currentROI" class="ml-1">Loading...</span>
+          </p>
+          <p>
+            <span class="highlight">ATH Price:</span> $0.08375 On Dec.29th,2024
+          </p>
+        </div>
+
+        <!-- Links card -->
+        <div class="sub-panel">
+          <h3 class="text-xl text-pink-300 mb-4">Links</h3>
+          <ul class="space-y-2 list-none">
+            <li>
+              <a 
+                href="https://app.fuel.network" 
+                target="_blank"
+                class="underline text-blue-400 hover:text-blue-300"
+              >
+                Website
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://twitter.com/fuel_network" 
+                target="_blank"
+                class="underline text-blue-400 hover:text-blue-300"
+              >
+                Twitter
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Price History / TradingView Chart -->
+      <div class="chart-container mt-6">
+        <div class="chart-title">Price History</div>
+        <!-- TradingView Widget BEGIN -->
+        <div class="tradingview-widget-container" style="height:900px; width:100%;">
+          <div 
+            class="tradingview-widget-container__widget" 
+            style="height:100%; width:100%;"
+          ></div>
+          <script 
+            type="text/javascript" 
+            src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
+            async
+          >
+          {
+            "autosize": true,
+            "symbol": "BYBIT:FUELUSDT",
+            "interval": "D",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "allow_symbol_change": true,
+            "calendar": false,
+            "support_host": "https://www.tradingview.com"
+          }
+          </script>
+        </div>
+        <!-- TradingView Widget END -->
+      </div>
+
     </div>
   </div>
+
+  <!-- Simple script to fetch current price / ROI from your "/calculate" endpoint and color the current price -->
+  <script>
+    // The original buy price for Fuel
+    const seedRoundPrice = 0.02;
+
+    async function fetchFuelData() {
+      try {
+        // We'll assume your API wants:
+        //   { "investment": 1 }
+        // so it returns current_price, roi_value, etc.
+        const response = await fetch("/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ investment: 1 })
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
+        // data.current_price => The token's current price from the API
+        // data.roi_value => total value if you invested $1 at seed, so let's compute ROI
+        const currentPriceEl = document.getElementById("currentPrice");
+        
+        // Format the current price
+        const currentPrice = data.current_price.toFixed(5); // e.g. 0.05057
+        currentPriceEl.textContent = `$${currentPrice}`;
+        
+        // Color the current price: green if above seedRoundPrice, red otherwise
+        const numericPrice = parseFloat(currentPrice);
+        currentPriceEl.classList.remove('text-green-400', 'text-red-400');
+        if (numericPrice > seedRoundPrice) {
+          currentPriceEl.classList.add('text-green-400');
+        } else {
+          currentPriceEl.classList.add('text-red-400');
+        }
+
+        // If data.roi_value = e.g. $2.53 for a $1 initial investment,
+        // the ROI in percent would be (2.53 - 1)/1 * 100 = 153%
+        // We'll show it as "153.00% (2.53x)"
+        const rawRoiPercent = ((data.roi_value - data.initial_investment) / data.initial_investment) * 100;
+        const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
+        
+        document.getElementById("currentROI").textContent = formattedRoi;
+      } catch (error) {
+        console.error("Error fetching Fuel data:", error);
+        document.getElementById("currentPrice").textContent = "Error";
+        document.getElementById("currentROI").textContent = "Error";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", fetchFuelData);
+  </script>
 </body>
 </html>
+
