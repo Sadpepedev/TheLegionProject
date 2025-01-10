@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fuel Network</title>
 
   <!-- Content Security Policy -->
@@ -50,7 +50,7 @@
   >
 
   <style>
-  
+    /* Tron-like background and styling, same as before... */
     * {
       margin: 0;
       padding: 0;
@@ -60,7 +60,6 @@
       height: 100%;
     }
     body {
-      /* Tron-like dark background */
       background-color: #09131b;
       color: #cfd0d1;
       font-family: 'Orbitron', sans-serif;
@@ -70,7 +69,6 @@
       overflow-x: hidden;
     }
 
-  
     .tron-grid {
       position: absolute;
       top: 0;
@@ -85,16 +83,14 @@
       z-index: 1;
     }
 
- 
     .content-wrapper {
-      z-index: 2; /* Place above the grid */
+      z-index: 2;
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem 1rem;
     }
-
 
     .main-panel {
       width: 100%;
@@ -110,11 +106,10 @@
       border-color: rgba(0,255,238,0.4);
     }
 
-    
     .token-title {
       font-size: 2rem;
       font-weight: 700;
-      color: #00ffee; /* Neon Cyan */
+      color: #00ffee;
       margin-bottom: 0.5rem;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -124,7 +119,6 @@
       color: #a2a4a5;
       margin-bottom: 1.5rem;
     }
-
 
     .sub-panel {
       background-color: rgba(255,255,255,0.03);
@@ -144,14 +138,12 @@
       color: #00ffee;
     }
 
- 
     .highlight {
       color: #a4a6a7;
       font-weight: 700;
       display: inline-block;
       margin-right: 0.25rem;
     }
-
 
     .chart-container {
       background: rgba(255,255,255,0.03);
@@ -175,7 +167,6 @@
       color: #00ffee;
     }
 
-
     a {
       color: #00afff;
       text-decoration: underline;
@@ -191,12 +182,11 @@
       color: #ff3860 !important;
     }
 
-
     @media (min-width: 768px) {
       .md-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.5rem /* 6 in Tailwind units */;
+        gap: 1.5rem;
       }
       .md-col-span-2 {
         grid-column: span 2 / span 2;
@@ -204,7 +194,6 @@
     }
   </style>
 </head>
-
 <body>
   <!-- Tron Grid Overlay -->
   <div class="tron-grid"></div>
@@ -213,7 +202,6 @@
   <div class="content-wrapper">
     <!-- Main Panel -->
     <div class="main-panel">
-
       <!-- Title & Sale Date -->
       <div class="text-center mb-8">
         <h1 class="token-title">Fuel Network</h1>
@@ -225,19 +213,54 @@
         <!-- ICO Details -->
         <div class="sub-panel md-col-span-2 mb-6 md:mb-0">
           <h3>ICO Details</h3>
+
+          <!-- Buy Price -->
           <p class="mb-2">
             <span class="highlight">Buy Price:</span> $0.02
           </p>
+
+          <!-- Current Price -->
           <p class="mb-2">
             <span class="highlight">Current Price:</span> 
             <span id="currentPrice">Loading...</span>
           </p>
+
+          <!-- Current ROI -->
           <p class="mb-2">
             <span class="highlight">Current ROI:</span> 
             <span id="currentROI">Loading...</span>
           </p>
+
+          <!-- ATH Price -->
           <p>
             <span class="highlight">ATH Price:</span> $0.08375 (On Dec.29th,2024)
+          </p>
+
+          <!-- Daily Sentiment in the same panel -->
+          <div class="flex items-center space-x-4 my-4 mt-6">
+            <!-- Rocket Button (Emoji Only) -->
+            <button 
+              id="rocketButton" 
+              class="px-4 py-2 rounded bg-green-500 hover:bg-green-600 text-white"
+              title="Vote Rocket"
+            >
+              &#128640;
+            </button>
+
+            <!-- Poop Button (Emoji Only) -->
+            <button 
+              id="poopButton" 
+              class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
+              title="Vote Poop"
+            >
+              &#128169;
+            </button>
+          </div>
+
+          <!-- Show only Daily Sentiment -->
+          <p class="mb-2">
+            <span class="highlight">Today's Sentiment:</span>
+            <span id="todaySentiment">Loading...</span>
           </p>
         </div>
 
@@ -298,32 +321,28 @@
     </div>
   </div>
 
-  <!-- Script -->
+  <!-- Scripts -->
   <script>
     // The original buy price for Fuel
     const seedRoundPrice = 0.02;
 
+    // (A) Fetch Price/ROI
     async function fetchFuelData() {
       try {
-        
         const response = await fetch("/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ investment: 1 })
         });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        
-        // Current Price
+        if (data.error) throw new Error(data.error);
+
+        // Price
         const currentPriceEl = document.getElementById("currentPrice");
         const currentPrice = data.current_price.toFixed(5);
         currentPriceEl.textContent = `$${currentPrice}`;
-        
+
         // Price color
         const numericPrice = parseFloat(currentPrice);
         currentPriceEl.classList.remove("text-green-400", "text-red-400");
@@ -334,7 +353,6 @@
         }
 
         // ROI
-       
         const rawRoiPercent = (data.roi_value / data.initial_investment) * 100;
         const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
         const currentROIEl = document.getElementById("currentROI");
@@ -353,7 +371,53 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", fetchFuelData);
+    // (B) Fetch Daily Sentiment
+    async function fetchDailySentiment() {
+      try {
+        // If your Node server is on a different IP or port, update accordingly:
+        // e.g. 'http://192.168.1.50:3000/sentiment'
+        const res = await fetch("/sentiment");
+        const data = await res.json();
+
+        const todaySentEl = document.getElementById("todaySentiment");
+        if (data && data.today) {
+          todaySentEl.textContent = `${data.today.rocketPercentage}% 🚀 / ${data.today.poopPercentage}% 💩`;
+        } else {
+          todaySentEl.textContent = "No data yet.";
+        }
+      } catch (err) {
+        console.error("Error fetching daily sentiment:", err);
+      }
+    }
+
+    // (C) Post a new vote (Rocket/Poop)
+    async function postDailySentiment(type) {
+      try {
+        await fetch("/sentiment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type })
+        });
+        // Refresh
+        fetchDailySentiment();
+      } catch (err) {
+        console.error("Error posting sentiment:", err);
+      }
+    }
+
+    // (D) On page load
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchFuelData();
+      fetchDailySentiment();
+
+      // Button event listeners
+      document.getElementById("rocketButton").addEventListener("click", () => {
+        postDailySentiment("rocket");
+      });
+      document.getElementById("poopButton").addEventListener("click", () => {
+        postDailySentiment("poop");
+      });
+    });
   </script>
 </body>
 </html>
