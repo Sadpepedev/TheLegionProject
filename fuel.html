@@ -98,12 +98,14 @@
       padding: 1rem;
     }
     
-    /* Removed max-width; force full width. */
+    /* Main panel - narrower on large screens but keeps wave background on body */
     .main-panel {
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.7); /* same shading as front page */
-      margin-top: 2rem;
-      margin-bottom: 2rem;
+      /* Limit container width on desktop, center it */
+      max-width: 900px;
+      margin: 2rem auto;
+
+      width: 100%; 
+      background-color: rgba(0, 0, 0, 0.7); 
       border-radius: 0.75rem;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
       padding: 2rem;
@@ -141,17 +143,15 @@
       font-weight: 700;
     }
 
-    /* Force a larger height for the chart */
+    /* Chart container height remains the same. */
     .chart-container {
       background: rgba(255,255,255,0.05);
       border-radius: 0.5rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       margin-top: 2rem;
-      height: 600px; /* You can increase this to 1200px, etc. */
+      height: 600px;  /* Keep the same chart height */
       width: 100%;
     }
-
-    /* Let the TradingView widget fill its parent */
     .tradingview-widget-container {
       height: 100%;
       width: 100%;
@@ -167,14 +167,13 @@
   </style>
 </head>
 <body>
-
   <!-- Grid overlay for aesthetics -->
   <div class="overlay-grid"></div>
 
   <div class="content-wrapper">
     <div class="main-panel">
 
-      <!-- Title & Sale Date -->
+      <!-- Title & Launch Date -->
       <div class="text-center mb-8">
         <h1 class="token-title">Fuel Network</h1>
         <div class="sale-date">Launch Date: 2024-12-19</div>
@@ -234,7 +233,6 @@
         <!-- TradingView Widget BEGIN -->
         <div class="tradingview-widget-container">
           <div class="tradingview-widget-container__widget"></div>
-          
           <script 
             type="text/javascript" 
             src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
@@ -260,8 +258,6 @@
     </div>
   </div>
 
-  <!-- Simple script to fetch current price / ROI from your "/calculate" endpoint,
-       color the current price, AND color the ROI. -->
   <script>
     // The original buy price for Fuel
     const seedRoundPrice = 0.02;
@@ -301,7 +297,7 @@
         // ---- ROI ----
         // If data.roi_value = 2.61 for a $1 initial investment,
         // rawRoiPercent = ((2.61 - 1) / 1) * 100 = 161%
-        const rawRoiPercent = (data.roi_value / data.initial_investment) * 100;
+        const rawRoiPercent = ((data.roi_value - data.initial_investment) / data.initial_investment) * 100;
         const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
 
         const currentROIEl = document.getElementById("currentROI");
