@@ -28,7 +28,7 @@
   >
   
   <style>
-    /* ======== 1) Global Reset and Basic Setup ======== */
+
     * {
       margin: 0;
       padding: 0;
@@ -38,8 +38,8 @@
       height: 100%;
     }
     body {
-      /* Dark background with a subtle Tron-style grid overlay */
-      background-color: #09131b; /* Slightly bluish black */
+      
+      background-color: #09131b; 
       color: #cfd0d1;
       font-family: 'Orbitron', sans-serif;
       display: flex;
@@ -48,7 +48,7 @@
       position: relative;
     }
 
-    /* ======== 2) Tron Grid Background Overlay ======== */
+
     .tron-grid {
       position: absolute;
       top: 0;
@@ -63,9 +63,9 @@
       z-index: 1;
     }
 
-    /* ======== 3) Content Wrapper ======== */
+
     .content-wrapper {
-      z-index: 2; /* Above the grid overlay */
+      z-index: 2; 
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -73,20 +73,19 @@
       padding: 2rem 1rem;
     }
 
-    /* ======== 4) Main Container Styling ======== */
     .main-container {
       width: 100%;
       max-width: 1200px;
       padding: 2rem;
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      background: rgba(0, 0, 0, 0.3); /* Slightly transparent fill */
+      background: rgba(0, 0, 0, 0.3); 
     }
     .main-container:hover {
       border-color: rgba(0, 255, 238, 0.4);
     }
 
-    /* ======== 5) Header Styling ======== */
+
     .modern-header {
       text-align: center;
       margin-bottom: 2rem;
@@ -105,7 +104,7 @@
       border-top: 1px solid rgba(0, 255, 238, 0.4);
     }
 
-    /* ======== 6) Table Styling ======== */
+
     .tron-table {
       width: 100%;
       border-collapse: collapse;
@@ -127,7 +126,7 @@
       letter-spacing: 1px;
       color: #00ffee;
     }
-    /* Remove final border on last row */
+   
     .tron-table tr:last-child td {
       border-bottom: none;
     }
@@ -136,7 +135,7 @@
       transition: background-color 0.3s ease;
     }
 
-    /* ROI positive/negative styling */
+ 
     .roi-positive {
       color: #0afc4e; 
       font-weight: bold;
@@ -146,7 +145,7 @@
       font-weight: bold;
     }
 
-    /* ======== 7) Badge Styling ======== */
+
     .badge {
       display: inline-block;
       padding: 0.25rem 0.75rem;
@@ -169,7 +168,7 @@
       color: #09131b;
     }
 
-    /* ======== 8) Token Name Colors (Optional, can remove if unwanted) ======== */
+    
     .token-fuel { color: #0afc4e; }
     .token-almanak { color: #f9f9f9; }
     .token-pulse { color: #0eb7ff; }
@@ -177,7 +176,7 @@
     .token-enclave { color: #89CFF0; }
     .token-corn { color: #FFA500; }
 
-    /* ======== 9) Support Button ======== */
+ 
     .support-button {
       padding: 0.75rem 1.5rem;
       border: 1px solid #00ffee;
@@ -193,7 +192,7 @@
       color: #09131b;
     }
 
-    /* ======== 10) Footer ======== */
+
     footer {
       background-color: #09131b;
       color: #a4a6a7;
@@ -225,7 +224,7 @@
       flex-shrink: 0;
     }
 
-    /* ======== 11) Modal Styling ======== */
+ 
     #walletModal {
       position: fixed;
       inset: 0;
@@ -262,7 +261,7 @@
       background-color: #00a0ff;
     }
 
-    /* ======== 12) Responsive Hide Columns ======== */
+
     @media (max-width: 767px) {
       .tron-table th:nth-child(3),
       .tron-table th:nth-child(4),
@@ -278,7 +277,7 @@
 </head>
 <body>
 
-  <!-- Tron Grid Overlay -->
+
   <div class="tron-grid"></div>
 
   <!-- Content Wrapper -->
@@ -314,11 +313,9 @@
             <!-- Example: Fuel (tradable) -->
             <tr data-tradable="true">
               <td class="token-fuel">
-                <a 
-                  href="fuel.html" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
+  <a href="fuel.html">Fuel</a>
+</td>
+
                   Fuel
                 </a>
               </td>
