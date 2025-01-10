@@ -40,9 +40,9 @@
     }
 
     body {
+      /* Same wave gradient background as Fuel page */
       background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
       background-size: 400% 400%;
-      
       font-family: 'Orbitron', sans-serif; 
       color: #FFFFFF;
       display: flex;
@@ -51,14 +51,16 @@
       overflow-x: hidden;
     }
 
+    /* Grid overlay (same as Fuel page) */
     .overlay-grid {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size: 50px 50px;
       pointer-events: none;
       z-index: 1;
@@ -76,37 +78,73 @@
       padding: 1rem; /* Added padding for mobile spacing */
     }
 
-    /* Status badges */
-    .badge {
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      display: inline-block;
-      margin-top: 0.5rem;
+    /* MAIN PANEL: Dark purple gradient like the Fuel page */
+    #overviewSection {
+      background: linear-gradient(135deg, #2d014f, #1c0c2b 70%);
+      border-radius: 0.75rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .modern-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modern-header h2 {
+      font-size: 2rem;
       font-weight: bold;
-      white-space: nowrap; /* Prevent text wrapping */
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      color: #00ffb9; /* neon aqua text, matching Fuel’s style */
+      text-shadow: 0 0 10px rgba(0,255,185,0.7);
+      margin-bottom: 0.5rem;
     }
 
-    .badge-live {
-      background-color: #32CD32; /* Green */
-      color: white;
-      box-shadow: 0 0 5px #32CD32;
+    .modern-header hr {
+      border-color: #ff87fa; /* neon pink to match new style */
+      width: 40%;
+      margin: 0 auto;
     }
 
-    .badge-soon {
-      background-color: #FFB347; /* Warm Yellow */
-      color: white;
-      box-shadow: 0 0 5px #FFB347;
+    /* Table container uses a slightly transparent black background. */
+    .overview-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(255, 255, 255, 0.05); /* subtle overlay */
+      border-radius: 0.5rem;
+      overflow: hidden;
     }
 
-    .badge-ico {
-      background-color: #00BFFF; /* Deep Sky Blue */
-      color: white;
-      box-shadow: 0 0 5px #00BFFF;
+    .overview-table th,
+    .overview-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #FF4B5C; 
+      font-size: 0.875rem;
     }
 
-    /* Token Name Colors */
+    .overview-table th {
+      background-color: rgba(0,0,0,0.7); /* darker heading row */
+      color: #FFFFFF;
+      text-transform: uppercase;
+      white-space: nowrap; 
+    }
+
+    .overview-table tr:hover {
+      background-color: rgba(255, 75, 92, 0.15);
+    }
+
+    /* ROI colors remain the same. */
+    .roi-positive {
+      color: #0ad82c; /* Neon Green */
+      font-weight: bold;
+    }
+    .roi-negative {
+      color: #FF4500; /* Neon Red-Orange */
+      font-weight: bold;
+    }
+
+    /* Token Name Colors remain the same. */
     .token-name {
       font-weight: bold;
     }
@@ -130,6 +168,36 @@
       color: #FFA500; /* Orange */
     }
 
+    /* Badges updated for a slightly neon glow. */
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-weight: bold;
+      white-space: nowrap; 
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+
+    .badge-live {
+      background-color: #32CD32; /* Green */
+      color: white;
+      box-shadow: 0 0 10px #32CD32;
+    }
+
+    .badge-soon {
+      background-color: #FFB347; /* Warm Yellow */
+      color: white;
+      box-shadow: 0 0 10px #FFB347;
+    }
+
+    .badge-ico {
+      background-color: #00BFFF; /* Deep Sky Blue */
+      color: white;
+      box-shadow: 0 0 10px #00BFFF;
+    }
+
     /* Support Button */
     .support-button {
       border: 2px solid #FF4B5C;
@@ -146,63 +214,26 @@
       box-shadow: 0 0 20px #FF4B5C;
     }
 
-    /* Footer Styles */
+    /* Footer - same style, but you could unify it with Fuel’s if desired. */
     footer {
       background: linear-gradient(135deg, #FF4B5C 0%, #2F2F2F 100%);
       color: #FFFFFF;
       box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-      padding: 1rem; /* Reduced padding for mobile */
+      padding: 1rem; 
     }
 
-    /* Modal Styles */
+    /* Modal Styles remain unchanged. */
     #walletModal {
-      z-index: 50; /* Ensures modal is above other content */
+      z-index: 50;
     }
-    
     #walletModal .modal-content {
-      background-color: rgba(0, 0, 0, 0.8); /* Increased opacity for better visibility */
+      background-color: rgba(0, 0, 0, 0.8); 
       backdrop-filter: blur(10px);
-      padding: 1rem; /* Reduced padding for mobile */
+      padding: 1rem; 
       border-radius: 0.375rem;
     }
 
-    /* Table styles for Overview */
-    .overview-table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 0.5rem;
-      overflow: hidden;
-    }
-
-    .overview-table th, .overview-table td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid #FF4B5C;
-      font-size: 0.875rem;
-    }
-
-    .overview-table th {
-      background-color: #8B0000; /* Deeper Red */
-      color: #FFFFFF;
-      text-transform: uppercase;
-      white-space: nowrap; /* Prevent header text wrapping */
-    }
-
-    .overview-table tr:hover {
-      background-color: rgba(255, 75, 92, 0.2);
-    }
-
-    .roi-positive {
-      color: #0ad82c; /* Neon Green */
-      font-weight: bold;
-    }
-
-    .roi-negative {
-      color: #FF4500; /* Neon Red-Orange */
-      font-weight: bold;
-    }
-
+    /* Responsive table tweaks remain unchanged. */
     @media (max-width: 767px) {
       .overview-table th:nth-child(3),
       .overview-table th:nth-child(4),
@@ -217,25 +248,21 @@
   
 </head>
 <body>
- 
+  <!-- Grid Overlay -->
   <div class="overlay-grid"></div>
 
-  
   <div class="content-wrapper content">
     <main>
-      
+      <!-- Main Panel / Table Section -->
       <div
         id="overviewSection"
-        class="container mx-auto px-4 py-6 rounded-lg shadow-lg max-w-6xl w-full"
-        style="background-color: rgba(0,0,0,0.7);"
+        class="container mx-auto px-4 py-6 rounded-lg shadow-lg w-full max-w-6xl"
       >
-        
-        <div class="modern-header text-center mb-6">
-          <h2 class="text-2xl font-bold mb-2 text-white">Legion ICO Tracker</h2>
-          <hr class="border-pink-500">
+        <div class="modern-header mb-6">
+          <h2 class="text-white">Legion ICO Tracker</h2>
+          <hr>
         </div>
 
-        
         <div class="overflow-x-auto">
           <table class="overview-table">
             <thead>
@@ -243,7 +270,7 @@
                 <th>Token</th>
                 <th>Status</th>
                 <th>Seed Price</th>
-                <th>Token Price</th> 
+                <th>Token Price</th>
                 <th>ROI (%)</th>
                 <th>If you invested $1000</th>
               </tr>
@@ -254,13 +281,12 @@
                 <td colspan="6" class="text-center text-gray-400">Loading...</td>
               </tr>
 
-              
+              <!-- Tradable Token: Fuel -->
               <tr data-tradable="true">
-                <!-- Make the token name "Fuel" clickable -->
                 <td class="token-fuel token-name">
-                  <a 
-                    href="fuel.html" 
-                    target="_blank" 
+                  <a
+                    href="fuel.html"
+                    target="_blank"
                     class="underline hover:text-green-300"
                   >
                     Fuel
@@ -276,7 +302,7 @@
                 <td style="color:#0ad82c;"></td>
               </tr>
 
-              
+              <!-- Almanak -->
               <tr>
                 <td class="token-almanak token-name">Almanak</td>
                 <td>
@@ -285,11 +311,11 @@
                 </td>
                 <td>TBD</td>
                 <td>--</td>
-                <td class="">--</td>
+                <td>--</td>
                 <td>--</td>
               </tr>
 
-              
+              <!-- Pulse -->
               <tr>
                 <td class="token-pulse token-name">Pulse</td>
                 <td>
@@ -298,9 +324,11 @@
                 </td>
                 <td>TBD</td>
                 <td>--</td>
-                <td class="">--</td>
+                <td>--</td>
                 <td>--</td>
               </tr>
+
+              <!-- Silencio -->
               <tr>
                 <td class="token-silencio token-name">Silencio</td>
                 <td>
@@ -309,9 +337,11 @@
                 </td>
                 <td>$0.0006</td>
                 <td>--</td>
-                <td class="">--</td>
+                <td>--</td>
                 <td>--</td>
               </tr>
+
+              <!-- Enclave -->
               <tr>
                 <td class="token-enclave token-name">Enclave</td>
                 <td>
@@ -320,9 +350,11 @@
                 </td>
                 <td>TBD</td>
                 <td>--</td>
-                <td class="">--</td>
+                <td>--</td>
                 <td>--</td>
               </tr>
+
+              <!-- Corn -->
               <tr>
                 <td class="token-corn token-name">Corn</td>
                 <td>
@@ -331,9 +363,10 @@
                 </td>
                 <td>TBD</td>
                 <td>--</td>
-                <td class="">--</td>
+                <td>--</td>
                 <td>--</td>
               </tr>
+
             </tbody>
           </table>
         </div>
@@ -358,56 +391,67 @@
       
       <!-- Built By -->
       <div class="flex items-center mb-4 sm:mb-0">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-300 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             class="h-6 w-6 text-pink-300 mr-2" 
+             fill="none" viewBox="0 0 24 24" 
+             stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        
         <div>
           <p class="text-lg font-semibold text-white">Built by</p>
-          <a href="https://x.com/Dustybeerbong" target="_blank" class="text-pink-300 hover:text-pink-200 transition-colors duration-200 text-sm sm:text-base">
+          <a href="https://x.com/Dustybeerbong" target="_blank" 
+             class="text-pink-300 hover:text-pink-200 transition-colors duration-200 text-sm sm:text-base">
             Sadpepe.exe
           </a>
         </div>
       </div>
       
-      
       <div class="text-center sm:text-right">
         <p class="text-xs sm:text-sm">
           Price data provided by 
-          <a href="https://coingecko.com" target="_blank" class="text-blue-300 hover:underline">
+          <a href="https://coingecko.com" target="_blank" 
+             class="text-blue-300 hover:underline">
             CoinGecko
           </a>.
         </p>
         <p class="mt-2 text-xs sm:text-sm">
-          <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do 
-          <em>not</em> offer financial or trading advice. This website is purely for informational 
-          purposes to assist in tracking prior ICO performance. Always conduct your own 
-          research before making any investment decisions.
+          <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion 
+          and do <em>not</em> offer financial or trading advice. This website is 
+          purely for informational purposes to assist in tracking prior ICO 
+          performance. Always conduct your own research before making any 
+          investment decisions.
         </p>
       </div>
     </div>
   </footer>
 
-  
-  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <!-- Modal -->
+  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" 
+       role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <!-- Modal Content -->
     <div class="modal-content">
       <h2 id="modalTitle" class="text-lg sm:text-xl font-semibold text-white mb-3">Support Us</h2>
-      <p class="text-gray-300 mb-3">If you're feeling generous, I'd love a nice cold drink:</p>
+      <p class="text-gray-300 mb-3">
+        If you're feeling generous, I'd love a nice cold drink:
+      </p>
       <div class="flex flex-col sm:flex-row sm:items-center bg-gray-700 p-2 rounded mb-3">
-        <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">0x62f1F6bFE3A798d5023608ac0a9c8a9538276283</span>
-        <button onclick="copyWalletAddress()" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors text-sm sm:text-base">
+        <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">
+          0x62f1F6bFE3A798d5023608ac0a9c8a9538276283
+        </span>
+        <button onclick="copyWalletAddress()" 
+                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors text-sm sm:text-base">
           Copy
         </button>
       </div>
-      <button onclick="closeModal()" class="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors text-sm sm:text-base">
+      <button onclick="closeModal()" 
+              class="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors text-sm sm:text-base">
         Close
       </button>
     </div>
   </div>
 
- 
+  <!-- Existing Scripts (Unchanged) -->
   <script>
     // Function to open the modal
     function supportSite() {
@@ -439,19 +483,15 @@
 
     // Function to fetch and update data for tradable tokens
     async function updateTradableTokens() {
-      // Select all table rows with data-tradable="true"
       const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
 
       tradableRows.forEach(async (row) => {
         const tokenName = row.querySelector('td.token-name').textContent.trim();
-
-        // Example: Fetch data from your API endpoint
-        // Replace '/calculate' with your actual API endpoint
         try {
           const response = await fetch('/calculate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ investment: 1, round_price: 0.02 }) // Adjust round_price as needed
+            body: JSON.stringify({ investment: 1, round_price: 0.02 })
           });
 
           if (!response.ok) {
@@ -459,26 +499,18 @@
           }
 
           const data = await response.json();
-
           if (data.error) {
             throw new Error('API error');
           }
 
-          // Assume data contains current_price
           const currentPrice = data.current_price;
-
-          // Calculate ROI (%)
           const seedPrice = parseFloat(row.querySelector('td:nth-child(3)').textContent.replace('$', ''));
           const roi = (currentPrice / seedPrice) * 100;
-
-          // Calculate "If you invested $1000 you would have"
           const investmentValue = (1000 / seedPrice) * currentPrice;
 
-          // Update Token Price cell (4th cell)
           const tokenPriceCell = row.querySelector('td:nth-child(4)');
           tokenPriceCell.textContent = `$${currentPrice.toFixed(4)}`;
 
-          // Update ROI cell (5th cell)
           const roiCell = row.querySelector('td:nth-child(5)');
           roiCell.textContent = `${roi.toFixed(2)}%`;
 
@@ -493,13 +525,11 @@
             roiCell.classList.remove('roi-positive', 'roi-negative');
           }
 
-          // Update "If you invested $1000" cell (6th cell)
           const investmentCell = row.querySelector('td:nth-child(6)');
           investmentCell.textContent = `$${investmentValue.toFixed(2)}`;
 
         } catch (error) {
           console.error(`Error updating data for ${tokenName}:`, error);
-          // Optionally, display error indicators in the table
           const tokenPriceCell = row.querySelector('td:nth-child(4)');
           tokenPriceCell.textContent = `Error`;
 
@@ -513,13 +543,10 @@
       });
     }
 
-    // Initialize page on DOMContentLoaded
     document.addEventListener('DOMContentLoaded', () => {
-      // Remove the loading row
       const loadingRow = document.getElementById('loadingRow');
       if (loadingRow) loadingRow.remove();
 
-      // Update tradable tokens
       updateTradableTokens();
     });
   </script>
