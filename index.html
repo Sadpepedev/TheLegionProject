@@ -283,6 +283,12 @@
       .tron-table td:nth-child(6) {
         display: none;
       }
+
+      /* Adjust logo size on smaller screens */
+      .token-logo {
+        width: 30px;
+        height: 30px;
+      }
     }
 
     /* Additional Styles for Grid View */
@@ -294,6 +300,8 @@
       transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
@@ -308,7 +316,13 @@
       text-decoration: underline;
     }
 
-    /* Glow Effect */
+    /* Glow Effect for Logos on Hover */
+    .grid-item:hover .token-logo {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 10px #00ffee);
+    }
+
+    /* Glow Effect for Entire Grid Item (Optional) */
     .grid-item::before {
       content: '';
       position: absolute;
@@ -323,6 +337,13 @@
     }
     .grid-item:hover::before {
       opacity: 1;
+    }
+
+    /* Accessible Focus States */
+    .token-logo:focus,
+    .grid-item:focus-within .token-logo {
+      outline: 2px solid #00ffee;
+      outline-offset: 4px;
     }
   </style>
 </head>
@@ -588,12 +609,16 @@
         if (row.id === 'loadingRow') return;
 
         const cells = row.querySelectorAll('td');
-        const tokenName = cells[0].innerHTML;
-        const status = cells[1].innerHTML;
-        const seedPrice = cells[2].textContent;
-        const tokenPrice = cells[3].textContent;
-        const roi = cells[4].textContent;
-        const investment = cells[5].textContent;
+        const tokenName = cells[0].innerHTML.trim();
+        const status = cells[1].innerHTML.trim();
+        const seedPrice = cells[2].textContent.trim();
+        const tokenPrice = cells[3].textContent.trim();
+        const roi = cells[4].textContent.trim();
+        const investment = cells[5].textContent.trim();
+
+        // Extract token identifier from the link (assuming href="token.html")
+        const tokenLink = cells[0].querySelector('a').getAttribute('href');
+        const tokenIdentifier = tokenLink.replace('.html', '').toLowerCase();
 
         // Determine investment color based on value
         let investmentClass = '';
@@ -607,7 +632,10 @@
         gridItem.className = 'grid-item';
 
         gridItem.innerHTML = `
-          <div class="mb-2 text-xl font-semibold text-teal-400">${tokenName}</div>
+          <div class="flex items-center mb-2">
+            <img src="images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2">
+            <a href="${tokenLink}" class="text-xl font-semibold text-teal-400 hover:underline">${tokenName}</a>
+          </div>
           <div class="mb-2">${status}</div>
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
