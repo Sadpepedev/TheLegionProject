@@ -50,9 +50,7 @@
   >
 
   <style>
-    /* --------------------------------------------------
-       Tron-like background and styling
-       -------------------------------------------------- */
+    /* Tron-like background and styling */
     * {
       margin: 0;
       padding: 0;
@@ -153,7 +151,9 @@
       border-radius: 0.5rem;
       margin-top: 2rem;
       width: 100%;
-      height: 500px; /* Fixed height */
+      height: 600px; /* Increased height to accommodate title */
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
       transition: background-color 0.3s ease;
     }
@@ -167,6 +167,11 @@
       text-align: center;
       font-size: 1.25rem;
       color: #00ffee;
+      flex: 0 0 50px; /* Allocate space for the title */
+    }
+
+    .tradingview-widget-container {
+      flex: 1; /* Take up remaining space */
     }
 
     a {
@@ -250,6 +255,14 @@
       color: #cfd0d1;
       font-size: 1rem;
       line-height: 1.5;
+    }
+
+    /* Disabled Button Styles */
+    .opacity-50 {
+      opacity: 0.5;
+    }
+    .cursor-not-allowed {
+      cursor: not-allowed;
     }
   </style>
 </head>
@@ -387,7 +400,7 @@
       websiteLink: "https://app.fuel.network/",
       twitterLink: "https://x.com/fuel_network",
       isHidden: false,    // Toggle flag based on status
-      sentimentPending: false // <== NEW FLAG FOR SENTIMENT STATUS
+      sentimentPending: true // <== NEW FLAG FOR SENTIMENT STATUS
     };
 
     /**************************************************
@@ -494,7 +507,7 @@
         {
           "autosize": false,
           "width": "100%",            
-          "height": "500",
+          "height": "500px", /* Corrected height with units */
           "symbol": "${config.tradingViewSymbol}",
           "interval": "240",
           "timezone": "Etc/UTC",
