@@ -16,7 +16,8 @@
       https://fonts.googleapis.com
       https://fonts.gstatic.com
       https://s3.tradingview.com
-      https://www.tradingview.com;
+      https://www.tradingview.com
+      https://vercel.live; /* Added to allow Vercel's feedback script */
     style-src
       'self'
       'unsafe-inline'
@@ -36,11 +37,12 @@
       https://www.tradingview-widget.com;
     object-src 'none';
     base-uri 'self';
-    frame-ancestors 'none';
+    /* Removed frame-ancestors as it's not supported in meta tags */
   ">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
   <!-- Tailwind CSS -->
+  <!-- For production, consider installing Tailwind via npm as per the recommendation -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google Fonts -->
@@ -151,7 +153,7 @@
       border-radius: 0.5rem;
       margin-top: 2rem;
       width: 100%;
-      height: 600px; /* Increased height to accommodate title and widget */
+      height: 600px; /* Adjusted height to accommodate title and widget */
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -286,8 +288,8 @@
     <div class="main-panel">
       <!-- Title & Sale Date -->
       <div class="text-center mb-8">
-        <h1 id="tokenTitle" class="token-title"></h1>
-        <div id="saleDate" class="sale-date"></div>
+        <h1 id="tokenTitle" class="token-title">Fuel</h1>
+        <div id="saleDate" class="sale-date">Launch Date: Q1 2025</div>
       </div>
 
       <!-- ICO Details & Blurb & Links (Responsive Layout) -->
@@ -306,19 +308,19 @@
           <!-- Buy Price -->
           <p class="mb-2 mt-4">
             <span class="highlight">Buy Price:</span> 
-            <span id="buyPriceText"></span>
+            <span id="buyPriceText">$0.02</span>
           </p>
 
           <!-- Current Price -->
           <p class="mb-2">
             <span class="highlight">Current Price:</span> 
-            <span id="currentPrice"></span>
+            <span id="currentPrice">$0.02</span>
           </p>
 
           <!-- Current ROI -->
           <p class="mb-2">
             <span class="highlight">Current ROI:</span> 
-            <span id="currentROI"></span>
+            <span id="currentROI">100.00% (1.00x)</span>
           </p>
 
           <!-- Voting Buttons -->
@@ -343,7 +345,7 @@
           <!-- Daily Sentiment -->
           <p class="mb-2">
             <span class="highlight">Today's Sentiment:</span>
-            <span id="todaySentiment"></span>
+            <span id="todaySentiment">50% 🚀 / 50% 💩</span>
           </p>
         </div>
 
@@ -354,7 +356,7 @@
             <li>
               <a 
                 id="websiteLink"
-                href="#"
+                href="https://app.fuel.network/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -364,7 +366,7 @@
             <li>
               <a 
                 id="twitterLink"
-                href="#"
+                href="https://x.com/fuel_network"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -378,10 +380,29 @@
       <!-- Price History Section -->
       <div class="chart-container mt-6">
         <div class="chart-title">Price History</div>
-        <div class="tradingview-widget-container" style="width: 100%; height: 100%;">
-          <div class="tradingview-widget-container__widget"></div>
-          <!-- TradingView widget will be injected here by JavaScript -->
+        <!-- TradingView Widget BEGIN -->
+        <div class="tradingview-widget-container">
+          <div id="tradingview_fuel"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+          <script type="text/javascript">
+            new TradingView.widget(
+              {
+                "autosize": true,
+                "symbol": "BYBIT:FUELUSDT", // Ensure this symbol is valid on TradingView
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview_fuel"
+              }
+            );
+          </script>
         </div>
+        <!-- TradingView Widget END -->
       </div>
     </div>
   </div>
@@ -420,12 +441,9 @@
       // Handle Display Based on Status
       if (config.isHidden) {
         showPendingStatus();
-        // Initialize TradingView with a default or hidden state if desired
-        initializeTradingView(true);
       } else {
         // Show live data
         setBuyPrice();
-        initializeTradingView(false);
         fetchTokenData();
         fetchDailySentiment();
       }
@@ -449,13 +467,12 @@
       document.getElementById("currentROI").innerHTML = `<span class="badge">Pending TGE</span>`;
 
       // Handle Sentiment Display
+      const todaySentEl = document.getElementById("todaySentiment");
       if (config.sentimentPending) {
         // Display "Pending Dev" badge
-        const todaySentEl = document.getElementById("todaySentiment");
         todaySentEl.innerHTML = `<span class="badge">Pending Dev</span>`;
       } else {
         // Display "No data yet" badge
-        const todaySentEl = document.getElementById("todaySentiment");
         todaySentEl.innerHTML = `<span class="badge">No data yet</span>`;
       }
 
@@ -484,50 +501,7 @@
     }
 
     /**************************************************
-      5. INITIALIZE TRADINGVIEW WIDGET
-    **************************************************/
-    function initializeTradingView(isPending) {
-      const widgetContainer = document.querySelector('.tradingview-widget-container__widget');
-      
-      if (isPending) {
-        // Display a "Trading Data Coming Soon" badge instead of the chart
-        widgetContainer.innerHTML = `<div class="badge">Trading Data Coming Soon</div>`;
-        widgetContainer.style.display = 'flex';
-        widgetContainer.style.justifyContent = 'center';
-        widgetContainer.style.alignItems = 'center';
-        widgetContainer.style.height = '100%';
-        widgetContainer.style.fontSize = '1.25rem';
-      } else {
-        // Clear any existing content
-        widgetContainer.innerHTML = '';
-
-        // Create a new script element for the TradingView widget
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-        script.async = true;
-        script.innerHTML = `
-        {
-          "autosize": false,
-          "width": "100%",            
-          "height": "500px",
-          "symbol": "${config.tradingViewSymbol}",
-          "interval": "240",
-          "timezone": "Etc/UTC",
-          "theme": "dark",
-          "style": "1",
-          "locale": "en",
-          "allow_symbol_change": true,
-          "calendar": false,
-          "support_host": "https://www.tradingview.com"
-        }
-        `;
-        widgetContainer.appendChild(script);
-      }
-    }
-
-    /**************************************************
-      6. FETCH TOKEN DATA (Price & ROI)
+      5. FETCH TOKEN DATA (Price & ROI)
     **************************************************/
     async function fetchTokenData() {
       try {
@@ -576,7 +550,7 @@
     }
 
     /**************************************************
-      7. FETCH DAILY SENTIMENT
+      6. FETCH DAILY SENTIMENT
     **************************************************/
     async function fetchDailySentiment() {
       if (config.sentimentPending) {
@@ -603,7 +577,7 @@
     }
 
     /**************************************************
-      8. POST A NEW VOTE (ROCKET / POOP)
+      7. POST A NEW VOTE (ROCKET / POOP)
     **************************************************/
     async function postDailySentiment(type) {
       try {
