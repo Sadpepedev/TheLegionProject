@@ -151,7 +151,7 @@
       border-radius: 0.5rem;
       margin-top: 2rem;
       width: 100%;
-      height: 600px; /* Increased height to accommodate title */
+      height: 600px; /* Increased height to accommodate title and widget */
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -400,7 +400,7 @@
       websiteLink: "https://app.fuel.network/",
       twitterLink: "https://x.com/fuel_network",
       isHidden: false,    // Toggle flag based on status
-      sentimentPending: true // <== NEW FLAG FOR SENTIMENT STATUS
+      sentimentPending: false // <== NEW FLAG FOR SENTIMENT STATUS
     };
 
     /**************************************************
@@ -464,6 +464,9 @@
       document.getElementById("poopButton").disabled = true;
       document.getElementById("rocketButton").classList.add('opacity-50', 'cursor-not-allowed');
       document.getElementById("poopButton").classList.add('opacity-50', 'cursor-not-allowed');
+      // Add aria-disabled for accessibility
+      document.getElementById("rocketButton").setAttribute('aria-disabled', 'true');
+      document.getElementById("poopButton").setAttribute('aria-disabled', 'true');
     }
 
     /**************************************************
@@ -507,7 +510,7 @@
         {
           "autosize": false,
           "width": "100%",            
-          "height": "500px", /* Corrected height with units */
+          "height": "500px",
           "symbol": "${config.tradingViewSymbol}",
           "interval": "240",
           "timezone": "Etc/UTC",
@@ -540,7 +543,7 @@
 
         // Price
         const currentPriceEl = document.getElementById("currentPrice");
-        const currentPrice = data.current_price.toFixed(5);
+        const currentPrice = parseFloat(data.current_price).toFixed(5);
         currentPriceEl.textContent = `$${currentPrice}`;
 
         // Price color
@@ -583,6 +586,7 @@
 
       try {
         const res = await fetch("/sentiment");
+        if (!res.ok) throw new Error("Network response was not ok");
         const data = await res.json();
         const todaySentEl = document.getElementById("todaySentiment");
         if (data && data.today) {
@@ -603,11 +607,12 @@
     **************************************************/
     async function postDailySentiment(type) {
       try {
-        await fetch("/sentiment", {
+        const res = await fetch("/sentiment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ type })
         });
+        if (!res.ok) throw new Error("Network response was not ok");
         // Refresh
         fetchDailySentiment();
       } catch (err) {
