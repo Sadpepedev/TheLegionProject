@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title><!-- Dynamically updated below -->Token Tracker</title>
+  <title>Almanak ICO</title>
 
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -221,6 +221,19 @@
       color: #37fffc;
     }
 
+    /* Badge styling for "Pending TGE" */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background-color: #ffae00; /* Matches 'badge-soon' from your landing page */
+      color: #09131b;
+    }
+
   </style>
 </head>
 <body>
@@ -244,8 +257,8 @@
     <div class="main-panel">
       <!-- Title & Sale Date -->
       <div class="text-center mb-8">
-        <h1 id="tokenTitle" class="token-title"><!-- filled by JS --></h1>
-        <div id="saleDate" class="sale-date"><!-- filled by JS --></div>
+        <h1 id="tokenTitle" class="token-title"></h1>
+        <div id="saleDate" class="sale-date"></div>
       </div>
 
       <!-- ICO Details & Links (Responsive Layout) -->
@@ -257,19 +270,19 @@
           <!-- Buy Price -->
           <p class="mb-2">
             <span class="highlight">Buy Price:</span> 
-            <span id="buyPriceText">Loading...</span>
+            <span id="buyPriceText"></span>
           </p>
 
           <!-- Current Price -->
           <p class="mb-2">
             <span class="highlight">Current Price:</span> 
-            <span id="currentPrice">Loading...</span>
+            <span id="currentPrice"></span>
           </p>
 
           <!-- Current ROI -->
           <p class="mb-2">
             <span class="highlight">Current ROI:</span> 
-            <span id="currentROI">Loading...</span>
+            <span id="currentROI"></span>
           </p>
 
           <!-- Voting Buttons -->
@@ -294,7 +307,7 @@
           <!-- Daily Sentiment -->
           <p class="mb-2">
             <span class="highlight">Today's Sentiment:</span>
-            <span id="todaySentiment">Loading...</span>
+            <span id="todaySentiment"></span>
           </p>
         </div>
 
@@ -339,7 +352,7 @@
           {
             "autosize": true,
             "width": "100%",
-            "symbol": "BYBIT:FUELUSDT",       /* Overwritten by JS below */
+            "symbol": "BYBIT:FUELUSDT",  /* Overwritten by JS below */
             "interval": "240",
             "timezone": "Etc/UTC",
             "theme": "dark",
@@ -360,15 +373,16 @@
     /**************************************************
       1. CONFIGURE YOUR TOKEN HERE
     **************************************************/
-const config = {
-  tokenName: "Almanak",
-  launchDate: "Q1 2025",
-  buyPrice: --,
-  tradingViewSymbol: "BINANCE:ALMANAKUSDT",
-  websiteLink: "https://almanak.co",
-  twitterLink: "https://x.com/Almanak__"
-};
-
+    const config = {
+      tokenName: "Almanak",
+      launchDate: "Q1 2025",
+      buyPrice: null,   // or "TBD"
+      pendingTGE: true, // <== KEY FLAG
+      tradingViewSymbol: "BINANCE:ALMANAKUSDT",
+      websiteLink: "https://almanak.co",
+      twitterLink: "https://x.com/Almanak__",
+      isHidden: true     // Toggle flag based on status
+    };
 
     /**************************************************
       2. DYNAMICALLY UPDATE THE PAGE
@@ -376,42 +390,26 @@ const config = {
     document.addEventListener("DOMContentLoaded", () => {
       // Set <title>
       document.title = config.tokenName;
-
       // Title & Launch Date
       document.getElementById("tokenTitle").textContent = config.tokenName;
-      document.getElementById("saleDate").textContent =
-        "Launch Date: " + config.launchDate;
-
-      // Buy Price
-      const buyPriceEl = document.getElementById("buyPriceText");
-      buyPriceEl.textContent = `$${config.buyPrice.toFixed(2)}`;
+      document.getElementById("saleDate").textContent = "Launch Date: " + config.launchDate;
 
       // Links
       document.getElementById("websiteLink").href = config.websiteLink;
       document.getElementById("twitterLink").href = config.twitterLink;
 
-      // Update TradingView symbol (by rewriting the script config)
-      // We'll do a quick hack: find the script tag & replace the "symbol" value.
-      const tvScript = document.querySelector(
-        'script[src*="tradingview.com/external-embedding/embed-widget-advanced-chart.js"]'
-      );
-      if (tvScript) {
-        // We assume the script text is the one in the script's innerHTML
-        // If the symbol line is "BYBIT:FUELUSDT", let's replace it
-        // with config.tradingViewSymbol:
-        let code = tvScript.innerHTML;
-        code = code.replace(
-          /"symbol":\s*"[^"]*"/,
-          `"symbol": "${config.tradingViewSymbol}"`
-        );
-        tvScript.innerHTML = code;
+      // Handle Display Based on Status
+      if (config.isHidden) {
+        showPendingStatus();
+      } else {
+        // Show live data
+        setBuyPrice();
+        updateTradingViewSymbol();
+        fetchTokenData();
+        fetchDailySentiment();
       }
 
-      // Kick off data fetch
-      fetchFuelData();
-      fetchDailySentiment();
-
-      // Button event listeners
+      // Voting buttons
       document.getElementById("rocketButton").addEventListener("click", () => {
         postDailySentiment("rocket");
       });
@@ -421,14 +419,60 @@ const config = {
     });
 
     /**************************************************
-      3. FETCH PRICE / ROI (EXAMPLE ENDPOINT)
+      3. SHOW PENDING STATUS
     **************************************************/
-    async function fetchFuelData() {
+    function showPendingStatus() {
+      // Replace Buy Price, Current Price, and ROI with Pending TGE badge
+      document.getElementById("buyPriceText").innerHTML = `<span class="badge">Pending TGE</span>`;
+      document.getElementById("currentPrice").innerHTML = `<span class="badge">Pending TGE</span>`;
+      document.getElementById("currentROI").innerHTML = `<span class="badge">Pending TGE</span>`;
+
+      // Optionally, hide voting buttons and sentiments or show placeholders
+      // Here, we replace Daily Sentiment with "No data yet"
+      const todaySentEl = document.getElementById("todaySentiment");
+      todaySentEl.innerHTML = `<span class="badge">No data yet</span>`;
+    }
+
+    /**************************************************
+      4. SET BUY PRICE TEXT
+    **************************************************/
+    function setBuyPrice() {
+      const buyPriceEl = document.getElementById("buyPriceText");
+      if (typeof config.buyPrice === "number") {
+        buyPriceEl.textContent = `$${config.buyPrice.toFixed(2)}`;
+      } else if (config.buyPrice === "TBD") {
+        buyPriceEl.textContent = "TBD";
+      } else {
+        buyPriceEl.textContent = "--";
+      }
+    }
+
+    /**************************************************
+      5. UPDATE TRADINGVIEW SYMBOL
+    **************************************************/
+    function updateTradingViewSymbol() {
+      const tvScript = document.querySelector(
+        'script[src*="tradingview.com/external-embedding/embed-widget-advanced-chart.js"]'
+      );
+      if (tvScript) {
+        let code = tvScript.innerHTML;
+        code = code.replace(
+          /"symbol":\s*"[^"]*"/,
+          `"symbol": "${config.tradingViewSymbol}"`
+        );
+        tvScript.innerHTML = code;
+      }
+    }
+
+    /**************************************************
+      6. FETCH TOKEN DATA (Price & ROI)
+    **************************************************/
+    async function fetchTokenData() {
       try {
         const response = await fetch("/calculate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          // We pass buyPrice from config so backend knows seed price
+          // Send round_price to the server
           body: JSON.stringify({ investment: 1, round_price: config.buyPrice })
         });
         if (!response.ok) throw new Error("Network response was not ok");
@@ -450,8 +494,7 @@ const config = {
         }
 
         // ROI
-        const rawRoiPercent =
-          (data.roi_value / data.initial_investment) * 100;
+        const rawRoiPercent = (data.roi_value / data.initial_investment) * 100;
         const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
         const currentROIEl = document.getElementById("currentROI");
         currentROIEl.textContent = formattedRoi;
@@ -462,6 +505,7 @@ const config = {
         } else {
           currentROIEl.classList.add("text-red-400");
         }
+
       } catch (error) {
         console.error("Error fetching token data:", error);
         document.getElementById("currentPrice").textContent = "Error";
@@ -470,7 +514,7 @@ const config = {
     }
 
     /**************************************************
-      4. FETCH DAILY SENTIMENT (EXAMPLE ENDPOINT)
+      7. FETCH DAILY SENTIMENT
     **************************************************/
     async function fetchDailySentiment() {
       try {
@@ -489,7 +533,7 @@ const config = {
     }
 
     /**************************************************
-      5. POST A NEW VOTE (ROCKET / POOP)
+      8. POST A NEW VOTE (ROCKET / POOP)
     **************************************************/
     async function postDailySentiment(type) {
       try {
@@ -507,3 +551,4 @@ const config = {
   </script>
 </body>
 </html>
+
