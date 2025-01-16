@@ -146,6 +146,16 @@
       font-weight: bold;
     }
 
+    /* Investment Styles */
+    .investment-positive {
+      color: #0afc4e; 
+      font-weight: bold;
+    }
+    .investment-negative {
+      color: #ff3860;
+      font-weight: bold;
+    }
+
     /* Badge Styles */
     .badge {
       display: inline-block;
@@ -187,6 +197,7 @@
       transition: all 0.3s ease;
       cursor: pointer;
       display: inline-block;
+      margin-top: 1.5rem; /* Added margin to lower the button */
     }
     .support-button:hover {
       background-color: #00ffee;
@@ -280,10 +291,14 @@
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
       padding: 1.5rem;
-      transition: border-color 0.3s ease;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 255, 238, 0.5);
     }
     .grid-item a {
       color: inherit;
@@ -291,6 +306,23 @@
     }
     .grid-item a:hover {
       text-decoration: underline;
+    }
+
+    /* Glow Effect */
+    .grid-item::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,255,238,0.3) 0%, rgba(0,255,238,0) 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .grid-item:hover::before {
+      opacity: 1;
     }
   </style>
 </head>
@@ -312,22 +344,27 @@
       <div class="flex justify-end mb-4" role="group" aria-label="View Toggle">
         <button 
           id="tableViewBtn" 
-          class="px-4 py-2 bg-gray-800 text-gray-200 rounded-l hover:bg-gray-700 focus:outline-none"
-          aria-pressed="true"
+          class="px-4 py-2 bg-gray-700 text-gray-200 rounded-l hover:bg-gray-600 focus:outline-none"
+          aria-pressed="false"
         >
           Table View
         </button>
         <button 
           id="gridViewBtn" 
-          class="px-4 py-2 bg-gray-700 text-gray-200 rounded-r hover:bg-gray-600 focus:outline-none"
-          aria-pressed="false"
+          class="px-4 py-2 bg-gray-800 text-gray-200 rounded-r hover:bg-gray-700 focus:outline-none"
+          aria-pressed="true"
         >
           Grid View
         </button>
       </div>
 
-      <!-- Table View -->
-      <div id="tableView" class="overflow-x-auto">
+      <!-- Grid View (Default Visible) -->
+      <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Grid items will be dynamically generated -->
+      </div>
+
+      <!-- Table View (Hidden by Default) -->
+      <div id="tableView" class="hidden overflow-x-auto">
         <table class="tron-table">
           <thead>
             <tr>
@@ -359,7 +396,7 @@
               <td>$0.02</td>
               <td>$0.05</td>
               <td class="roi-positive">150.00%</td>
-              <td style="color:#0afc4e;"></td>
+              <td class="investment-positive">$5000.00</td>
             </tr>
 
             <!-- Almanak -->
@@ -439,11 +476,6 @@
             
           </tbody>
         </table>
-      </div>
-
-      <!-- Grid View -->
-      <div id="gridView" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Grid items will be dynamically generated -->
       </div>
 
       <!-- Support the Site Button -->
@@ -563,6 +595,13 @@
         const roi = cells[4].textContent;
         const investment = cells[5].textContent;
 
+        // Determine investment color based on value
+        let investmentClass = '';
+        if (investment && investment !== '--') {
+          const investmentValue = parseFloat(investment.replace('$', ''));
+          investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
+        }
+
         // Create grid item
         const gridItem = document.createElement('div');
         gridItem.className = 'grid-item';
@@ -573,7 +612,7 @@
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
           <div class="mb-1"><strong>ROI:</strong> <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span></div>
-          <div><strong>If you invested $1000:</strong> ${investment}</div>
+          <div><strong>If you invested $1000:</strong> <span class="${investmentClass}">${investment}</span></div>
         `;
 
         gridView.appendChild(gridItem);
@@ -633,14 +672,15 @@
           if (data.error) throw new Error('API error');
 
           const currentPrice = data.current_price;
-          const seedPrice = parseFloat(row.querySelector('td:nth-child(3)').textContent.replace('$', ''));
-          const roi = (currentPrice / seedPrice) * 100;
-          const investmentValue = (1000 / seedPrice) * currentPrice;
+          const seedPriceText = row.querySelector('td:nth-child(3)').textContent.replace('$', '');
+          const seedPrice = parseFloat(seedPriceText) || 0;
+          const roi = seedPrice > 0 ? ((currentPrice - seedPrice) / seedPrice * 100) : 0;
+          const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update cells
-          row.querySelector('td:nth-child(4)').textContent = `$${currentPrice.toFixed(4)}`;
+          row.querySelector('td:nth-child(4)').textContent = seedPrice > 0 ? `$${currentPrice.toFixed(4)}` : '--';
           const roiCell = row.querySelector('td:nth-child(5)');
-          roiCell.textContent = `${roi.toFixed(2)}%`;
+          roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : '--';
 
           // Positive or Negative ROI styling
           if (roi > 0) {
@@ -652,7 +692,20 @@
           } else {
             roiCell.classList.remove('roi-positive', 'roi-negative');
           }
-          row.querySelector('td:nth-child(6)').textContent = `$${investmentValue.toFixed(2)}`;
+
+          const investmentCell = row.querySelector('td:nth-child(6)');
+          investmentCell.textContent = seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : '--';
+
+          // Determine investment color based on value
+          if (investmentValue > 1000) {
+            investmentCell.classList.add('investment-positive');
+            investmentCell.classList.remove('investment-negative');
+          } else if (investmentValue < 1000) {
+            investmentCell.classList.add('investment-negative');
+            investmentCell.classList.remove('investment-positive');
+          } else {
+            investmentCell.classList.remove('investment-positive', 'investment-negative');
+          }
 
           // Regenerate grid view if active
           const gridView = document.getElementById('gridView');
@@ -666,7 +719,9 @@
           const roiCell = row.querySelector('td:nth-child(5)');
           roiCell.textContent = 'Error';
           roiCell.classList.remove('roi-positive', 'roi-negative');
-          row.querySelector('td:nth-child(6)').textContent = 'Error';
+          const investmentCell = row.querySelector('td:nth-child(6)');
+          investmentCell.textContent = 'Error';
+          investmentCell.classList.remove('investment-positive', 'investment-negative');
           
           // Regenerate grid view if active
           const gridView = document.getElementById('gridView');
@@ -684,6 +739,9 @@
 
       // Kick off data fetch
       updateTradableTokens();
+
+      // Generate grid view on load since it's default
+      generateGridView();
     });
   </script>
 
