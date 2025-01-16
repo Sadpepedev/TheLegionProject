@@ -234,6 +234,23 @@
       color: #09131b;
     }
 
+    /* Blurb Styling */
+    .blurb {
+      background-color: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,238,0.2);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+    .blurb:hover {
+      background-color: rgba(255,255,255,0.06);
+    }
+    .blurb p {
+      color: #cfd0d1;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -261,14 +278,21 @@
         <div id="saleDate" class="sale-date"></div>
       </div>
 
-      <!-- ICO Details & Links (Responsive Layout) -->
+      <!-- ICO Details & Blurb & Links (Responsive Layout) -->
       <div class="md-grid">
         <!-- ICO Details -->
         <div class="sub-panel md-col-span-2 mb-6 md:mb-0">
           <h3>ICO Details</h3>
 
+          <!-- Blurb -->
+          <div class="blurb">
+            <p>
+              Almanak is an agent-centric platform that allows users to build, train, and manage financial strategies using AI agents.
+            </p>
+          </div>
+
           <!-- Buy Price -->
-          <p class="mb-2">
+          <p class="mb-2 mt-4">
             <span class="highlight">Buy Price:</span> 
             <span id="buyPriceText"></span>
           </p>
@@ -344,25 +368,7 @@
         <div class="chart-title">Price History</div>
         <div class="tradingview-widget-container" style="width: 100%; height: 100%;">
           <div class="tradingview-widget-container__widget"></div>
-          <script 
-            type="text/javascript" 
-            src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
-            async
-          >
-          {
-            "autosize": true,
-            "width": "100%",
-            "symbol": "BYBIT:FUELUSDT",  /* Overwritten by JS below */
-            "interval": "240",
-            "timezone": "Etc/UTC",
-            "theme": "dark",
-            "style": "1",
-            "locale": "en",
-            "allow_symbol_change": true,
-            "calendar": false,
-            "support_host": "https://www.tradingview.com"
-          }
-          </script>
+          <!-- TradingView widget will be injected here by JavaScript -->
         </div>
       </div>
     </div>
@@ -378,7 +384,7 @@
       launchDate: "Q1 2025",
       buyPrice: null,   // or "TBD"
       pendingTGE: true, // <== KEY FLAG
-      tradingViewSymbol: "",
+      tradingViewSymbol: "BINANCE:ALMANAKUSDT",
       websiteLink: "https://almanak.co",
       twitterLink: "https://x.com/Almanak__",
       isHidden: true     // Toggle flag based on status
@@ -401,10 +407,12 @@
       // Handle Display Based on Status
       if (config.isHidden) {
         showPendingStatus();
+        // Initialize TradingView with a default or hidden state if desired
+        initializeTradingView(true);
       } else {
         // Show live data
         setBuyPrice();
-        updateTradingViewSymbol();
+        initializeTradingView(false);
         fetchTokenData();
         fetchDailySentiment();
       }
@@ -427,8 +435,7 @@
       document.getElementById("currentPrice").innerHTML = `<span class="badge">Pending TGE</span>`;
       document.getElementById("currentROI").innerHTML = `<span class="badge">Pending TGE</span>`;
 
-      // Optionally, hide voting buttons and sentiments or show placeholders
-      // Here, we replace Daily Sentiment with "No data yet"
+      // Replace Daily Sentiment with "No data yet"
       const todaySentEl = document.getElementById("todaySentiment");
       todaySentEl.innerHTML = `<span class="badge">No data yet</span>`;
     }
@@ -448,19 +455,43 @@
     }
 
     /**************************************************
-      5. UPDATE TRADINGVIEW SYMBOL
+      5. INITIALIZE TRADINGVIEW WIDGET
     **************************************************/
-    function updateTradingViewSymbol() {
-      const tvScript = document.querySelector(
-        'script[src*="tradingview.com/external-embedding/embed-widget-advanced-chart.js"]'
-      );
-      if (tvScript) {
-        let code = tvScript.innerHTML;
-        code = code.replace(
-          /"symbol":\s*"[^"]*"/,
-          `"symbol": "${config.tradingViewSymbol}"`
-        );
-        tvScript.innerHTML = code;
+    function initializeTradingView(isPending) {
+      const widgetContainer = document.querySelector('.tradingview-widget-container__widget');
+      
+      if (isPending) {
+        // Optionally, you can display a message or leave the chart empty
+        widgetContainer.innerHTML = `<div class="badge">Trading Data Coming Soon</div>`;
+        widgetContainer.style.display = 'flex';
+        widgetContainer.style.justifyContent = 'center';
+        widgetContainer.style.alignItems = 'center';
+        widgetContainer.style.height = '100%';
+        widgetContainer.style.fontSize = '1.25rem';
+      } else {
+        // Clear any existing content
+        widgetContainer.innerHTML = '';
+
+        // Create a new script element for the TradingView widget
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+        script.async = true;
+        script.innerHTML = `
+        {
+          "autosize": true,
+          "symbol": "${config.tradingViewSymbol}",
+          "interval": "240",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "allow_symbol_change": true,
+          "calendar": false,
+          "support_host": "https://www.tradingview.com"
+        }
+        `;
+        widgetContainer.appendChild(script);
       }
     }
 
@@ -551,4 +582,3 @@
   </script>
 </body>
 </html>
-
