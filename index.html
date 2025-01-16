@@ -1,23 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Track Legion ICO Performance</title>
+  <!-- ... existing head content ... -->
   
-  <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    font-src 'self' https://fonts.gstatic.com;
-    object-src 'none';
-    base-uri 'self';
-    frame-ancestors 'none';
-  ">
-  
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -28,237 +13,10 @@
   >
   
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-    }
-    body {
-      background-color: #09131b; 
-      color: #cfd0d1;
-      font-family: 'Orbitron', sans-serif;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      position: relative;
-    }
+    /* ... existing styles ... */
 
-    .tron-grid {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 60px 60px; 
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .content-wrapper {
-      z-index: 2; 
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-
-    .main-container {
-      width: 100%;
-      max-width: 1200px;
-      padding: 2rem;
-      border: 1px solid rgba(0, 255, 238, 0.2);
-      border-radius: 0.5rem;
-      background: rgba(0, 0, 0, 0.3); 
-    }
-    .main-container:hover {
-      border-color: rgba(0, 255, 238, 0.4);
-    }
-
-    .modern-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .modern-header h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #00ffee; /* Neon cyan */
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    .modern-header hr {
-      margin: 1rem auto;
-      width: 60%;
-      border: none;
-      border-top: 1px solid rgba(0, 255, 238, 0.4);
-    }
-
-    .tron-table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid rgba(0,255,238,0.2);
-      margin-bottom: 2rem;
-      font-size: 0.875rem;
-    }
-    .tron-table thead {
-      background-color: rgba(0,255,238,0.05);
-    }
-    .tron-table th, .tron-table td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(0,255,238,0.2);
-      white-space: nowrap;
-    }
-    .tron-table th {
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #00ffee;
-    }
-   
-    .tron-table tr:last-child td {
-      border-bottom: none;
-    }
-    .tron-table tbody tr:hover {
-      background-color: rgba(0, 255, 238, 0.05);
-      transition: background-color 0.3s ease;
-    }
-
-    .roi-positive {
-      color: #0afc4e; 
-      font-weight: bold;
-    }
-    .roi-negative {
-      color: #ff3860;
-      font-weight: bold;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .badge-live {
-      background-color: #0afc4e;
-      color: #09131b;
-    }
-    .badge-soon {
-      background-color: #ffae00;
-      color: #09131b;
-    }
-    .badge-ico {
-      background-color: #008ffc;
-      color: #09131b;
-    }
-
-    .token-fuel { color: #0afc4e; }
-    .token-almanak { color: #f9f9f9; }
-    .token-pulse { color: #0eb7ff; }
-    .token-silencio { color: #4086d6; }
-    .token-enclave { color: #89CFF0; }
-    .token-corn { color: #FFA500; }
-
-    .support-button {
-      padding: 0.75rem 1.5rem;
-      border: 1px solid #00ffee;
-      border-radius: 9999px;
-      color: #00ffee;
-      background: transparent;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: inline-block;
-    }
-    .support-button:hover {
-      background-color: #00ffee;
-      color: #09131b;
-    }
-
-    footer {
-      background-color: #09131b;
-      color: #a4a6a7;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.75rem;
-      border-top: 1px solid rgba(0,255,238,0.2);
-    }
-    footer .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-    }
-    footer a {
-      color: #00ffee;
-      text-decoration: underline;
-    }
-    footer a:hover {
-      color: #37fffc;
-    }
-    footer svg {
-      height: 24px;
-      width: 24px;
-      margin-right: 0.5rem;
-      flex-shrink: 0;
-    }
-
-    #walletModal {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0,0,0,0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    #walletModal.active {
-      display: flex;
-    }
-    .modal-content {
-      background-color: #0c1d28;
-      border: 1px solid rgba(0, 255, 238, 0.3);
-      border-radius: 0.5rem;
-      padding: 2rem;
-      max-width: 400px;
-      width: 90%;
-      color: #fff;
-      text-align: center;
-      position: relative;
-    }
-    .modal-content button {
-      background-color: #008ffc;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      margin-top: 1rem;
-      border: none;
-      cursor: pointer;
-    }
-    .modal-content button:hover {
-      background-color: #00a0ff;
-    }
-
-    @media (max-width: 767px) {
-      .tron-table th:nth-child(3),
-      .tron-table th:nth-child(4),
-      .tron-table th:nth-child(6),
-      .tron-table td:nth-child(3),
-      .tron-table td:nth-child(4),
-      .tron-table td:nth-child(6) {
-        display: none;
-      }
-    }
+    /* Additional Styles for Grid View */
+    /* You can add any additional custom styles here if necessary */
   </style>
 </head>
 <body>
@@ -275,8 +33,26 @@
         <hr>
       </div>
 
-      <!-- Table -->
-      <div class="overflow-x-auto">
+      <!-- View Toggle Buttons -->
+      <div class="flex justify-end mb-4" role="group" aria-label="View Toggle">
+        <button 
+          id="tableViewBtn" 
+          class="px-4 py-2 bg-gray-800 text-gray-200 rounded-l hover:bg-gray-700 focus:outline-none"
+          aria-pressed="true"
+        >
+          Table View
+        </button>
+        <button 
+          id="gridViewBtn" 
+          class="px-4 py-2 bg-gray-700 text-gray-200 rounded-r hover:bg-gray-600 focus:outline-none"
+          aria-pressed="false"
+        >
+          Grid View
+        </button>
+      </div>
+
+      <!-- Table View -->
+      <div id="tableView" class="overflow-x-auto">
         <table class="tron-table">
           <thead>
             <tr>
@@ -390,6 +166,11 @@
         </table>
       </div>
 
+      <!-- Grid View -->
+      <div id="gridView" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Grid items will be dynamically generated -->
+      </div>
+
       <!-- Support the Site Button -->
       <div class="flex justify-center">
         <button
@@ -405,67 +186,15 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-container">
-      <!-- Built By -->
-      <div class="mb-4 flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" 
-             viewBox="0 0 24 24" stroke-width="2" 
-             stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" 
-                d="M12 4v16m8-8H4" />
-        </svg>
-        <span class="text-base font-semibold text-white">
-          Built by 
-          <a href="https://x.com/Dustybeerbong" target="_blank" 
-             rel="noopener noreferrer" 
-             class="ml-1">
-            Sadpepe.exe
-          </a>
-        </span>
-      </div>
-      <!-- Disclaimer -->
-      <p class="max-w-xl text-center leading-snug">
-        <strong>Disclaimer:</strong> We are 
-        <em>not</em> affiliated with Legion and do 
-        <em>not</em> offer financial or trading advice. 
-        This website is purely for informational 
-        purposes to assist in tracking prior ICO 
-        performance. Always conduct your own 
-        research before making any investment decisions.
-      </p>
-      <!-- Price Data -->
-      <p class="mt-4">
-        Price data provided by 
-        <a href="https://coingecko.com" target="_blank" 
-           rel="noopener noreferrer">
-          CoinGecko
-        </a>.
-      </p>
-    </div>
+    <!-- ... existing footer content ... -->
   </footer>
 
   <!-- MODAL -->
   <div id="walletModal">
-    <div class="modal-content">
-      <h2 id="modalTitle" class="text-lg font-bold">Support Us</h2>
-      <p class="my-3">
-        If you're feeling generous, I'd love a nice cold drink:
-      </p>
-      <div class="bg-gray-800 p-2 rounded flex flex-col sm:flex-row sm:items-center">
-        <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">
-          0x62f1F6bFE3A798d5023608ac0a9c8a9538276283
-        </span>
-        <button onclick="copyWalletAddress()">
-          Copy
-        </button>
-      </div>
-      <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 w-full sm:w-auto mt-4 sm:mt-0">
-        Close
-      </button>
-    </div>
+    <!-- ... existing modal content ... -->
   </div>
 
-  <!-- SCRIPT: Similar to previous logic but with updated modal toggles -->
+  <!-- SCRIPT -->
   <script>
     // Open Modal
     function supportSite() {
@@ -488,6 +217,74 @@
         .then(() => alert('Wallet address copied to clipboard!'))
         .catch(() => alert('Failed to copy wallet address.'));
     }
+
+    // Function to generate grid view items
+    function generateGridView() {
+      const gridView = document.getElementById('gridView');
+      const overviewList = document.getElementById('overviewList');
+      gridView.innerHTML = ''; // Clear existing grid items
+
+      overviewList.querySelectorAll('tr').forEach((row) => {
+        // Skip the loading row
+        if (row.id === 'loadingRow') return;
+
+        const cells = row.querySelectorAll('td');
+        const tokenName = cells[0].innerHTML;
+        const status = cells[1].innerHTML;
+        const seedPrice = cells[2].textContent;
+        const tokenPrice = cells[3].textContent;
+        const roi = cells[4].textContent;
+        const investment = cells[5].textContent;
+
+        // Create grid item
+        const gridItem = document.createElement('div');
+        gridItem.className = 'bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-teal-500 transition';
+
+        gridItem.innerHTML = `
+          <div class="mb-2 text-xl font-semibold text-teal-400">${tokenName}</div>
+          <div class="mb-2">${status}</div>
+          <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
+          <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
+          <div class="mb-1"><strong>ROI:</strong> <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span></div>
+          <div><strong>If you invested $1000:</strong> ${investment}</div>
+        `;
+
+        gridView.appendChild(gridItem);
+      });
+    }
+
+    // Toggle Views
+    function toggleView(view) {
+      const tableView = document.getElementById('tableView');
+      const gridView = document.getElementById('gridView');
+      const tableBtn = document.getElementById('tableViewBtn');
+      const gridBtn = document.getElementById('gridViewBtn');
+
+      if (view === 'grid') {
+        tableView.classList.add('hidden');
+        gridView.classList.remove('hidden');
+        tableBtn.classList.remove('bg-gray-800');
+        tableBtn.classList.add('bg-gray-700');
+        gridBtn.classList.remove('bg-gray-700');
+        gridBtn.classList.add('bg-gray-800');
+        tableBtn.setAttribute('aria-pressed', 'false');
+        gridBtn.setAttribute('aria-pressed', 'true');
+        generateGridView();
+      } else {
+        tableView.classList.remove('hidden');
+        gridView.classList.add('hidden');
+        tableBtn.classList.remove('bg-gray-700');
+        tableBtn.classList.add('bg-gray-800');
+        gridBtn.classList.remove('bg-gray-800');
+        gridBtn.classList.add('bg-gray-700');
+        tableBtn.setAttribute('aria-pressed', 'true');
+        gridBtn.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    // Event Listeners for Toggle Buttons
+    document.getElementById('tableViewBtn').addEventListener('click', () => toggleView('table'));
+    document.getElementById('gridViewBtn').addEventListener('click', () => toggleView('grid'));
 
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
@@ -530,6 +327,12 @@
           }
           row.querySelector('td:nth-child(6)').textContent = `$${investmentValue.toFixed(2)}`;
 
+          // Regenerate grid view if active
+          const gridView = document.getElementById('gridView');
+          if (!gridView.classList.contains('hidden')) {
+            generateGridView();
+          }
+
         } catch (error) {
           console.error(`Error updating ${tokenName}:`, error);
           row.querySelector('td:nth-child(4)').textContent = 'Error';
@@ -537,6 +340,12 @@
           roiCell.textContent = 'Error';
           roiCell.classList.remove('roi-positive', 'roi-negative');
           row.querySelector('td:nth-child(6)').textContent = 'Error';
+          
+          // Regenerate grid view if active
+          const gridView = document.getElementById('gridView');
+          if (!gridView.classList.contains('hidden')) {
+            generateGridView();
+          }
         }
       });
     }
