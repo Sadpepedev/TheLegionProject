@@ -465,7 +465,7 @@
         widgetContainer.style.display = 'flex';
         widgetContainer.style.justifyContent = 'center';
         widgetContainer.style.alignItems = 'center';
-        widgetContainer.style.height = '600';
+        widgetContainer.style.height = '500';
         widgetContainer.style.fontSize = '1.25rem';
       } else {
         // Clear any existing content
@@ -478,7 +478,7 @@
         script.async = true;
         script.innerHTML = `
         {
-          "autosize": true,
+          "autosize": false,
           "width": "100%",            
           "height": "500"
           "symbol": "${config.tradingViewSymbol}",
