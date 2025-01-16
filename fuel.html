@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Almanak ICO</title>
+  <title>Fuel Network</title>
 
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -153,7 +153,7 @@
       border-radius: 0.5rem;
       margin-top: 2rem;
       width: 100%;
-      min-height: 600px; 
+      height: 500px; /* Fixed height */
       overflow: hidden;
       transition: background-color 0.3s ease;
     }
@@ -221,7 +221,7 @@
       color: #37fffc;
     }
 
-    /* Badge styling for "Pending TGE" */
+    /* Badge styling for "Pending TGE" and "Pending Dev" */
     .badge {
       display: inline-block;
       padding: 0.25rem 0.75rem;
@@ -386,7 +386,8 @@
       tradingViewSymbol: "BYBIT:FUELUSDT",
       websiteLink: "https://app.fuel.network/",
       twitterLink: "https://x.com/fuel_network",
-      isHidden: false    // Toggle flag based on status
+      isHidden: false,    // Toggle flag based on status
+      sentimentPending: false // <== NEW FLAG FOR SENTIMENT STATUS
     };
 
     /**************************************************
@@ -434,9 +435,22 @@
       document.getElementById("currentPrice").innerHTML = `<span class="badge">Pending TGE</span>`;
       document.getElementById("currentROI").innerHTML = `<span class="badge">Pending TGE</span>`;
 
-      // Replace Daily Sentiment with "No data yet"
-      const todaySentEl = document.getElementById("todaySentiment");
-      todaySentEl.innerHTML = `<span class="badge">No data yet</span>`;
+      // Handle Sentiment Display
+      if (config.sentimentPending) {
+        // Display "Pending Dev" badge
+        const todaySentEl = document.getElementById("todaySentiment");
+        todaySentEl.innerHTML = `<span class="badge">Pending Dev</span>`;
+      } else {
+        // Display "No data yet" badge
+        const todaySentEl = document.getElementById("todaySentiment");
+        todaySentEl.innerHTML = `<span class="badge">No data yet</span>`;
+      }
+
+      // Disable Voting Buttons
+      document.getElementById("rocketButton").disabled = true;
+      document.getElementById("poopButton").disabled = true;
+      document.getElementById("rocketButton").classList.add('opacity-50', 'cursor-not-allowed');
+      document.getElementById("poopButton").classList.add('opacity-50', 'cursor-not-allowed');
     }
 
     /**************************************************
@@ -460,12 +474,12 @@
       const widgetContainer = document.querySelector('.tradingview-widget-container__widget');
       
       if (isPending) {
-        // Optionally, you can display a message or leave the chart empty
+        // Display a "Trading Data Coming Soon" badge instead of the chart
         widgetContainer.innerHTML = `<div class="badge">Trading Data Coming Soon</div>`;
         widgetContainer.style.display = 'flex';
         widgetContainer.style.justifyContent = 'center';
         widgetContainer.style.alignItems = 'center';
-        widgetContainer.style.height = '500';
+        widgetContainer.style.height = '100%';
         widgetContainer.style.fontSize = '1.25rem';
       } else {
         // Clear any existing content
@@ -480,7 +494,7 @@
         {
           "autosize": false,
           "width": "100%",            
-          "height": "500"
+          "height": "500",
           "symbol": "${config.tradingViewSymbol}",
           "interval": "240",
           "timezone": "Etc/UTC",
@@ -549,6 +563,11 @@
       7. FETCH DAILY SENTIMENT
     **************************************************/
     async function fetchDailySentiment() {
+      if (config.sentimentPending) {
+        // Sentiment is pending; no need to fetch
+        return;
+      }
+
       try {
         const res = await fetch("/sentiment");
         const data = await res.json();
@@ -561,6 +580,8 @@
         }
       } catch (err) {
         console.error("Error fetching daily sentiment:", err);
+        const todaySentEl = document.getElementById("todaySentiment");
+        todaySentEl.textContent = "Error fetching data.";
       }
     }
 
