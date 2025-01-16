@@ -28,6 +28,7 @@
   >
   
   <style>
+    /* Reset and Base Styles */
     * {
       margin: 0;
       padding: 0;
@@ -46,6 +47,7 @@
       position: relative;
     }
 
+    /* Tron Grid Overlay */
     .tron-grid {
       position: absolute;
       top: 0;
@@ -60,6 +62,7 @@
       z-index: 1;
     }
 
+    /* Content Wrapper */
     .content-wrapper {
       z-index: 2; 
       flex: 1;
@@ -69,6 +72,7 @@
       padding: 2rem 1rem;
     }
 
+    /* Main Container */
     .main-container {
       width: 100%;
       max-width: 1200px;
@@ -76,11 +80,13 @@
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
       background: rgba(0, 0, 0, 0.3); 
+      position: relative;
     }
     .main-container:hover {
       border-color: rgba(0, 255, 238, 0.4);
     }
 
+    /* Header */
     .modern-header {
       text-align: center;
       margin-bottom: 2rem;
@@ -99,6 +105,7 @@
       border-top: 1px solid rgba(0, 255, 238, 0.4);
     }
 
+    /* Table Styles */
     .tron-table {
       width: 100%;
       border-collapse: collapse;
@@ -129,6 +136,7 @@
       transition: background-color 0.3s ease;
     }
 
+    /* ROI Styles */
     .roi-positive {
       color: #0afc4e; 
       font-weight: bold;
@@ -138,6 +146,7 @@
       font-weight: bold;
     }
 
+    /* Badge Styles */
     .badge {
       display: inline-block;
       padding: 0.25rem 0.75rem;
@@ -160,6 +169,7 @@
       color: #09131b;
     }
 
+    /* Token Color Styles */
     .token-fuel { color: #0afc4e; }
     .token-almanak { color: #f9f9f9; }
     .token-pulse { color: #0eb7ff; }
@@ -167,6 +177,7 @@
     .token-enclave { color: #89CFF0; }
     .token-corn { color: #FFA500; }
 
+    /* Support Button Styles */
     .support-button {
       padding: 0.75rem 1.5rem;
       border: 1px solid #00ffee;
@@ -182,6 +193,7 @@
       color: #09131b;
     }
 
+    /* Footer Styles */
     footer {
       background-color: #09131b;
       color: #a4a6a7;
@@ -213,6 +225,7 @@
       flex-shrink: 0;
     }
 
+    /* Modal Styles */
     #walletModal {
       position: fixed;
       inset: 0;
@@ -249,6 +262,7 @@
       background-color: #00a0ff;
     }
 
+    /* Responsive Styles */
     @media (max-width: 767px) {
       .tron-table th:nth-child(3),
       .tron-table th:nth-child(4),
@@ -258,6 +272,25 @@
       .tron-table td:nth-child(6) {
         display: none;
       }
+    }
+
+    /* Additional Styles for Grid View */
+    .grid-item {
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 238, 0.2);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      transition: border-color 0.3s ease;
+    }
+    .grid-item:hover {
+      border-color: rgba(0, 255, 238, 0.4);
+    }
+    .grid-item a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .grid-item a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -275,8 +308,26 @@
         <hr>
       </div>
 
-      <!-- Table -->
-      <div class="overflow-x-auto">
+      <!-- View Toggle Buttons -->
+      <div class="flex justify-end mb-4" role="group" aria-label="View Toggle">
+        <button 
+          id="tableViewBtn" 
+          class="px-4 py-2 bg-gray-800 text-gray-200 rounded-l hover:bg-gray-700 focus:outline-none"
+          aria-pressed="true"
+        >
+          Table View
+        </button>
+        <button 
+          id="gridViewBtn" 
+          class="px-4 py-2 bg-gray-700 text-gray-200 rounded-r hover:bg-gray-600 focus:outline-none"
+          aria-pressed="false"
+        >
+          Grid View
+        </button>
+      </div>
+
+      <!-- Table View -->
+      <div id="tableView" class="overflow-x-auto">
         <table class="tron-table">
           <thead>
             <tr>
@@ -390,6 +441,11 @@
         </table>
       </div>
 
+      <!-- Grid View -->
+      <div id="gridView" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Grid items will be dynamically generated -->
+      </div>
+
       <!-- Support the Site Button -->
       <div class="flex justify-center">
         <button
@@ -455,17 +511,17 @@
         <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">
           0x62f1F6bFE3A798d5023608ac0a9c8a9538276283
         </span>
-        <button onclick="copyWalletAddress()">
+        <button onclick="copyWalletAddress()" class="px-3 py-1 bg-teal-500 text-white rounded hover:bg-teal-600 focus:outline-none">
           Copy
         </button>
       </div>
-      <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 w-full sm:w-auto mt-4 sm:mt-0">
+      <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 w-full sm:w-auto mt-4 sm:mt-0 px-4 py-2 rounded focus:outline-none">
         Close
       </button>
     </div>
   </div>
 
-  <!-- SCRIPT: Similar to previous logic but with updated modal toggles -->
+  <!-- SCRIPT -->
   <script>
     // Open Modal
     function supportSite() {
@@ -488,6 +544,74 @@
         .then(() => alert('Wallet address copied to clipboard!'))
         .catch(() => alert('Failed to copy wallet address.'));
     }
+
+    // Function to generate grid view items
+    function generateGridView() {
+      const gridView = document.getElementById('gridView');
+      const overviewList = document.getElementById('overviewList');
+      gridView.innerHTML = ''; // Clear existing grid items
+
+      overviewList.querySelectorAll('tr').forEach((row) => {
+        // Skip the loading row
+        if (row.id === 'loadingRow') return;
+
+        const cells = row.querySelectorAll('td');
+        const tokenName = cells[0].innerHTML;
+        const status = cells[1].innerHTML;
+        const seedPrice = cells[2].textContent;
+        const tokenPrice = cells[3].textContent;
+        const roi = cells[4].textContent;
+        const investment = cells[5].textContent;
+
+        // Create grid item
+        const gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
+
+        gridItem.innerHTML = `
+          <div class="mb-2 text-xl font-semibold text-teal-400">${tokenName}</div>
+          <div class="mb-2">${status}</div>
+          <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
+          <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
+          <div class="mb-1"><strong>ROI:</strong> <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span></div>
+          <div><strong>If you invested $1000:</strong> ${investment}</div>
+        `;
+
+        gridView.appendChild(gridItem);
+      });
+    }
+
+    // Toggle Views
+    function toggleView(view) {
+      const tableView = document.getElementById('tableView');
+      const gridView = document.getElementById('gridView');
+      const tableBtn = document.getElementById('tableViewBtn');
+      const gridBtn = document.getElementById('gridViewBtn');
+
+      if (view === 'grid') {
+        tableView.classList.add('hidden');
+        gridView.classList.remove('hidden');
+        tableBtn.classList.remove('bg-gray-800');
+        tableBtn.classList.add('bg-gray-700');
+        gridBtn.classList.remove('bg-gray-700');
+        gridBtn.classList.add('bg-gray-800');
+        tableBtn.setAttribute('aria-pressed', 'false');
+        gridBtn.setAttribute('aria-pressed', 'true');
+        generateGridView();
+      } else {
+        tableView.classList.remove('hidden');
+        gridView.classList.add('hidden');
+        tableBtn.classList.remove('bg-gray-700');
+        tableBtn.classList.add('bg-gray-800');
+        gridBtn.classList.remove('bg-gray-800');
+        gridBtn.classList.add('bg-gray-700');
+        tableBtn.setAttribute('aria-pressed', 'true');
+        gridBtn.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    // Event Listeners for Toggle Buttons
+    document.getElementById('tableViewBtn').addEventListener('click', () => toggleView('table'));
+    document.getElementById('gridViewBtn').addEventListener('click', () => toggleView('grid'));
 
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
@@ -530,6 +654,12 @@
           }
           row.querySelector('td:nth-child(6)').textContent = `$${investmentValue.toFixed(2)}`;
 
+          // Regenerate grid view if active
+          const gridView = document.getElementById('gridView');
+          if (!gridView.classList.contains('hidden')) {
+            generateGridView();
+          }
+
         } catch (error) {
           console.error(`Error updating ${tokenName}:`, error);
           row.querySelector('td:nth-child(4)').textContent = 'Error';
@@ -537,6 +667,12 @@
           roiCell.textContent = 'Error';
           roiCell.classList.remove('roi-positive', 'roi-negative');
           row.querySelector('td:nth-child(6)').textContent = 'Error';
+          
+          // Regenerate grid view if active
+          const gridView = document.getElementById('gridView');
+          if (!gridView.classList.contains('hidden')) {
+            generateGridView();
+          }
         }
       });
     }
