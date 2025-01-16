@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><!-- Dynamically updated below -->Token Tracker</title>
+
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src
+      'self'
+      'unsafe-inline'
+      'unsafe-eval'
+      https://cdn.tailwindcss.com
+      https://fonts.googleapis.com
+      https://fonts.gstatic.com
+      https://s3.tradingview.com
+      https://www.tradingview.com;
+    style-src
+      'self'
+      'unsafe-inline'
+      https://fonts.googleapis.com;
+    font-src
+      'self'
+      https://fonts.gstatic.com;
+    frame-src
+      'self'
+      https://www.tradingview-widget.com
+      https://www.tradingview.com
+      https://s3.tradingview.com;
+    connect-src
+      'self'
+      https://*.tradingview.com
+      https://data.tradingview.com
+      https://www.tradingview-widget.com;
+    object-src 'none';
+    base-uri 'self';
+    frame-ancestors 'none';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* --------------------------------------------------
+       Tron-like background and styling
+       -------------------------------------------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+    }
+    body {
+      background-color: #09131b;
+      color: #cfd0d1;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .tron-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .content-wrapper {
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .main-panel {
+      width: 100%;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid rgba(0,255,238,0.2);
+      border-radius: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.3);
+      transition: border-color 0.3s ease;
+    }
+    .main-panel:hover {
+      border-color: rgba(0,255,238,0.4);
+    }
+
+    .token-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00ffee;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .sale-date {
+      font-size: 0.9rem;
+      color: #a2a4a5;
+      margin-bottom: 1.5rem;
+    }
+
+    .sub-panel {
+      background-color: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,238,0.2);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    .sub-panel:hover {
+      background-color: rgba(255,255,255,0.06);
+    }
+    .sub-panel h3 {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      color: #00ffee;
+    }
+
+    .highlight {
+      color: #a4a6a7;
+      font-weight: 700;
+      display: inline-block;
+      margin-right: 0.25rem;
+    }
+
+    .chart-container {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,238,0.2);
+      border-radius: 0.5rem;
+      margin-top: 2rem;
+      width: 100%;
+      min-height: 600px; 
+      overflow: hidden;
+      transition: background-color 0.3s ease;
+    }
+    .chart-container:hover {
+      background-color: rgba(255,255,255,0.06);
+    }
+    .chart-title {
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-size: 1.25rem;
+      color: #00ffee;
+    }
+
+    a {
+      color: #00afff;
+      text-decoration: underline;
+    }
+    a:hover {
+      color: #37fffc;
+    }
+
+    .text-green-400 {
+      color: #0afc4e !important;
+    }
+    .text-red-400 {
+      color: #ff3860 !important;
+    }
+
+    @media (min-width: 768px) {
+      .md-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+      .md-col-span-2 {
+        grid-column: span 2 / span 2;
+      }
+    }
+
+    /* Return-to-home Tron button */
+    .return-home {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 50;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(0,255,238,0.2);
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 0.25rem;
+      text-align: center;
+      transition: border-color 0.3s ease;
+    }
+    .return-home:hover {
+      border-color: rgba(0,255,238,0.4);
+    }
+    .return-home a {
+      color: #00ffee;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .return-home a:hover {
+      color: #37fffc;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Tron Grid Overlay -->
+  <div class="tron-grid"></div>
+
+  <!-- Return to Home Link -->
+  <div class="return-home">
+    <a 
+      href="https://www.degenzone.xyz" 
+      target="_blank" 
+      rel="noopener noreferrer"
+    >
+      Return to Home
+    </a>
+  </div>
+
+  <!-- Content Wrapper -->
+  <div class="content-wrapper">
+    <!-- Main Panel -->
+    <div class="main-panel">
+      <!-- Title & Sale Date -->
+      <div class="text-center mb-8">
+        <h1 id="tokenTitle" class="token-title"><!-- filled by JS --></h1>
+        <div id="saleDate" class="sale-date"><!-- filled by JS --></div>
+      </div>
+
+      <!-- ICO Details & Links (Responsive Layout) -->
+      <div class="md-grid">
+        <!-- ICO Details -->
+        <div class="sub-panel md-col-span-2 mb-6 md:mb-0">
+          <h3>ICO Details</h3>
+
+          <!-- Buy Price -->
+          <p class="mb-2">
+            <span class="highlight">Buy Price:</span> 
+            <span id="buyPriceText">Loading...</span>
+          </p>
+
+          <!-- Current Price -->
+          <p class="mb-2">
+            <span class="highlight">Current Price:</span> 
+            <span id="currentPrice">Loading...</span>
+          </p>
+
+          <!-- Current ROI -->
+          <p class="mb-2">
+            <span class="highlight">Current ROI:</span> 
+            <span id="currentROI">Loading...</span>
+          </p>
+
+          <!-- Voting Buttons -->
+          <div class="flex items-center space-x-4 my-4 mt-6">
+            <button 
+              id="rocketButton" 
+              class="px-4 py-2 rounded bg-green-500 hover:bg-green-600 text-white"
+              title="Vote Rocket"
+            >
+              &#128640;
+            </button>
+
+            <button 
+              id="poopButton" 
+              class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
+              title="Vote Poop"
+            >
+              &#128169;
+            </button>
+          </div>
+
+          <!-- Daily Sentiment -->
+          <p class="mb-2">
+            <span class="highlight">Today's Sentiment:</span>
+            <span id="todaySentiment">Loading...</span>
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div class="sub-panel">
+          <h3>Links</h3>
+          <ul class="space-y-2 list-none">
+            <li>
+              <a 
+                id="websiteLink"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Website
+              </a>
+            </li>
+            <li>
+              <a 
+                id="twitterLink"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Twitter
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Price History Section -->
+      <div class="chart-container mt-6">
+        <div class="chart-title">Price History</div>
+        <div class="tradingview-widget-container" style="width: 100%; height: 100%;">
+          <div class="tradingview-widget-container__widget"></div>
+          <script 
+            type="text/javascript" 
+            src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
+            async
+          >
+          {
+            "autosize": true,
+            "width": "100%",
+            "symbol": "BYBIT:FUELUSDT",       /* Overwritten by JS below */
+            "interval": "240",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "allow_symbol_change": true,
+            "calendar": false,
+            "support_host": "https://www.tradingview.com"
+          }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    /**************************************************
+      1. CONFIGURE YOUR TOKEN HERE
+    **************************************************/
+const config = {
+  tokenName: "Almanak",
+  launchDate: "Q1 2025",
+  buyPrice: --,
+  tradingViewSymbol: "BINANCE:ALMANAKUSDT",
+  websiteLink: "https://almanak.co",
+  twitterLink: "https://x.com/Almanak__"
+};
+
+
+    /**************************************************
+      2. DYNAMICALLY UPDATE THE PAGE
+    **************************************************/
+    document.addEventListener("DOMContentLoaded", () => {
+      // Set <title>
+      document.title = config.tokenName;
+
+      // Title & Launch Date
+      document.getElementById("tokenTitle").textContent = config.tokenName;
+      document.getElementById("saleDate").textContent =
+        "Launch Date: " + config.launchDate;
+
+      // Buy Price
+      const buyPriceEl = document.getElementById("buyPriceText");
+      buyPriceEl.textContent = `$${config.buyPrice.toFixed(2)}`;
+
+      // Links
+      document.getElementById("websiteLink").href = config.websiteLink;
+      document.getElementById("twitterLink").href = config.twitterLink;
+
+      // Update TradingView symbol (by rewriting the script config)
+      // We'll do a quick hack: find the script tag & replace the "symbol" value.
+      const tvScript = document.querySelector(
+        'script[src*="tradingview.com/external-embedding/embed-widget-advanced-chart.js"]'
+      );
+      if (tvScript) {
+        // We assume the script text is the one in the script's innerHTML
+        // If the symbol line is "BYBIT:FUELUSDT", let's replace it
+        // with config.tradingViewSymbol:
+        let code = tvScript.innerHTML;
+        code = code.replace(
+          /"symbol":\s*"[^"]*"/,
+          `"symbol": "${config.tradingViewSymbol}"`
+        );
+        tvScript.innerHTML = code;
+      }
+
+      // Kick off data fetch
+      fetchFuelData();
+      fetchDailySentiment();
+
+      // Button event listeners
+      document.getElementById("rocketButton").addEventListener("click", () => {
+        postDailySentiment("rocket");
+      });
+      document.getElementById("poopButton").addEventListener("click", () => {
+        postDailySentiment("poop");
+      });
+    });
+
+    /**************************************************
+      3. FETCH PRICE / ROI (EXAMPLE ENDPOINT)
+    **************************************************/
+    async function fetchFuelData() {
+      try {
+        const response = await fetch("/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          // We pass buyPrice from config so backend knows seed price
+          body: JSON.stringify({ investment: 1, round_price: config.buyPrice })
+        });
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        // Price
+        const currentPriceEl = document.getElementById("currentPrice");
+        const currentPrice = data.current_price.toFixed(5);
+        currentPriceEl.textContent = `$${currentPrice}`;
+
+        // Price color
+        const numericPrice = parseFloat(currentPrice);
+        currentPriceEl.classList.remove("text-green-400", "text-red-400");
+        if (numericPrice >= config.buyPrice) {
+          currentPriceEl.classList.add("text-green-400");
+        } else {
+          currentPriceEl.classList.add("text-red-400");
+        }
+
+        // ROI
+        const rawRoiPercent =
+          (data.roi_value / data.initial_investment) * 100;
+        const formattedRoi = `${rawRoiPercent.toFixed(2)}% (${data.roi_value.toFixed(2)}x)`;
+        const currentROIEl = document.getElementById("currentROI");
+        currentROIEl.textContent = formattedRoi;
+
+        currentROIEl.classList.remove("text-green-400", "text-red-400");
+        if (rawRoiPercent >= 0) {
+          currentROIEl.classList.add("text-green-400");
+        } else {
+          currentROIEl.classList.add("text-red-400");
+        }
+      } catch (error) {
+        console.error("Error fetching token data:", error);
+        document.getElementById("currentPrice").textContent = "Error";
+        document.getElementById("currentROI").textContent = "Error";
+      }
+    }
+
+    /**************************************************
+      4. FETCH DAILY SENTIMENT (EXAMPLE ENDPOINT)
+    **************************************************/
+    async function fetchDailySentiment() {
+      try {
+        const res = await fetch("/sentiment");
+        const data = await res.json();
+        const todaySentEl = document.getElementById("todaySentiment");
+        if (data && data.today) {
+          todaySentEl.textContent =
+            `${data.today.rocketPercentage}% 🚀 / ${data.today.poopPercentage}% 💩`;
+        } else {
+          todaySentEl.textContent = "No data yet.";
+        }
+      } catch (err) {
+        console.error("Error fetching daily sentiment:", err);
+      }
+    }
+
+    /**************************************************
+      5. POST A NEW VOTE (ROCKET / POOP)
+    **************************************************/
+    async function postDailySentiment(type) {
+      try {
+        await fetch("/sentiment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type })
+        });
+        // Refresh
+        fetchDailySentiment();
+      } catch (err) {
+        console.error("Error posting sentiment:", err);
+      }
+    }
+  </script>
+</body>
+</html>
