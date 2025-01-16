@@ -192,6 +192,22 @@
       .md-col-span-2 {
         grid-column: span 2 / span 2;
       }
+          /* Blurb Styling */
+    .blurb {
+      background-color: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,238,0.2);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+    .blurb:hover {
+      background-color: rgba(255,255,255,0.06);
+    }
+    .blurb p {
+      color: #cfd0d1;
+      font-size: 1rem;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -281,7 +297,7 @@
           <ul class="space-y-2 list-none">
             <li>
               <a 
-                href="https://app.fuel.network" 
+                href="https://fuel.network" 
                 target="_blank"
                 rel="noopener noreferrer"
               >
