@@ -402,7 +402,7 @@
 
       <!-- Header -->
       <div class="modern-header">
-        <h2>Legion ICO Tracker</h2>
+        <h2></h2>
         <hr>
       </div>
 
@@ -703,7 +703,7 @@
           const currentPrice = data.current_price;
           const seedPriceText = row.querySelector('td:nth-child(3)').textContent.replace('$', '');
           const seedPrice = parseFloat(seedPriceText) || 0;
-          const roi = seedPrice > 0 ? ((currentPrice - seedPrice) / seedPrice * 100) : 0;
+          const roi = seedPrice > 0 ? (currentPrice / seedPrice * 100) : 0;
           const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update cells
