@@ -254,7 +254,7 @@
       height: auto; 
       max-width: 100%;
       display: block; 
-      transition: transform 0.3s; /* So the hover scale is smoother */
+      transition: transform 0.3s; /* For the hover scale */
     }
     @media (max-width: 768px) {
       .token-logo {
@@ -277,12 +277,12 @@
     }
 
     /* ===================== */
-    /* LOGO HOVER SWAP (NEW) */
+    /* LOGO HOVER SWAP */
     /* ===================== */
     .logo-container {
       position: relative;
       display: inline-block; 
-      width: 150px; /* fix width of the container */
+      width: 150px; /* fix container width */
     }
     .logo-container img {
       position: absolute;
@@ -307,21 +307,22 @@
       opacity: 1;
     }
 
-    /* =========================== */
-    /* ROTATE & EXPAND ON CLICK   */
-    /* =========================== */
+    /* ====================================== */
+    /* ROTATE & EXPAND ANIMATION ON CLICK */
+    /* ====================================== */
     @keyframes rotateExpand {
       0% {
         transform: scale(1) rotate(0deg);
         opacity: 1;
       }
       100% {
-        transform: scale(1.2) rotate(15deg);
+        /* Increase rotation angle & scale as desired */
+        transform: scale(1.4) rotate(25deg);
         opacity: 0.8;
       }
     }
     .rotate-expand {
-      animation: rotateExpand 0.4s forwards ease-in-out;
+      animation: rotateExpand 0.7s forwards ease-in-out;
     }
   </style>
 </head>
@@ -334,25 +335,25 @@
   <div class="content-wrapper">
     <main class="main-container">
       
-      <!-- Use an H1 for the logo to push it up like a heading -->
-      <h1 class="flex justify-center items-center mb-2 text-2xl font-bold text-cyan-400">
+      <!-- LOGO at top for simplicity -->
+      <div class="flex justify-center mb-2">
         <div class="logo-container">
-          <!-- degion.png by default -->
+          <!-- Degion by default -->
           <img 
             src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
             alt="Degion Logo"
             class="degion"
           >
-          <!-- legion.png on hover -->
+          <!-- Legion on hover -->
           <img 
             src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
             alt="Legion Logo"
             class="legion"
           >
         </div>
-      </h1>
+      </div>
 
-      <!-- Horizontal Rule right below the "H1" logo -->
+      <!-- Simple line beneath the logo -->
       <hr class="mx-auto w-60 border-t border-cyan-400 mb-6" />
 
       <!-- Grid View (Default Visible) -->
@@ -601,7 +602,7 @@
         let investmentClass = '';
         if (investment && investment !== '--') {
           const investmentValue = parseFloat(investment.replace('$', ''));
-          investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
+          investmentClass = (investmentValue > 1000) ? 'investment-positive' : 'investment-negative';
         }
 
         // Create grid item as an <a> tag
@@ -633,18 +634,24 @@
           </div>
         `;
 
-        // ==============================
-        // ROTATE & EXPAND ON CLICK
-        // ==============================
-        // We'll intercept the click, do the animation, then navigate.
+        /* 
+          ROTATE & EXPAND ON CLICK, THEN NAVIGATE 
+          We listen for animationend to remove the .rotate-expand class
+          (so it doesn't stay "stuck" if the user comes back).
+        */
         gridItem.addEventListener('click', (e) => {
-          e.preventDefault();  // prevent immediate navigation
+          e.preventDefault();  // Stop immediate navigation
+
           // Add the animation class
           gridItem.classList.add('rotate-expand');
-          // Wait ~0.4s (same as the animation duration), then go to the link
-          setTimeout(() => {
-            window.location = tokenLink;
-          }, 400);
+
+          // Once the animation finishes, remove the class and navigate
+          const handleAnimationEnd = () => {
+            gridItem.classList.remove('rotate-expand');
+            gridItem.removeEventListener('animationend', handleAnimationEnd);
+            window.location = tokenLink; 
+          };
+          gridItem.addEventListener('animationend', handleAnimationEnd);
         });
 
         gridView.appendChild(gridItem);
