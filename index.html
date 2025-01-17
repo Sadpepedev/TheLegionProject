@@ -185,29 +185,38 @@
 
     /* Token Color Styles with CSS Variables */
     .token-fuel { 
-      --token-color: rgba(10, 252, 78, 0.5); 
+      --token-color: rgba(10, 252, 78, 0.9); 
       color: #0afc4e; 
     }
     .token-almanak { 
-      --token-color: rgba(249, 249, 249, 0.5); 
+      --token-color: rgba(249, 249, 249, 0.9); 
       color: #f9f9f9; 
     }
     .token-pulse { 
-      --token-color: rgba(14, 183, 255, 0.5); 
+      --token-color: rgba(14, 183, 255, 0.9); 
       color: #0eb7ff; 
     }
     .token-silencio { 
-      --token-color: rgba(64, 134, 214, 0.5); 
+      --token-color: rgba(64, 134, 214, 0.9); 
       color: #4086d6; 
     }
     .token-enclave { 
-      --token-color: rgba(137, 207, 240, 0.5); 
+      --token-color: rgba(137, 207, 240, 0.9); 
       color: #89CFF0; 
     }
     .token-corn { 
-      --token-color: rgba(255, 165, 0, 0.5); 
+      --token-color: rgba(255, 165, 0, 0.9); 
       color: #FFA500; 
     }
+
+    /* Enhanced Grid Item Hover Effect */
+  .grid-item:hover {
+  border-color: rgba(0, 255, 238, 0.6); /* Slightly darker border on hover */
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 15px var(--token-color), /* Larger blur radius */
+    0 0 30px var(--token-color); /* Added second shadow for intensity */
+}
 
     /* Support Button Styles */
     .support-button {
@@ -420,7 +429,7 @@
 
       <!-- Header -->
       <div class="modern-header">
-        <h2>Legion ICO Tracker</h2>
+        <h2></h2>
         <hr>
       </div>
 
@@ -721,7 +730,7 @@
           const currentPrice = data.current_price;
           const seedPriceText = row.querySelector('td:nth-child(3)').textContent.replace('$', '');
           const seedPrice = parseFloat(seedPriceText) || 0;
-          const roi = seedPrice > 0 ? ((currentPrice - seedPrice) / seedPrice * 100) : 0;
+          const roi = seedPrice > 0 ? (currentPrice / seedPrice * 100) : 0;
           const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update cells
