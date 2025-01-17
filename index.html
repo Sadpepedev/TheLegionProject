@@ -313,6 +313,7 @@
       .tron-table td:nth-child(6) {
         display: none;
       }
+
       /* Adjust logo size on smaller screens */
       .token-logo {
         width: 30px;
@@ -381,26 +382,27 @@
 
     /* Updated Image Sizing */
     .token-logo {
-      width: 100px;
-      height: auto;
+      width: 100px; 
+      height: auto; 
       max-width: 100%;
-      display: block;
+      display: block; 
     }
     @media (max-width: 768px) {
       .token-logo {
-        width: 60px;
+        width: 60px; 
       }
     }
     @media (max-width: 480px) {
       .token-logo {
-        width: 40px;
+        width: 40px; 
       }
     }
 
-    /* Logo Swap on Hover */
+    /* 1) Container for degion & legion to fade on hover */
     .logo-container {
       position: relative;
-      width: 150px; /* match original width */
+      width: 150px;
+      height: auto;
     }
     .logo-container img {
       position: absolute;
@@ -420,6 +422,13 @@
     .logo-container:hover .legion-hover {
       opacity: 1;
     }
+
+    /* 2) Force center + extra spacing below the logo. */
+    .logo-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 3rem; /* Increase if needed for more spacing above hr */
+    }
   </style>
 </head>
 <body>
@@ -430,11 +439,9 @@
   <!-- Content Wrapper -->
   <div class="content-wrapper">
     <main class="main-container">
-      <!-- 
-        Center the logo and add some bottom margin 
-        so it does not overlap the horizontal rule. 
-      -->
-      <div class="flex justify-center mb-6">
+
+      <!-- Center the logo + add spacing so hr doesn't overlap -->
+      <div class="logo-wrapper">
         <div class="logo-container">
           <!-- degion.png is visible by default -->
           <img 
@@ -451,10 +458,9 @@
         </div>
       </div>
 
-      <!-- Header -->
+      <!-- Header (with hr only) -->
       <div class="modern-header">
-        <!-- (Optional) If you want to remove the H2 or keep it empty, that's up to you. -->
-        <h2></h2>
+        <!-- (We removed the empty <h2> entirely) -->
         <hr>
       </div>
 
@@ -677,7 +683,7 @@
         .catch(() => alert('Failed to copy wallet address.'));
     }
 
-    // Function to generate grid view items
+    // Generate the Grid View
     function generateGridView() {
       const gridView = document.getElementById('gridView');
       const overviewList = document.getElementById('overviewList');
@@ -704,15 +710,17 @@
         let investmentClass = '';
         if (investment && investment !== '--') {
           const investmentValue = parseFloat(investment.replace('$', ''));
-          investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
+          investmentClass = (investmentValue > 1000) 
+            ? 'investment-positive' 
+            : 'investment-negative';
         }
 
-        // Create grid item as an <a> tag with token class for CSS variables
+        // Create a grid item as an <a> tag
         const gridItem = document.createElement('a');
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
-        // Set the inner HTML of the grid item
+        // Fill the grid item's innerHTML
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
             <img 
@@ -722,15 +730,20 @@
               loading="lazy" 
               onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'"
             >
-            <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">${tokenName}</span>
+            <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">
+              ${tokenName}
+            </span>
           </div>
           <div class="mb-2">${status}</div>
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
           <div class="mb-1"><strong>ROI:</strong> 
-            <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span>
+            <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">
+              ${roi}
+            </span>
           </div>
-          <div><strong>If you invested $1000:</strong> 
+          <div>
+            <strong>If you invested $1000:</strong> 
             <span class="${investmentClass}">${investment}</span>
           </div>
         `;
@@ -739,17 +752,15 @@
       });
     }
 
-    // Removed Toggle View Functions and Event Listeners
-
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
       const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
-
       tradableRows.forEach(async (row) => {
         const tokenNameCell = row.querySelector('td');
         const tokenName = tokenNameCell ? tokenNameCell.textContent.trim() : 'Unknown';
         
         try {
+          // Example fetch to "/calculate"; adjust to your actual endpoint
           const response = await fetch('/calculate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -763,7 +774,7 @@
           const currentPrice = data.current_price;
           const seedPriceText = row.querySelector('td:nth-child(3)').textContent.replace('$', '');
           const seedPrice = parseFloat(seedPriceText) || 0;
-          const roi = seedPrice > 0 ? (currentPrice / seedPrice * 100) : 0;
+          const roi = seedPrice > 0 ? (currentPrice / seedPrice) * 100 : 0;
           const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update cells
@@ -772,7 +783,7 @@
           const roiCell = row.querySelector('td:nth-child(5)');
           roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : '--';
 
-          // Positive/Negative ROI styling
+          // Positive/Negative ROI
           if (roi > 0) {
             roiCell.classList.add('roi-positive');
             roiCell.classList.remove('roi-negative');
@@ -787,23 +798,22 @@
           investmentCell.textContent = 
             seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : '--';
 
-          // Positive/Negative investment styling
+          // Positive/Negative Investment
           if (investmentValue > 1000) {
             investmentCell.classList.add('investment-positive');
             investmentCell.classList.remove('investment-negative');
-          } else if (investmentValue < 1000) {
+          } else if (investmentValue < 1000 && investmentValue !== 0) {
             investmentCell.classList.add('investment-negative');
             investmentCell.classList.remove('investment-positive');
           } else {
             investmentCell.classList.remove('investment-positive', 'investment-negative');
           }
 
-          // Regenerate grid view if active
+          // If Grid View is visible, regenerate
           const gridView = document.getElementById('gridView');
           if (!gridView.classList.contains('hidden')) {
             generateGridView();
           }
-
         } catch (error) {
           console.error(`Error updating ${tokenName}:`, error);
           row.querySelector('td:nth-child(4)').textContent = 'Error';
@@ -814,7 +824,7 @@
           investmentCell.textContent = 'Error';
           investmentCell.classList.remove('investment-positive', 'investment-negative');
 
-          // Regenerate grid view if active
+          // If Grid View is visible, regenerate
           const gridView = document.getElementById('gridView');
           if (!gridView.classList.contains('hidden')) {
             generateGridView();
@@ -828,10 +838,10 @@
       const loadingRow = document.getElementById('loadingRow');
       if (loadingRow) loadingRow.remove();
 
-      // Kick off data fetch
+      // Fetch data for tradable tokens
       updateTradableTokens();
 
-      // Generate grid view on load
+      // Generate grid view on page load
       generateGridView();
     });
   </script>
