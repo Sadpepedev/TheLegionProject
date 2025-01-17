@@ -5,18 +5,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Track Legion ICO Performance</title>
   
-  <!-- Content Security Policy -->
+  <!-- Updated Content Security Policy -->
+  <!-- ADDED connect-src for CoinGecko & script-src for vercel.live -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
+    connect-src 'self' https://api.coingecko.com;
     img-src 'self' https://sadpepedev.github.io;
-    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
+    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com https://vercel.live;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     object-src 'none';
     base-uri 'self';
     frame-ancestors 'none';
   ">
-  
+
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
   <!-- Tailwind CSS -->
@@ -30,6 +32,9 @@
   
   <!-- Favicon -->
   <link rel="icon" href="https://sadpepedev.github.io/TheLegionProject/favicon.ico" type="image/x-icon">
+
+  <!-- Sparkline.js (lightweight library for spark lines) -->
+  <script src="https://cdn.jsdelivr.net/npm/sparkline-js@1.0.0/dist/sparkline.min.js"></script>
 
   <style>
     /* Reset and Base Styles */
@@ -313,7 +318,6 @@
       .tron-table td:nth-child(6) {
         display: none;
       }
-
       /* Adjust logo size on smaller screens */
       .token-logo {
         width: 30px;
@@ -349,14 +353,10 @@
     .grid-item a:hover {
       text-decoration: underline;
     }
-
-    /* Glow Effect for Logos on Hover */
     .grid-item:hover .token-logo {
       transform: scale(1.2);
       filter: drop-shadow(0 0 10px #00ffee);
     }
-
-    /* Glow Effect for Entire Grid Item (Optional) */
     .grid-item::before {
       content: '';
       position: absolute;
@@ -372,15 +372,6 @@
     .grid-item:hover::before {
       opacity: 1;
     }
-
-    /* Accessible Focus States */
-    .token-logo:focus,
-    .grid-item:focus-within .token-logo {
-      outline: 2px solid #00ffee;
-      outline-offset: 4px;
-    }
-
-    /* Updated Image Sizing */
     .token-logo {
       width: 100px; 
       height: auto; 
@@ -427,19 +418,24 @@
     .logo-wrapper {
       display: flex;
       justify-content: center;
-      margin-bottom: 3rem; /* Increase if needed for more spacing above hr */
+      margin-bottom: 3rem; 
+    }
+
+    /* Sparkline container style (for Fuel) */
+    .sparkline-fuel {
+      width: 120px;
+      height: 32px;
+      margin: 0.5rem auto 0; /* Adjust as needed */
     }
   </style>
 </head>
 <body>
-
   <!-- Tron Grid Overlay -->
   <div class="tron-grid"></div>
 
   <!-- Content Wrapper -->
   <div class="content-wrapper">
     <main class="main-container">
-
       <!-- Center the logo + add spacing so hr doesn't overlap -->
       <div class="logo-wrapper">
         <div class="logo-container">
@@ -460,7 +456,6 @@
 
       <!-- Header (with hr only) -->
       <div class="modern-header">
-        <!-- (We removed the empty <h2> entirely) -->
         <hr>
       </div>
 
@@ -579,7 +574,6 @@
               <td>--</td>
               <td>--</td>
             </tr>
-            
           </tbody>
         </table>
       </div>
@@ -683,11 +677,42 @@
         .catch(() => alert('Failed to copy wallet address.'));
     }
 
+    /**
+     * Fetch the 7-day historical price data from CoinGecko for Fuel
+     * Returns an array of floats for the sparkline, e.g. [0.05, 0.049, 0.048, ...]
+     */
+    async function fetchFuelHistory() {
+      const url = 'https://api.coingecko.com/api/v3/coins/fuel/market_chart?vs_currency=usd&days=7';
+      try {
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error('Error fetching Fuel data from CoinGecko');
+        }
+        const data = await res.json();
+        // data.prices => [[timestamp, price], [timestamp, price], ...]
+        return data.prices.map(p => p[1]); // extract just the price
+      } catch (err) {
+        console.error(err);
+        return []; // fallback empty array
+      }
+    }
+
     // Generate the Grid View
-    function generateGridView() {
+    async function generateGridView() {
       const gridView = document.getElementById('gridView');
       const overviewList = document.getElementById('overviewList');
       gridView.innerHTML = ''; // Clear existing grid items
+
+      // We'll do one request for Fuel's spark data
+      let fuelSparkData = [];
+
+      // Fetch it once so we don't spam the API
+      try {
+        fuelSparkData = await fetchFuelHistory();
+      } catch (err) {
+        console.error('Sparkline fetch error:', err);
+        fuelSparkData = [];
+      }
 
       overviewList.querySelectorAll('tr').forEach((row) => {
         // Skip the loading row
@@ -701,7 +726,7 @@
         const roi = cells[4].textContent.trim();
         const investment = cells[5].textContent.trim();
 
-        // Extract token identifier from the link (assuming href="token.html")
+        // Extract token identifier from the link
         const tokenLinkElement = cells[0].querySelector('a');
         const tokenLink = tokenLinkElement ? tokenLinkElement.getAttribute('href') : '#';
         const tokenIdentifier = tokenLink.replace('.html', '').toLowerCase();
@@ -720,8 +745,8 @@
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
-        // Fill the grid item's innerHTML
-        gridItem.innerHTML = `
+        // Base HTML for each token
+        let itemHTML = `
           <div class="flex items-center mb-2">
             <img 
               src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" 
@@ -742,13 +767,28 @@
               ${roi}
             </span>
           </div>
-          <div>
-            <strong>If you invested $1000:</strong> 
-            <span class="${investmentClass}">${investment}</span>
-          </div>
+          <div><strong>If you invested $1000:</strong> <span class="${investmentClass}">${investment}</span></div>
         `;
 
+        // If this is Fuel, add a sparkline container
+        if (tokenIdentifier === 'fuel') {
+          // We'll put an extra <div> for the sparkline
+          itemHTML += `
+            <div id="sparkline-fuel" class="sparkline-fuel"></div>
+          `;
+        }
+
+        gridItem.innerHTML = itemHTML;
         gridView.appendChild(gridItem);
+
+        // Now if it's Fuel, draw the sparkline
+        if (tokenIdentifier === 'fuel' && fuelSparkData.length > 0) {
+          // Wait a tick for DOM to exist, then draw
+          const fuelContainer = gridItem.querySelector('#sparkline-fuel');
+          if (fuelContainer) {
+            new Sparkline(fuelContainer).draw(fuelSparkData);
+          }
+        }
       });
     }
 
@@ -833,15 +873,15 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       // Remove loading row if present
       const loadingRow = document.getElementById('loadingRow');
       if (loadingRow) loadingRow.remove();
 
-      // Fetch data for tradable tokens
+      // Update tradable tokens (sets ROI, tokenPrice, etc.)
       updateTradableTokens();
 
-      // Generate grid view on page load
+      // Build the grid with sparkline
       generateGridView();
     });
   </script>
