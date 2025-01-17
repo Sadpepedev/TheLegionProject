@@ -131,7 +131,6 @@
       letter-spacing: 1px;
       color: #00ffee;
     }
-   
     .tron-table tr:last-child td {
       border-bottom: none;
     }
@@ -210,13 +209,13 @@
     }
 
     /* Enhanced Grid Item Hover Effect */
-  .grid-item:hover {
-  border-color: rgba(0, 255, 238, 0.6); /* Slightly darker border on hover */
-  transform: scale(1.05);
-  box-shadow: 
-    0 0 15px var(--token-color), /* Larger blur radius */
-    0 0 30px var(--token-color); /* Added second shadow for intensity */
-}
+    .grid-item:hover {
+      border-color: rgba(0, 255, 238, 0.6); /* Slightly darker border on hover */
+      transform: scale(1.05);
+      box-shadow: 
+        0 0 15px var(--token-color), /* Larger blur radius */
+        0 0 30px var(--token-color); /* Added second shadow for intensity */
+    }
 
     /* Support Button Styles */
     .support-button {
@@ -409,6 +408,41 @@
       padding: 1rem;
       overflow: hidden; /* Prevent overflow */
     }
+
+
+    /* ===================== */
+    /* LOGO HOVER SWAP (NEW) */
+    /* ===================== */
+    .logo-container {
+      position: relative;
+      display: inline-block; /* so it can size to its content */
+    }
+
+    .logo-container img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    /* Degion is visible by default */
+    .degion {
+      z-index: 1;
+      opacity: 1;
+    }
+
+    /* Legion is hidden by default */
+    .legion {
+      z-index: 2;
+      opacity: 0;
+    }
+
+    /* On hover, Legion fades in */
+    .logo-container:hover .legion {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -419,13 +453,25 @@
   <!-- Content Wrapper -->
   <div class="content-wrapper">
     <main class="main-container">
-      <!-- Legion Logo Image -->
-      <img 
-        src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png" 
-        alt="Legion Logo" 
-        class="mx-auto mb-4" 
-        style="width: 150px; height: auto;"
-      >
+      
+      <!-- ================================================ -->
+      <!-- Replace the single <img> with the container below -->
+      <!-- ================================================ -->
+      <div class="logo-container mx-auto mb-4" style="width: 150px;">
+        <!-- degion.png is visible by default -->
+        <img 
+          src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
+          alt="Degion Logo"
+          class="degion"
+        >
+        <!-- legion.png fades in on hover -->
+        <img 
+          src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
+          alt="Legion Logo"
+          class="legion"
+        >
+      </div>
+      <!-- ================================================ -->
 
       <!-- Header -->
       <div class="modern-header">
@@ -705,8 +751,6 @@
         gridView.appendChild(gridItem);
       });
     }
-
-    // Removed Toggle View Functions and Event Listeners
 
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
