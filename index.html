@@ -16,7 +16,7 @@
     base-uri 'self';
     frame-ancestors 'none';
   ">
-
+  
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
   <!-- Tailwind CSS -->
@@ -42,7 +42,7 @@
       height: 100%;
     }
     body {
-      background-color: #09131b;
+      background-color: #09131b; 
       color: #cfd0d1;
       font-family: 'Orbitron', sans-serif;
       display: flex;
@@ -73,8 +73,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      /* Reduced top padding from 2rem to 1rem to move logo higher */
-      padding: 1rem 1rem;
+      padding: 2rem 1rem;
     }
 
     /* Main Container */
@@ -89,6 +88,27 @@
     }
     .main-container:hover {
       border-color: rgba(0, 255, 238, 0.4);
+    }
+
+    /* Header */
+    .modern-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .modern-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00ffee; /* Neon cyan */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      /* The <h2> is removed from the HTML, 
+         but we leave this style here in case it's reused elsewhere */
+    }
+    .modern-header hr {
+      margin: 1rem auto;
+      width: 60%;
+      border: none;
+      border-top: 1px solid rgba(0, 255, 238, 0.4);
     }
 
     /* Table Styles */
@@ -113,6 +133,7 @@
       letter-spacing: 1px;
       color: #00ffee;
     }
+   
     .tron-table tr:last-child td {
       border-bottom: none;
     }
@@ -190,7 +211,120 @@
       color: #FFA500; 
     }
 
-    /* Grid Item Styles */
+    /* Enhanced Grid Item Hover Effect */
+    .grid-item:hover {
+      border-color: rgba(0, 255, 238, 0.6);
+      transform: scale(1.05);
+      box-shadow:
+        0 0 15px var(--token-color),
+        0 0 30px var(--token-color);
+    }
+
+    /* Support Button Styles */
+    .support-button {
+      padding: 0.75rem 1.5rem;
+      border: 1px solid #00ffee;
+      border-radius: 9999px;
+      color: #00ffee;
+      background: transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: inline-block;
+      margin-top: 1.5rem;
+    }
+    .support-button:hover {
+      background-color: #00ffee;
+      color: #09131b;
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: #09131b;
+      color: #a4a6a7;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.75rem;
+      border-top: 1px solid rgba(0,255,238,0.2);
+    }
+    footer .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    footer a {
+      color: #00ffee;
+      text-decoration: underline;
+    }
+    footer a:hover {
+      color: #37fffc;
+    }
+    footer svg {
+      height: 24px;
+      width: 24px;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* Modal Styles */
+    #walletModal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    #walletModal.active {
+      display: flex;
+    }
+    .modal-content {
+      background-color: #0c1d28;
+      border: 1px solid rgba(0, 255, 238, 0.3);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      color: #fff;
+      text-align: center;
+      position: relative;
+    }
+    .modal-content button {
+      background-color: #008ffc;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      margin-top: 1rem;
+      border: none;
+      cursor: pointer;
+    }
+    .modal-content button:hover {
+      background-color: #00a0ff;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 767px) {
+      .tron-table th:nth-child(3),
+      .tron-table th:nth-child(4),
+      .tron-table th:nth-child(6),
+      .tron-table td:nth-child(3),
+      .tron-table td:nth-child(4),
+      .tron-table td:nth-child(6) {
+        display: none;
+      }
+
+      /* Adjust logo size on smaller screens */
+      .token-logo {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    /* Additional Styles for Grid View */
     .grid-item {
       display: flex;
       flex-direction: column;
@@ -203,8 +337,8 @@
       transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
-      text-decoration: none; 
-      color: inherit; 
+      text-decoration: none;
+      color: inherit;
     }
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
@@ -251,79 +385,47 @@
 
     /* Updated Image Sizing */
     .token-logo {
-      width: 100px; 
-      height: auto; 
+      width: 100px;
+      height: auto;
       max-width: 100%;
-      display: block; 
-      transition: transform 0.3s; /* For the hover scale */
+      display: block;
     }
     @media (max-width: 768px) {
       .token-logo {
-        width: 60px; 
+        width: 60px;
       }
     }
     @media (max-width: 480px) {
       .token-logo {
-        width: 40px; 
+        width: 40px;
       }
     }
 
-    /* Ensure Grid Items Accommodate Image Sizes */
-    .grid-item {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 1rem;
-      overflow: hidden; 
-    }
-
-    /* ===================== */
-    /* LOGO HOVER SWAP */
-    /* ===================== */
+    /* ======================================== */
+    /* 1) REPLACE SINGLE <img> WITH FADE SWAP   */
+    /* ======================================== */
     .logo-container {
       position: relative;
       display: inline-block;
-      width: 150px;
+      width: 150px; /* match original width */
     }
     .logo-container img {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: auto;
-      transition: opacity 0.8s ease-in-out;
+      transition: opacity 0.8s ease-in-out; /* slower fade */
     }
-    /* degion.png is visible by default */
     .degion {
       z-index: 1;
       opacity: 1;
     }
-    /* legion.png is hidden by default */
-    .legion {
+    .legion-hover {
       z-index: 2;
       opacity: 0;
     }
-    /* fade legion.png in on hover */
-    .logo-container:hover .legion {
+    .logo-container:hover .legion-hover {
       opacity: 1;
-    }
-
-    /* =========================== */
-    /* ROTATE & EXPAND ON CLICK   */
-    /* =========================== */
-    @keyframes rotateExpand {
-      0% {
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        /* Adjust for bigger rotate and scale */
-        transform: scale(1.4) rotate(25deg);
-        opacity: 0.8;
-      }
-    }
-    .rotate-expand {
-      animation: rotateExpand 0.7s forwards ease-in-out;
     }
   </style>
 </head>
@@ -335,35 +437,40 @@
   <!-- Content Wrapper -->
   <div class="content-wrapper">
     <main class="main-container">
-      
-      <!-- H1 at the top for the logo -->
-      <h1 class="flex justify-center items-center text-2xl font-bold text-cyan-400 mb-2">
-        <!-- Logo container inside the H1 -->
-        <div class="logo-container">
-          <!-- degion is default -->
-          <img 
-            src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
-            alt="Degion Logo"
-            class="degion"
-          >
-          <!-- legion on hover -->
-          <img 
-            src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
-            alt="Legion Logo"
-            class="legion"
-          >
-        </div>
-      </h1>
+      <!-- 
+        1) Replaced the single legion.png <img> 
+           with a container showing degion.png by default, 
+           then legion.png on hover (fade).
+      -->
+      <div class="mx-auto mb-4 logo-container">
+        <!-- degion.png is visible by default -->
+        <img 
+          src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png" 
+          alt="Degion Logo" 
+          class="degion" 
+        >
+        <!-- legion.png fades in on hover -->
+        <img 
+          src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png" 
+          alt="Legion Logo" 
+          class="legion-hover"
+        >
+      </div>
 
-      <!-- Simple horizontal rule right below the logo/h1 -->
-      <hr class="mx-auto w-60 border-t border-cyan-400 mb-6" />
+      <!-- Header -->
+      <div class="modern-header">
+        <!-- 2) Removed the empty <h2></h2> but kept <hr> below. -->
+        <hr>
+      </div>
 
-      <!-- GRID VIEW (Default Visible) -->
+      <!-- Removed View Toggle Buttons -->
+
+      <!-- Grid View (Default Visible) -->
       <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <!-- Grid items will be dynamically generated -->
       </div>
 
-      <!-- TABLE VIEW (Hidden by Default) -->
+      <!-- Table View (Hidden by Default) -->
       <div id="tableView" class="hidden overflow-x-auto">
         <table class="tron-table">
           <thead>
@@ -491,7 +598,7 @@
     </main>
   </div>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (Unchanged) -->
   <footer>
     <div class="footer-container">
       <!-- Built By -->
@@ -553,7 +660,7 @@
     </div>
   </div>
 
-  <!-- SCRIPT -->
+  <!-- SCRIPT (unchanged) -->
   <script>
     // Open Modal
     function supportSite() {
@@ -604,10 +711,10 @@
         let investmentClass = '';
         if (investment && investment !== '--') {
           const investmentValue = parseFloat(investment.replace('$', ''));
-          investmentClass = (investmentValue > 1000) ? 'investment-positive' : 'investment-negative';
+          investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
         }
 
-        // Create grid item as an <a> tag
+        // Create grid item as an <a> tag with token class for CSS variables
         const gridItem = document.createElement('a');
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
@@ -615,60 +722,31 @@
         // Set the inner HTML of the grid item
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
-            <img 
-              src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" 
-              alt="${tokenName} Logo" 
-              class="token-logo mr-2" 
-              loading="lazy"
-              onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'"
-            >
+            <img src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2" loading="lazy" onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'">
             <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">${tokenName}</span>
           </div>
           <div class="mb-2">${status}</div>
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
-          <div class="mb-1"><strong>ROI:</strong> 
-            <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span>
-          </div>
-          <div>
-            <strong>If you invested $1000:</strong> 
-            <span class="${investmentClass}">${investment}</span>
-          </div>
+          <div class="mb-1"><strong>ROI:</strong> <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span></div>
+          <div><strong>If you invested $1000:</strong> <span class="${investmentClass}">${investment}</span></div>
         `;
-
-        /* 
-          ROTATE & EXPAND ON CLICK, THEN NAVIGATE 
-          We'll remove the rotate class on animation end 
-          so it doesn't remain "stuck" if the user returns.
-        */
-        gridItem.addEventListener('click', (e) => {
-          e.preventDefault(); // Stop immediate navigation
-
-          // Add the rotate-expand class
-          gridItem.classList.add('rotate-expand');
-
-          // Remove class on animation end and navigate
-          const handleAnimationEnd = () => {
-            gridItem.classList.remove('rotate-expand');
-            gridItem.removeEventListener('animationend', handleAnimationEnd);
-            window.location = tokenLink; 
-          };
-          gridItem.addEventListener('animationend', handleAnimationEnd);
-        });
 
         gridView.appendChild(gridItem);
       });
     }
 
+    // Removed Toggle View Functions and Event Listeners
+
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
       const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
+
       tradableRows.forEach(async (row) => {
         const tokenNameCell = row.querySelector('td');
         const tokenName = tokenNameCell ? tokenNameCell.textContent.trim() : 'Unknown';
         
         try {
-          // Example fetch to "/calculate" – can customize as needed
           const response = await fetch('/calculate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -686,14 +764,9 @@
           const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update cells
-          row.querySelector('td:nth-child(4)').textContent = seedPrice > 0 
-            ? `$${currentPrice.toFixed(4)}` 
-            : '--';
-
+          row.querySelector('td:nth-child(4)').textContent = seedPrice > 0 ? `$${currentPrice.toFixed(4)}` : '--';
           const roiCell = row.querySelector('td:nth-child(5)');
-          roiCell.textContent = seedPrice > 0 
-            ? `${roi.toFixed(2)}%` 
-            : '--';
+          roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : '--';
 
           // Positive or Negative ROI styling
           if (roi > 0) {
@@ -707,15 +780,13 @@
           }
 
           const investmentCell = row.querySelector('td:nth-child(6)');
-          investmentCell.textContent = seedPrice > 0 
-            ? `$${investmentValue.toFixed(2)}` 
-            : '--';
+          investmentCell.textContent = seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : '--';
 
           // Determine investment color based on value
           if (investmentValue > 1000) {
             investmentCell.classList.add('investment-positive');
             investmentCell.classList.remove('investment-negative');
-          } else if (investmentValue < 1000 && investmentValue !== 0) {
+          } else if (investmentValue < 1000) {
             investmentCell.classList.add('investment-negative');
             investmentCell.classList.remove('investment-positive');
           } else {
@@ -737,7 +808,7 @@
           const investmentCell = row.querySelector('td:nth-child(6)');
           investmentCell.textContent = 'Error';
           investmentCell.classList.remove('investment-positive', 'investment-negative');
-
+          
           // Regenerate grid view if active
           const gridView = document.getElementById('gridView');
           if (!gridView.classList.contains('hidden')) {
@@ -755,7 +826,7 @@
       // Kick off data fetch
       updateTradableTokens();
 
-      // Generate grid view on load (default)
+      // Generate grid view on load since it's default
       generateGridView();
     });
   </script>
