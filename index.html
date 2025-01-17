@@ -609,7 +609,7 @@
         if (row.id === 'loadingRow') return;
 
         const cells = row.querySelectorAll('td');
-        const tokenName = cells[0].innerHTML.trim();
+        const tokenName = cells[0].textContent.trim();
         const status = cells[1].innerHTML.trim();
         const seedPrice = cells[2].textContent.trim();
         const tokenPrice = cells[3].textContent.trim();
@@ -617,7 +617,8 @@
         const investment = cells[5].textContent.trim();
 
         // Extract token identifier from the link (assuming href="token.html")
-        const tokenLink = cells[0].querySelector('a').getAttribute('href');
+        const tokenLinkElement = cells[0].querySelector('a');
+        const tokenLink = tokenLinkElement ? tokenLinkElement.getAttribute('href') : '#';
         const tokenIdentifier = tokenLink.replace('.html', '').toLowerCase();
 
         // Determine investment color based on value
@@ -633,7 +634,7 @@
 
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
-            <img src="images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2">
+            <img src="images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2" onerror="this.onerror=null; this.src='images/logos/placeholder.png'">
             <a href="${tokenLink}" class="text-xl font-semibold text-teal-400 hover:underline">${tokenName}</a>
           </div>
           <div class="mb-2">${status}</div>
