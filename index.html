@@ -417,28 +417,25 @@
       position: relative;
       display: inline-block; /* so it can size to its content */
     }
-
     .logo-container img {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: auto;
-      transition: opacity 0.5s ease-in-out;
+      /* Slowing fade from 0.5s to 0.8s */
+      transition: opacity 0.8s ease-in-out;
     }
-
     /* Degion is visible by default */
     .degion {
       z-index: 1;
       opacity: 1;
     }
-
     /* Legion is hidden by default */
     .legion {
       z-index: 2;
       opacity: 0;
     }
-
     /* On hover, Legion fades in */
     .logo-container:hover .legion {
       opacity: 1;
@@ -454,24 +451,27 @@
   <div class="content-wrapper">
     <main class="main-container">
       
-      <!-- ================================================ -->
-      <!-- Replace the single <img> with the container below -->
-      <!-- ================================================ -->
-      <div class="logo-container mx-auto mb-4" style="width: 150px;">
-        <!-- degion.png is visible by default -->
-        <img 
-          src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
-          alt="Degion Logo"
-          class="degion"
-        >
-        <!-- legion.png fades in on hover -->
-        <img 
-          src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
-          alt="Legion Logo"
-          class="legion"
-        >
+      <!-- 
+        Center the logo container using a flex container 
+        with 'justify-center' (Tailwind). This ensures 
+        the container is always in the middle.
+      -->
+      <div class="flex justify-center mb-4">
+        <div class="logo-container" style="width: 150px;">
+          <!-- degion.png is visible by default -->
+          <img 
+            src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
+            alt="Degion Logo"
+            class="degion"
+          >
+          <!-- legion.png fades in on hover -->
+          <img 
+            src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
+            alt="Legion Logo"
+            class="legion"
+          >
+        </div>
       </div>
-      <!-- ================================================ -->
 
       <!-- Header -->
       <div class="modern-header">
@@ -847,3 +847,4 @@
 
 </body>
 </html>
+
