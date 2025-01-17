@@ -183,13 +183,31 @@
       color: #09131b;
     }
 
-    /* Token Color Styles */
-    .token-fuel { color: #0afc4e; }
-    .token-almanak { color: #f9f9f9; }
-    .token-pulse { color: #0eb7ff; }
-    .token-silencio { color: #4086d6; }
-    .token-enclave { color: #89CFF0; }
-    .token-corn { color: #FFA500; }
+    /* Token Color Styles with CSS Variables */
+    .token-fuel { 
+      --token-color: rgba(10, 252, 78, 0.5); 
+      color: #0afc4e; 
+    }
+    .token-almanak { 
+      --token-color: rgba(249, 249, 249, 0.5); 
+      color: #f9f9f9; 
+    }
+    .token-pulse { 
+      --token-color: rgba(14, 183, 255, 0.5); 
+      color: #0eb7ff; 
+    }
+    .token-silencio { 
+      --token-color: rgba(64, 134, 214, 0.5); 
+      color: #4086d6; 
+    }
+    .token-enclave { 
+      --token-color: rgba(137, 207, 240, 0.5); 
+      color: #89CFF0; 
+    }
+    .token-corn { 
+      --token-color: rgba(255, 165, 0, 0.5); 
+      color: #FFA500; 
+    }
 
     /* Support Button Styles */
     .support-button {
@@ -314,7 +332,7 @@
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
       transform: scale(1.05);
-      box-shadow: 0 0 10px rgba(0, 255, 238, 0.5);
+      box-shadow: 0 0 10px var(--token-color); /* Apply colored glow */
     }
     .grid-item a {
       color: inherit;
@@ -402,7 +420,7 @@
 
       <!-- Header -->
       <div class="modern-header">
-        <h2></h2>
+        <h2>Legion ICO Tracker</h2>
         <hr>
       </div>
 
@@ -657,10 +675,10 @@
           investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
         }
 
-        // Create grid item as an <a> tag
+        // Create grid item as an <a> tag with token class for CSS variables
         const gridItem = document.createElement('a');
         gridItem.href = tokenLink;
-        gridItem.className = 'grid-item'; // Apply grid-item styles
+        gridItem.className = `grid-item token-${tokenIdentifier}`; // Apply grid-item and token class
 
         // Set the inner HTML of the grid item
         gridItem.innerHTML = `
@@ -703,7 +721,7 @@
           const currentPrice = data.current_price;
           const seedPriceText = row.querySelector('td:nth-child(3)').textContent.replace('$', '');
           const seedPrice = parseFloat(seedPriceText) || 0;
-          const roi = seedPrice > 0 ? (currentPrice / seedPrice * 100) : 0;
+          const roi = seedPrice > 0 ? ((currentPrice - seedPrice) / seedPrice * 100) : 0;
           const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update cells
