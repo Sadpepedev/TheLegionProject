@@ -101,8 +101,6 @@
       color: #00ffee; /* Neon cyan */
       text-transform: uppercase;
       letter-spacing: 2px;
-      /* The <h2> is removed from the HTML, 
-         but we leave this style here in case it's reused elsewhere */
     }
     .modern-header hr {
       margin: 1rem auto;
@@ -133,7 +131,6 @@
       letter-spacing: 1px;
       color: #00ffee;
     }
-   
     .tron-table tr:last-child td {
       border-bottom: none;
     }
@@ -316,7 +313,6 @@
       .tron-table td:nth-child(6) {
         display: none;
       }
-
       /* Adjust logo size on smaller screens */
       .token-logo {
         width: 30px;
@@ -401,12 +397,9 @@
       }
     }
 
-    /* ======================================== */
-    /* 1) REPLACE SINGLE <img> WITH FADE SWAP   */
-    /* ======================================== */
+    /* Logo Swap on Hover */
     .logo-container {
       position: relative;
-      display: inline-block;
       width: 150px; /* match original width */
     }
     .logo-container img {
@@ -414,7 +407,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      transition: opacity 0.8s ease-in-out; /* slower fade */
+      transition: opacity 0.8s ease-in-out;
     }
     .degion {
       z-index: 1;
@@ -438,32 +431,32 @@
   <div class="content-wrapper">
     <main class="main-container">
       <!-- 
-        1) Replaced the single legion.png <img> 
-           with a container showing degion.png by default, 
-           then legion.png on hover (fade).
+        Center the logo and add some bottom margin 
+        so it does not overlap the horizontal rule. 
       -->
-      <div class="mx-auto mb-4 logo-container">
-        <!-- degion.png is visible by default -->
-        <img 
-          src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png" 
-          alt="Degion Logo" 
-          class="degion" 
-        >
-        <!-- legion.png fades in on hover -->
-        <img 
-          src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png" 
-          alt="Legion Logo" 
-          class="legion-hover"
-        >
+      <div class="flex justify-center mb-6">
+        <div class="logo-container">
+          <!-- degion.png is visible by default -->
+          <img 
+            src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png" 
+            alt="Degion Logo" 
+            class="degion"
+          >
+          <!-- legion.png fades in on hover -->
+          <img 
+            src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png" 
+            alt="Legion Logo" 
+            class="legion-hover"
+          >
+        </div>
       </div>
 
       <!-- Header -->
       <div class="modern-header">
-        <!-- 2) Removed the empty <h2></h2> but kept <hr> below. -->
+        <!-- (Optional) If you want to remove the H2 or keep it empty, that's up to you. -->
+        <h2></h2>
         <hr>
       </div>
-
-      <!-- Removed View Toggle Buttons -->
 
       <!-- Grid View (Default Visible) -->
       <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -598,7 +591,7 @@
     </main>
   </div>
 
-  <!-- FOOTER (Unchanged) -->
+  <!-- FOOTER -->
   <footer>
     <div class="footer-container">
       <!-- Built By -->
@@ -660,7 +653,7 @@
     </div>
   </div>
 
-  <!-- SCRIPT (unchanged) -->
+  <!-- SCRIPT -->
   <script>
     // Open Modal
     function supportSite() {
@@ -722,14 +715,24 @@
         // Set the inner HTML of the grid item
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
-            <img src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2" loading="lazy" onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'">
+            <img 
+              src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" 
+              alt="${tokenName} Logo" 
+              class="token-logo mr-2" 
+              loading="lazy" 
+              onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'"
+            >
             <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">${tokenName}</span>
           </div>
           <div class="mb-2">${status}</div>
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
-          <div class="mb-1"><strong>ROI:</strong> <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span></div>
-          <div><strong>If you invested $1000:</strong> <span class="${investmentClass}">${investment}</span></div>
+          <div class="mb-1"><strong>ROI:</strong> 
+            <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span>
+          </div>
+          <div><strong>If you invested $1000:</strong> 
+            <span class="${investmentClass}">${investment}</span>
+          </div>
         `;
 
         gridView.appendChild(gridItem);
@@ -764,11 +767,12 @@
           const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update cells
-          row.querySelector('td:nth-child(4)').textContent = seedPrice > 0 ? `$${currentPrice.toFixed(4)}` : '--';
+          row.querySelector('td:nth-child(4)').textContent = 
+            seedPrice > 0 ? `$${currentPrice.toFixed(4)}` : '--';
           const roiCell = row.querySelector('td:nth-child(5)');
           roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : '--';
 
-          // Positive or Negative ROI styling
+          // Positive/Negative ROI styling
           if (roi > 0) {
             roiCell.classList.add('roi-positive');
             roiCell.classList.remove('roi-negative');
@@ -780,9 +784,10 @@
           }
 
           const investmentCell = row.querySelector('td:nth-child(6)');
-          investmentCell.textContent = seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : '--';
+          investmentCell.textContent = 
+            seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : '--';
 
-          // Determine investment color based on value
+          // Positive/Negative investment styling
           if (investmentValue > 1000) {
             investmentCell.classList.add('investment-positive');
             investmentCell.classList.remove('investment-negative');
@@ -808,7 +813,7 @@
           const investmentCell = row.querySelector('td:nth-child(6)');
           investmentCell.textContent = 'Error';
           investmentCell.classList.remove('investment-positive', 'investment-negative');
-          
+
           // Regenerate grid view if active
           const gridView = document.getElementById('gridView');
           if (!gridView.classList.contains('hidden')) {
@@ -826,7 +831,7 @@
       // Kick off data fetch
       updateTradableTokens();
 
-      // Generate grid view on load since it's default
+      // Generate grid view on load
       generateGridView();
     });
   </script>
