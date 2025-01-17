@@ -95,50 +95,20 @@
       text-align: center;
       margin-bottom: 2rem;
     }
-    .modern-header h2 {
+    .modern-header img {
+      width: 150px; /* Adjust as needed */
+      height: auto;
+      margin-bottom: 1rem;
+    }
+    .modern-header h1 {
       font-size: 2rem;
       font-weight: 700;
       color: #00ffee; /* Neon cyan */
       text-transform: uppercase;
       letter-spacing: 2px;
     }
-    .modern-header hr {
-      margin: 1rem auto;
-      width: 60%;
-      border: none;
-      border-top: 1px solid rgba(0, 255, 238, 0.4);
-    }
 
-    /* Table Styles */
-    .tron-table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid rgba(0,255,238,0.2);
-      margin-bottom: 2rem;
-      font-size: 0.875rem;
-    }
-    .tron-table thead {
-      background-color: rgba(0,255,238,0.05);
-    }
-    .tron-table th, .tron-table td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(0,255,238,0.2);
-      white-space: nowrap;
-    }
-    .tron-table th {
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #00ffee;
-    }
-   
-    .tron-table tr:last-child td {
-      border-bottom: none;
-    }
-    .tron-table tbody tr:hover {
-      background-color: rgba(0, 255, 238, 0.05);
-      transition: background-color 0.3s ease;
-    }
+    /* Table Styles - Removed */
 
     /* ROI Styles */
     .roi-positive {
@@ -279,20 +249,7 @@
 
     /* Responsive Styles */
     @media (max-width: 767px) {
-      .tron-table th:nth-child(3),
-      .tron-table th:nth-child(4),
-      .tron-table th:nth-child(6),
-      .tron-table td:nth-child(3),
-      .tron-table td:nth-child(4),
-      .tron-table td:nth-child(6) {
-        display: none;
-      }
-
-      /* Adjust logo size on smaller screens */
-      .token-logo {
-        width: 30px;
-        height: 30px;
-      }
+      /* Removed table-related styles */
     }
 
     /* Additional Styles for Grid View */
@@ -321,7 +278,8 @@
       text-decoration: none;
     }
     .grid-item a:hover {
-      text-decoration: underline;
+      /* Removed underline on hover */
+      /* Alternatively, you can leave it if desired */
     }
 
     /* Glow Effect for Logos on Hover */
@@ -394,146 +352,13 @@
     <main class="main-container">
       <!-- Header -->
       <div class="modern-header">
-        <h2>Legion ICO Tracker</h2>
-        <hr>
+        <img src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png" alt="Legion Logo">
+        <h1>ICO Performance Tracker</h1>
       </div>
 
-      <!-- View Toggle Buttons -->
-      <div class="flex justify-end mb-4" role="group" aria-label="View Toggle">
-        <button 
-          id="tableViewBtn" 
-          class="px-4 py-2 bg-gray-700 text-gray-200 rounded-l hover:bg-gray-600 focus:outline-none"
-          aria-pressed="false"
-        >
-          Table View
-        </button>
-        <button 
-          id="gridViewBtn" 
-          class="px-4 py-2 bg-gray-800 text-gray-200 rounded-r hover:bg-gray-700 focus:outline-none"
-          aria-pressed="true"
-        >
-          Grid View
-        </button>
-      </div>
-
-      <!-- Grid View (Default Visible) -->
+      <!-- Grid View (Only View Now) -->
       <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <!-- Grid items will be dynamically generated -->
-      </div>
-
-      <!-- Table View (Hidden by Default) -->
-      <div id="tableView" class="hidden overflow-x-auto">
-        <table class="tron-table">
-          <thead>
-            <tr>
-              <th>Token</th>
-              <th>Status</th>
-              <th>Seed Price</th>
-              <th>Token Price</th>
-              <th>ROI (%)</th>
-              <th>If you invested $1000</th>
-            </tr>
-          </thead>
-          <tbody id="overviewList">
-            <!-- Loading Indicator -->
-            <tr id="loadingRow">
-              <td colspan="6" class="text-center text-gray-400">
-                Loading...
-              </td>
-            </tr>
-
-            <!-- Fuel (Tradable) -->
-            <tr data-tradable="true">
-              <td class="token-fuel">
-                <a href="fuel.html">Fuel</a>
-              </td>
-              <td>
-                <span class="badge badge-live">Live</span>
-                <div class="text-xs text-gray-400 mt-1">2024-12-19</div>
-              </td>
-              <td>$0.02</td>
-              <td>$0.05</td>
-              <td class="roi-positive">150.00%</td>
-              <td class="investment-positive">$5000.00</td>
-            </tr>
-
-            <!-- Almanak -->
-            <tr>
-              <td class="token-almanak">
-                <a href="almanak.html">Almanak</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Pulse -->
-            <tr>
-              <td class="token-pulse">
-                <a href="pulse.html">Pulse</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">TBD</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Silencio -->
-            <tr>
-              <td class="token-silencio">
-                <a href="silencio.html">Silencio</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
-              </td>
-              <td>$0.0006</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Enclave -->
-            <tr>
-              <td class="token-enclave">
-                <a href="enclave.html">Enclave</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">Q4 2025</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Corn -->
-            <tr>
-              <td class="token-corn">
-                <a href="corn.html">Corn</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-            
-          </tbody>
-        </table>
       </div>
 
       <!-- Support the Site Button -->
@@ -674,7 +499,7 @@
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
             <img src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2" loading="lazy" onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'">
-            <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">${tokenName}</span>
+            <span class="text-xl font-semibold token-${tokenIdentifier}">${tokenName}</span>
           </div>
           <div class="mb-2">${status}</div>
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
@@ -687,38 +512,7 @@
       });
     }
 
-    // Toggle Views
-    function toggleView(view) {
-      const tableView = document.getElementById('tableView');
-      const gridView = document.getElementById('gridView');
-      const tableBtn = document.getElementById('tableViewBtn');
-      const gridBtn = document.getElementById('gridViewBtn');
-
-      if (view === 'grid') {
-        tableView.classList.add('hidden');
-        gridView.classList.remove('hidden');
-        tableBtn.classList.remove('bg-gray-800');
-        tableBtn.classList.add('bg-gray-700');
-        gridBtn.classList.remove('bg-gray-700');
-        gridBtn.classList.add('bg-gray-800');
-        tableBtn.setAttribute('aria-pressed', 'false');
-        gridBtn.setAttribute('aria-pressed', 'true');
-        generateGridView();
-      } else {
-        tableView.classList.remove('hidden');
-        gridView.classList.add('hidden');
-        tableBtn.classList.remove('bg-gray-700');
-        tableBtn.classList.add('bg-gray-800');
-        gridBtn.classList.remove('bg-gray-800');
-        gridBtn.classList.add('bg-gray-700');
-        tableBtn.setAttribute('aria-pressed', 'true');
-        gridBtn.setAttribute('aria-pressed', 'false');
-      }
-    }
-
-    // Event Listeners for Toggle Buttons
-    document.getElementById('tableViewBtn').addEventListener('click', () => toggleView('table'));
-    document.getElementById('gridViewBtn').addEventListener('click', () => toggleView('grid'));
+    // Removed Toggle Views Functionality as Table View is Removed
 
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
@@ -775,11 +569,8 @@
             investmentCell.classList.remove('investment-positive', 'investment-negative');
           }
 
-          // Regenerate grid view if active
-          const gridView = document.getElementById('gridView');
-          if (!gridView.classList.contains('hidden')) {
-            generateGridView();
-          }
+          // Regenerate grid view
+          generateGridView();
 
         } catch (error) {
           console.error(`Error updating ${tokenName}:`, error);
@@ -791,19 +582,14 @@
           investmentCell.textContent = 'Error';
           investmentCell.classList.remove('investment-positive', 'investment-negative');
           
-          // Regenerate grid view if active
-          const gridView = document.getElementById('gridView');
-          if (!gridView.classList.contains('hidden')) {
-            generateGridView();
-          }
+          // Regenerate grid view
+          generateGridView();
         }
       });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Remove loading row if present
-      const loadingRow = document.getElementById('loadingRow');
-      if (loadingRow) loadingRow.remove();
+      // Removed loading row and table-related elements
 
       // Kick off data fetch
       updateTradableTokens();
