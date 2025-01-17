@@ -8,6 +8,7 @@
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
+    img-src 'self' https://sadpepedev.github.io;
     script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
@@ -27,6 +28,9 @@
     rel="stylesheet"
   >
   
+  <!-- Favicon -->
+  <link rel="icon" href="https://sadpepedev.github.io/TheLegionProject/favicon.ico" type="image/x-icon">
+
   <style>
     /* Reset and Base Styles */
     * {
@@ -293,15 +297,17 @@
 
     /* Additional Styles for Grid View */
     .grid-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem;
       background-color: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      padding: 1.5rem;
       transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
@@ -344,6 +350,35 @@
     .grid-item:focus-within .token-logo {
       outline: 2px solid #00ffee;
       outline-offset: 4px;
+    }
+
+    /* Updated Image Sizing */
+    .token-logo {
+      width: 100px; /* Base width */
+      height: auto; /* Maintain aspect ratio */
+      max-width: 100%; /* Prevent overflow */
+      display: block; /* Remove inline spacing */
+    }
+
+    @media (max-width: 768px) {
+      .token-logo {
+        width: 60px; /* Smaller width on tablets and below */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .token-logo {
+        width: 40px; /* Even smaller width on mobile devices */
+      }
+    }
+
+    /* Ensure Grid Items Accommodate Image Sizes */
+    .grid-item {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1rem;
+      overflow: hidden; /* Prevent overflow */
     }
   </style>
 </head>
@@ -634,7 +669,7 @@
 
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
-            <img src="images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2" onerror="this.onerror=null; this.src='images/logos/placeholder.png'">
+            <img src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2" onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'">
             <a href="${tokenLink}" class="text-xl font-semibold text-teal-400 hover:underline">${tokenName}</a>
           </div>
           <div class="mb-2">${status}</div>
