@@ -392,29 +392,21 @@
   <!-- Content Wrapper -->
   <div class="content-wrapper">
     <main class="main-container">
+      <!-- Legion Logo Image -->
+      <img 
+        src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png" 
+        alt="Legion Logo" 
+        class="mx-auto mb-4" 
+        style="width: 150px; height: auto;"
+      >
+
       <!-- Header -->
       <div class="modern-header">
         <h2>Legion ICO Tracker</h2>
         <hr>
       </div>
 
-      <!-- View Toggle Buttons -->
-      <div class="flex justify-end mb-4" role="group" aria-label="View Toggle">
-        <button 
-          id="tableViewBtn" 
-          class="px-4 py-2 bg-gray-700 text-gray-200 rounded-l hover:bg-gray-600 focus:outline-none"
-          aria-pressed="false"
-        >
-          Table View
-        </button>
-        <button 
-          id="gridViewBtn" 
-          class="px-4 py-2 bg-gray-800 text-gray-200 rounded-r hover:bg-gray-700 focus:outline-none"
-          aria-pressed="true"
-        >
-          Grid View
-        </button>
-      </div>
+      <!-- Removed View Toggle Buttons -->
 
       <!-- Grid View (Default Visible) -->
       <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -687,38 +679,7 @@
       });
     }
 
-    // Toggle Views
-    function toggleView(view) {
-      const tableView = document.getElementById('tableView');
-      const gridView = document.getElementById('gridView');
-      const tableBtn = document.getElementById('tableViewBtn');
-      const gridBtn = document.getElementById('gridViewBtn');
-
-      if (view === 'grid') {
-        tableView.classList.add('hidden');
-        gridView.classList.remove('hidden');
-        tableBtn.classList.remove('bg-gray-800');
-        tableBtn.classList.add('bg-gray-700');
-        gridBtn.classList.remove('bg-gray-700');
-        gridBtn.classList.add('bg-gray-800');
-        tableBtn.setAttribute('aria-pressed', 'false');
-        gridBtn.setAttribute('aria-pressed', 'true');
-        generateGridView();
-      } else {
-        tableView.classList.remove('hidden');
-        gridView.classList.add('hidden');
-        tableBtn.classList.remove('bg-gray-700');
-        tableBtn.classList.add('bg-gray-800');
-        gridBtn.classList.remove('bg-gray-800');
-        gridBtn.classList.add('bg-gray-700');
-        tableBtn.setAttribute('aria-pressed', 'true');
-        gridBtn.setAttribute('aria-pressed', 'false');
-      }
-    }
-
-    // Event Listeners for Toggle Buttons
-    document.getElementById('tableViewBtn').addEventListener('click', () => toggleView('table'));
-    document.getElementById('gridViewBtn').addEventListener('click', () => toggleView('grid'));
+    // Removed Toggle View Functions and Event Listeners
 
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
