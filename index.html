@@ -207,6 +207,10 @@
       --token-color: rgba(255, 165, 0, 0.9); 
       color: #FFA500; 
     }
+    .token-giza {
+      --token-color: rgba(122, 122, 120, 0.9); 
+      color: #696866; 
+    }
 
     /* 
       Four requested changes to the .token-logo and .grid-item:
@@ -219,7 +223,7 @@
       margin: 0.5rem;              /* 1) Extra spacing around the logo */
       transition: transform 0.3s ease; /* 2) Sync with .grid-item */
       border-radius: 50%;          /* 3) Circle images */
-      width: 100px;                /* Original or desired base size */
+      width: 50px;               /* Original or desired base size */
       height: auto;
       max-width: 100%;
       display: block;
@@ -541,6 +545,21 @@
               <td>--</td>
               <td>--</td>
             </tr>
+
+                        <!-- Giza -->
+                        <tr>
+                          <td class="token-giza">
+                            <a href="giza">Giza
+                          </td>
+                          <td>
+                            <span class="badge badge-soon">Pending TGE</span>
+                            <div class="text-xs text-gray-400 mt-1">Q4 2025</div>
+                          </td>
+                          <td>TBD</td>
+                          <td>--</td>
+                          <td>--</td>
+                          <td>--</td>
+                        </tr>
             
           </tbody>
         </table>
@@ -787,16 +806,16 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Remove loading row if present
-      const loadingRow = document.getElementById('loadingRow');
-      if (loadingRow) loadingRow.remove();
+  // Remove loading row if present
+  const loadingRow = document.getElementById('loadingRow');
+  if (loadingRow) loadingRow.remove();
 
-      // Fetch data for tradable tokens
-      updateTradableTokens();
+  // Kick off data fetch
+  updateTradableTokens();
 
-      // Generate grid view on page load since it's default
-      generateGridView();
-    });
+  // Generate grid view on load since it's default
+  generateGridView();
+});
   </script>
 
 </body>
