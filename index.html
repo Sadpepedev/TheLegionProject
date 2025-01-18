@@ -209,17 +209,36 @@
     }
 
     /* 
-      1) More spacing to avoid overlap 
-      2) Sync transition durations with .grid-item 
+      1) More spacing around the logo 
+      2) Sync transition (0.3s) 
       3) Circular images 
     */
     .token-logo {
-      margin: 0.5rem;             /* #1 extra space around the logo */
-      transition: transform 0.3s ease; /* #2 match .3s ease for synergy */
-      border-radius: 50%;         /* #3 circle shape */
+      margin: 0.5rem;           
+      transition: transform 0.3s ease;
+      border-radius: 50%;       /* circle shape */
+      /* 4) We'll rely on .grid-item:hover for color changes, not needed here */
+      width: 50px;              /* REDUCED base size from 100px to 50px */
+      height: auto;
+      max-width: 100%;
+      display: block;
     }
 
-    /* Additional Grid Item Hover Effect */
+    @media (max-width: 768px) {
+      .token-logo {
+        width: 30px; /* smaller at tablet size */
+      }
+    }
+    @media (max-width: 480px) {
+      .token-logo {
+        width: 20px; /* even smaller at phone size */
+      }
+    }
+
+    /* Enhanced Grid Item Hover Effect 
+       - unify transitions for box + text + color 
+       - color => var(--token-color) on hover
+    */
     .grid-item {
       display: flex;
       flex-direction: column;
@@ -229,8 +248,11 @@
       background-color: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      /* #2 unify transitions so box + text scale in sync */
-      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+      transition:
+        border-color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        color 0.3s ease; /* sync color change on hover */
       position: relative;
       overflow: hidden;
       text-decoration: none;
@@ -239,10 +261,10 @@
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
       transform: scale(1.05);
-      box-shadow: 
+      box-shadow:
         0 0 15px var(--token-color),
         0 0 30px var(--token-color);
-      /* #4 unify text color with var(--token-color) on hover */
+      /* 4) unify text color with var(--token-color) */
       color: var(--token-color);
     }
     .grid-item a {
@@ -252,13 +274,14 @@
     .grid-item a:hover {
       text-decoration: underline;
     }
-    /* Glow effect for logos on hover */
+
+    /* Glow Effect for Logos on Hover */
     .grid-item:hover .token-logo {
       transform: scale(1.2);
       filter: drop-shadow(0 0 10px #00ffee);
     }
 
-    /* Additional Glow / Key effect */
+    /* Additional Glow Effect */
     .grid-item::before {
       content: '';
       position: absolute;
@@ -401,8 +424,6 @@
         <h2></h2>
         <hr>
       </div>
-
-      <!-- Removed View Toggle Buttons -->
 
       <!-- Grid View (Default Visible) -->
       <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -650,7 +671,7 @@
         let investmentClass = '';
         if (investment && investment !== '--') {
           const investmentValue = parseFloat(investment.replace('$', ''));
-          investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
+          investmentClass = (investmentValue > 1000) ? 'investment-positive' : 'investment-negative';
         }
 
         // Create grid item as an <a> tag with token class for CSS variables
