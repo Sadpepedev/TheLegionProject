@@ -207,42 +207,34 @@
       --token-color: rgba(255, 165, 0, 0.9); 
       color: #FFA500; 
     }
-    .token-giza { 
-      --token-color: rgba(99, 99, 98, 0.9); 
-      color: #696969; 
-    }
 
     /* 
-      1) More spacing around the logo 
+      1) More spacing 
       2) Sync transition (0.3s) 
       3) Circular images 
+      4) Color: var(--token-color) on .grid-item:hover
     */
     .token-logo {
-      margin: 0.5rem;           
+      margin: 0.5rem;
       transition: transform 0.3s ease;
-      border-radius: 50%;       /* circle shape */
-      /* 4) We'll rely on .grid-item:hover for color changes, not needed here */
-      width: 50px;              /* REDUCED base size from 100px to 50px */
+      border-radius: 50%;
+      width: 50px;
       height: auto;
       max-width: 100%;
       display: block;
     }
-
     @media (max-width: 768px) {
       .token-logo {
-        width: 30px; /* smaller at tablet size */
+        width: 30px; 
       }
     }
     @media (max-width: 480px) {
       .token-logo {
-        width: 20px; /* even smaller at phone size */
+        width: 20px; 
       }
     }
 
-    /* Enhanced Grid Item Hover Effect 
-       - unify transitions for box + text + color 
-       - color => var(--token-color) on hover
-    */
+    /* Enhanced Grid Item Hover Effect */
     .grid-item {
       display: flex;
       flex-direction: column;
@@ -256,7 +248,7 @@
         border-color 0.3s ease,
         transform 0.3s ease,
         box-shadow 0.3s ease,
-        color 0.3s ease; /* sync color change on hover */
+        color 0.3s ease; /* sync color on hover */
       position: relative;
       overflow: hidden;
       text-decoration: none;
@@ -278,14 +270,11 @@
     .grid-item a:hover {
       text-decoration: underline;
     }
-
     /* Glow Effect for Logos on Hover */
     .grid-item:hover .token-logo {
       transform: scale(1.2);
       filter: drop-shadow(0 0 10px #00ffee);
     }
-
-    /* Additional Glow Effect */
     .grid-item::before {
       content: '';
       position: absolute;
@@ -302,126 +291,63 @@
       opacity: 1;
     }
 
-    /* Support Button Styles */
-    .support-button {
-      padding: 0.75rem 1.5rem;
-      border: 1px solid #00ffee;
-      border-radius: 9999px;
-      color: #00ffee;
-      background: transparent;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: inline-block;
-      margin-top: 1.5rem;
-    }
-    .support-button:hover {
-      background-color: #00ffee;
-      color: #09131b;
-    }
-
-    /* Footer Styles */
-    footer {
-      background-color: #09131b;
-      color: #a4a6a7;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.75rem;
-      border-top: 1px solid rgba(0,255,238,0.2);
-    }
-    footer .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-    }
-    footer a {
-      color: #00ffee;
-      text-decoration: underline;
-    }
-    footer a:hover {
-      color: #37fffc;
-    }
-    footer svg {
-      height: 24px;
-      width: 24px;
-      margin-right: 0.5rem;
-      flex-shrink: 0;
-    }
-
-    /* Modal Styles */
-    #walletModal {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0,0,0,0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    #walletModal.active {
-      display: flex;
-    }
-    .modal-content {
-      background-color: #0c1d28;
-      border: 1px solid rgba(0, 255, 238, 0.3);
-      border-radius: 0.5rem;
-      padding: 2rem;
-      max-width: 400px;
-      width: 90%;
-      color: #fff;
-      text-align: center;
+    /* Top Logo Container for Degion -> Legion Fade */
+    .logo-container {
       position: relative;
+      width: 150px;
+      height: auto;
+      margin: 0 auto 1.5rem; /* optional spacing */
     }
-    .modal-content button {
-      background-color: #008ffc;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      margin-top: 1rem;
-      border: none;
-      cursor: pointer;
+    /* Base images stacked; Degion is visible, Legion hidden */
+    .degion {
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 0.8s ease-in-out, filter 0.3s ease;
     }
-    .modal-content button:hover {
-      background-color: #00a0ff;
+    .legion-hover {
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out, filter 0.3s ease;
     }
-
-    /* Responsive Styles */
-    @media (max-width: 767px) {
-      .tron-table th:nth-child(3),
-      .tron-table th:nth-child(4),
-      .tron-table th:nth-child(6),
-      .tron-table td:nth-child(3),
-      .tron-table td:nth-child(4),
-      .tron-table td:nth-child(6) {
-        display: none;
-      }
-
-      /* Adjust logo size on smaller screens */
-      .token-logo {
-        width: 30px;
-        height: 30px;
-      }
+    /* 
+       On hover, fade Degion out + Legion in.
+       Also apply a red glow to both images.
+    */
+    .logo-container:hover .degion {
+      opacity: 0;
+      filter: drop-shadow(0 0 10px red);
+    }
+    .logo-container:hover .legion-hover {
+      opacity: 1;
+      filter: drop-shadow(0 0 10px red);
     }
   </style>
 </head>
 <body>
-
   <!-- Tron Grid Overlay -->
   <div class="tron-grid"></div>
 
   <!-- Content Wrapper -->
   <div class="content-wrapper">
     <main class="main-container">
-      <!-- Legion Logo Image -->
-      <img 
-        src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png" 
-        alt="Legion Logo" 
-        class="mx-auto mb-4" 
-        style="width: 150px; height: auto;"
-      >
+      <!-- 
+        Replaced single <img> with a container showing 
+        Degion by default, then Legion on hover, plus red glow
+      -->
+      <div class="logo-container">
+        <img 
+          src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
+          alt="Degion Logo"
+          class="degion"
+          style="width: 150px; height: auto;"
+        >
+        <img 
+          src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
+          alt="Legion Logo"
+          class="legion-hover"
+          style="width: 150px; height: auto;"
+        >
+      </div>
 
       <!-- Header -->
       <div class="modern-header">
@@ -548,21 +474,6 @@
           </tbody>
         </table>
       </div>
-
-                  <!-- Giza -->
-                  <tr>
-                    <td class="token-giza">
-                      <a href="Giza.html">Giza</a>
-                    </td>
-                    <td>
-                      <span class="badge badge-ico">ICO Soon</span>
-                      <div class="text-xs text-gray-400 mt-1">TBD</div>
-                    </td>
-                    <td>TBD</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                  </tr>
 
       <!-- Support the Site Button -->
       <div class="flex justify-center">
@@ -696,12 +607,18 @@
         // Create grid item as an <a> tag with token class for CSS variables
         const gridItem = document.createElement('a');
         gridItem.href = tokenLink;
-        gridItem.className = `grid-item token-${tokenIdentifier}`; // Apply grid-item and token class
+        gridItem.className = `grid-item token-${tokenIdentifier}`;
 
         // Set the inner HTML of the grid item
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
-            <img src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" alt="${tokenName} Logo" class="token-logo mr-2" loading="lazy" onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'">
+            <img 
+              src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" 
+              alt="${tokenName} Logo" 
+              class="token-logo mr-2" 
+              loading="lazy" 
+              onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'"
+            >
             <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">${tokenName}</span>
           </div>
           <div class="mb-2">${status}</div>
@@ -714,8 +631,6 @@
         gridView.appendChild(gridItem);
       });
     }
-
-    // Removed Toggle View Functions and Event Listeners
 
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
@@ -747,7 +662,7 @@
           const roiCell = row.querySelector('td:nth-child(5)');
           roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : '--';
 
-          // Positive or Negative ROI styling
+          // Positive/Negative ROI styling
           if (roi > 0) {
             roiCell.classList.add('roi-positive');
             roiCell.classList.remove('roi-negative');
@@ -761,11 +676,11 @@
           const investmentCell = row.querySelector('td:nth-child(6)');
           investmentCell.textContent = seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : '--';
 
-          // Determine investment color based on value
+          // Determine investment color
           if (investmentValue > 1000) {
             investmentCell.classList.add('investment-positive');
             investmentCell.classList.remove('investment-negative');
-          } else if (investmentValue < 1000) {
+          } else if (investmentValue < 1000 && investmentValue !== 0) {
             investmentCell.classList.add('investment-negative');
             investmentCell.classList.remove('investment-positive');
           } else {
@@ -805,10 +720,9 @@
       // Kick off data fetch
       updateTradableTokens();
 
-      // Generate grid view on load since it's default
+      // Generate grid view on page load
       generateGridView();
     });
   </script>
-
 </body>
 </html>
