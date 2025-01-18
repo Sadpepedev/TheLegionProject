@@ -160,6 +160,13 @@ def serve_corn():
     except FileNotFoundError:
         return "corn.html not found.", 404
 
+@app.route("/giza.html")
+def serve_giza():
+    try:
+        return send_from_directory(".", "giza.html")
+    except FileNotFoundError:
+        return "giza.html not found.", 404
+
 
 # ----------------------------------------------------------------
 # OPTION B (alternative): A single catch-all route for *any* file
