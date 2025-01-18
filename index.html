@@ -251,7 +251,6 @@
       background-color: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      /* sync transitions for box + text + color changes */
       transition: 
         border-color 0.3s ease,
         transform 0.3s ease,
@@ -297,15 +296,16 @@
       opacity: 1;
     }
 
-    /* 
-      Replacing single <img> with .logo-container for degion->legion fade
-      with red glow on hover
+    /*
+      Instead of single <img>, we have .logo-container
+      degion + legion with fade + red glow on hover
+      with more bottom margin to avoid overlap with <hr>
     */
     .logo-container {
       position: relative;
       width: 150px; 
       height: auto;
-      margin: 0 auto 1.5rem; /* center + spacing beneath */
+      margin: 0 auto 3rem; /* 3rem bottom margin to push <hr> down */
     }
     .logo-container img {
       position: absolute;
@@ -442,17 +442,15 @@
   <!-- Content Wrapper -->
   <div class="content-wrapper">
     <main class="main-container">
-      <!-- 
-        Instead of single <img>, 
-        use a container showing degion by default, 
-        legion on hover with red glow
-      -->
+      <!-- Use .logo-container with degion + legion images -->
       <div class="logo-container">
+        <!-- Degion by default -->
         <img 
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
           alt="Degion Logo"
           class="degion"
         >
+        <!-- Legion on hover -->
         <img 
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
           alt="Legion Logo"
@@ -707,7 +705,7 @@
       gridView.innerHTML = ''; // Clear existing grid items
 
       overviewList.querySelectorAll('tr').forEach((row) => {
-        // Skip the loading row
+        // Skip loading row
         if (row.id === 'loadingRow') return;
 
         const cells = row.querySelectorAll('td');
@@ -718,24 +716,24 @@
         const roi = cells[4].textContent.trim();
         const investment = cells[5].textContent.trim();
 
-        // Extract token identifier from the link (assuming href="token.html")
+        // Extract token identifier from the link
         const tokenLinkElement = cells[0].querySelector('a');
         const tokenLink = tokenLinkElement ? tokenLinkElement.getAttribute('href') : '#';
         const tokenIdentifier = tokenLink.replace('.html', '').toLowerCase();
 
-        // Determine investment color based on value
+        // Determine investment color
         let investmentClass = '';
         if (investment && investment !== '--') {
           const investmentValue = parseFloat(investment.replace('$', ''));
-          investmentClass = (investmentValue > 1000) ? 'investment-positive' : 'investment-negative';
+          investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
         }
 
-        // Create grid item as an <a> tag with token class for CSS variables
+        // Create grid item as an <a> tag with token class for CSS
         const gridItem = document.createElement('a');
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
-        // Set the inner HTML of the grid item
+        // Build the HTML
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
             <img 
@@ -750,12 +748,14 @@
           <div class="mb-2">${status}</div>
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
-          <div class="mb-1"><strong>ROI:</strong> 
+          <div class="mb-1"><strong>ROI:</strong>
             <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span>
           </div>
-          <div><strong>If you invested $1000:</strong> <span class="${investmentClass}">${investment}</span></div>
+          <div>
+            <strong>If you invested $1000:</strong> 
+            <span class="${investmentClass}">${investment}</span>
+          </div>
         `;
-
         gridView.appendChild(gridItem);
       });
     }
@@ -763,13 +763,12 @@
     // Fetch & Update for Tradable Tokens
     async function updateTradableTokens() {
       const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
-
       tradableRows.forEach(async (row) => {
         const tokenNameCell = row.querySelector('td');
         const tokenName = tokenNameCell ? tokenNameCell.textContent.trim() : 'Unknown';
         
         try {
-          // Example fetch to "/calculate"; adjust if needed
+          // Example fetch to "/calculate"
           const response = await fetch('/calculate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -792,7 +791,7 @@
           const roiCell = row.querySelector('td:nth-child(5)');
           roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : '--';
 
-          // Positive/Negative ROI styling
+          // Positive vs. negative ROI styling
           if (roi > 0) {
             roiCell.classList.add('roi-positive');
             roiCell.classList.remove('roi-negative');
@@ -833,7 +832,7 @@
           const investmentCell = row.querySelector('td:nth-child(6)');
           investmentCell.textContent = 'Error';
           investmentCell.classList.remove('investment-positive', 'investment-negative');
-          
+
           // If Grid View is visible, regenerate
           const gridView = document.getElementById('gridView');
           if (!gridView.classList.contains('hidden')) {
@@ -851,7 +850,7 @@
       // Kick off data fetch
       updateTradableTokens();
 
-      // Generate grid view on load since it's default
+      // Generate grid view on load
       generateGridView();
     });
   </script>
