@@ -964,7 +964,7 @@
       });
     }
 
-    // Fetch Silencio from CoinGecko and update table
+    // Fetch Silencio row from CoinGecko, but using "fuel" data as an example
     async function updateSilencioToken() {
       try {
         // Locate the 'silencio' row via the link
@@ -972,22 +972,22 @@
           .querySelector('#overviewList tr td a[href="silencio.html"]')
           .closest("tr");
 
-        // Fetch from CoinGecko
+        // Fetch from CoinGecko for "fuel" (a live token)
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=silencio&vs_currencies=usd"
+          "https://api.coingecko.com/api/v3/simple/price?ids=fuel&vs_currencies=usd"
         );
-        if (!response.ok) throw new Error("Failed to fetch Silencio price");
+        if (!response.ok) throw new Error("Failed to fetch Fuel price");
 
         const data = await response.json();
-        // If 'silencio' or 'usd' is missing, we treat it as no data
-        if (!data.silencio || !data.silencio.usd) {
+        // If 'fuel' or 'usd' is missing, we treat it as no data
+        if (!data.fuel || !data.fuel.usd) {
           silencioRow.querySelector("td:nth-child(4)").textContent =
             "Coming soon";
           return;
         }
 
         // Extract price
-        const currentPrice = parseFloat(data.silencio.usd);
+        const currentPrice = parseFloat(data.fuel.usd);
 
         // Update table cells (seed price is column 3)
         const seedPriceText = silencioRow
@@ -1002,7 +1002,6 @@
 
         // Calculate ROI = (currentPrice / seedPrice) * 100
         // Investment = (1000 / seedPrice) * currentPrice
-        // If seedPrice is 0 or invalid, we just leave "Coming soon"
         if (seedPrice > 0) {
           const roi = (currentPrice / seedPrice) * 100;
           roiCell.textContent = `${roi.toFixed(2)}%`;
@@ -1040,7 +1039,7 @@
           generateGridView();
         }
       } catch (error) {
-        console.error("Error fetching Silencio price:", error);
+        console.error("Error fetching Fuel price for Silencio row:", error);
         // If there's an error, just put "Coming soon"
         const silencioRow = document
           .querySelector('#overviewList tr td a[href="silencio.html"]')
@@ -1074,7 +1073,7 @@
       // Kick off data fetch for tradable tokens
       updateTradableTokens();
 
-      // Fetch Silencio price from CoinGecko
+      // For Silencio row, fetch from "fuel" so we see real data
       updateSilencioToken();
 
       // Generate grid view on load
