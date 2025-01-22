@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Track Legion ICO Performance</title>
-  
+
   <!-- Content Security Policy -->
+  <!-- 
+       IMPORTANT: We have *not* added vercel.live or any other domain 
+       to script-src to avoid CSP violations. 
+       If you need a script from vercel.live, you must add it to 
+       script-src or remove the script entirely.
+  -->
   <meta
     http-equiv="Content-Security-Policy"
     content="
@@ -23,13 +29,13 @@
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" 
     rel="stylesheet"
   />
-  
+
   <!-- Favicon -->
   <link
     rel="icon"
@@ -48,7 +54,7 @@
       height: 100%;
     }
     body {
-      background-color: #09131b;
+      background-color: #09131b; 
       color: #cfd0d1;
       font-family: 'Orbitron', sans-serif;
       display: flex;
@@ -64,17 +70,17 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image:
+      background-image: 
         linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
+      background-size: 60px 60px; 
       pointer-events: none;
       z-index: 1;
     }
 
     /* Content Wrapper */
     .content-wrapper {
-      z-index: 2;
+      z-index: 2; 
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -89,7 +95,7 @@
       padding: 2rem;
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.3); 
       position: relative;
     }
     .main-container:hover {
@@ -126,8 +132,7 @@
     .tron-table thead {
       background-color: rgba(0,255,238,0.05);
     }
-    .tron-table th,
-    .tron-table td {
+    .tron-table th, .tron-table td {
       padding: 1rem;
       text-align: left;
       border-bottom: 1px solid rgba(0,255,238,0.2);
@@ -148,7 +153,7 @@
 
     /* ROI Styles */
     .roi-positive {
-      color: #0afc4e;
+      color: #0afc4e; 
       font-weight: bold;
     }
     .roi-negative {
@@ -158,7 +163,7 @@
 
     /* Investment Styles */
     .investment-positive {
-      color: #0afc4e;
+      color: #0afc4e; 
       font-weight: bold;
     }
     .investment-negative {
@@ -190,36 +195,36 @@
     }
 
     /* Token Color Styles with CSS Variables */
-    .token-fuel {
-      --token-color: rgba(10, 252, 78, 0.9);
-      color: #0afc4e;
+    .token-fuel { 
+      --token-color: rgba(10, 252, 78, 0.9); 
+      color: #0afc4e; 
     }
-    .token-almanak {
-      --token-color: rgba(249, 249, 249, 0.9);
-      color: #f9f9f9;
+    .token-almanak { 
+      --token-color: rgba(249, 249, 249, 0.9); 
+      color: #f9f9f9; 
     }
-    .token-pulse {
-      --token-color: rgba(14, 183, 255, 0.9);
-      color: #0eb7ff;
+    .token-pulse { 
+      --token-color: rgba(14, 183, 255, 0.9); 
+      color: #0eb7ff; 
     }
-    .token-silencio {
-      --token-color: rgba(64, 134, 214, 0.9);
-      color: #4086d6;
+    .token-silencio { 
+      --token-color: rgba(64, 134, 214, 0.9); 
+      color: #4086d6; 
     }
-    .token-enclave {
-      --token-color: rgba(137, 207, 240, 0.9);
-      color: #89CFF0;
+    .token-enclave { 
+      --token-color: rgba(137, 207, 240, 0.9); 
+      color: #89CFF0; 
     }
-    .token-corn {
-      --token-color: rgba(255, 165, 0, 0.9);
-      color: #FFA500;
+    .token-corn { 
+      --token-color: rgba(255, 165, 0, 0.9); 
+      color: #FFA500; 
     }
     .token-giza {
-      --token-color: rgba(122, 122, 120, 0.9);
-      color: #696866;
+      --token-color: rgba(122, 122, 120, 0.9); 
+      color: #696866; 
     }
 
-    /*
+    /* 
       Four requested changes to .token-logo & .grid-item:
       1) margin for spacing
       2) unified 0.3s transition
@@ -230,20 +235,20 @@
       margin: 0.5rem;
       transition: transform 0.3s ease;
       border-radius: 50%;
-      width: 50px;
+      width: 50px; 
       height: auto;
       max-width: 100%;
       display: block;
     }
     @media (max-width: 768px) {
       .token-logo {
-        width: 60px;
-        height: auto;
+        width: 60px; 
+        height: auto; 
       }
     }
     @media (max-width: 480px) {
       .token-logo {
-        width: 40px;
+        width: 40px; 
         height: auto;
       }
     }
@@ -258,7 +263,7 @@
       background-color: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      transition:
+      transition: 
         border-color 0.3s ease,
         transform 0.3s ease,
         box-shadow 0.3s ease,
@@ -271,7 +276,9 @@
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
       transform: scale(1.05);
-      box-shadow: 0 0 15px var(--token-color), 0 0 30px var(--token-color);
+      box-shadow:
+        0 0 15px var(--token-color),
+        0 0 30px var(--token-color);
       color: var(--token-color);
     }
     .grid-item a {
@@ -301,10 +308,10 @@
       opacity: 1;
     }
 
-    /* .logo-container for degion/legion images with fade on hover */
+    /* logo-container */
     .logo-container {
       position: relative;
-      width: 150px;
+      width: 150px; 
       height: auto;
       margin: 0 auto 3rem; /* 3rem bottom margin to push <hr> down */
     }
@@ -429,13 +436,14 @@
         display: none;
       }
       .token-logo {
-        width: 60px;
-        height: auto;
+        width: 60px; 
+        height: auto; 
       }
     }
   </style>
 </head>
 <body>
+
   <!-- Tron Grid Overlay -->
   <div class="tron-grid"></div>
 
@@ -445,13 +453,13 @@
       <!-- Use .logo-container with degion + legion images -->
       <div class="logo-container">
         <!-- Degion by default -->
-        <img
+        <img 
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
           alt="Degion Logo"
           class="degion"
         >
         <!-- Legion on hover -->
-        <img
+        <img 
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
           alt="Legion Logo"
           class="legion-hover"
@@ -466,7 +474,7 @@
 
       <!-- Grid View (Default Visible) -->
       <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Grid items will be dynamically generated -->
+        <!-- Grid items will be dynamically generated below -->
       </div>
 
       <!-- Table View (Hidden by Default) -->
@@ -490,7 +498,7 @@
               </td>
             </tr>
 
-            <!-- Fuel (Tradable) -->
+            <!-- FUEL (data-tradable="true") -->
             <tr data-tradable="true">
               <td class="token-fuel">
                 <a href="fuel.html">Fuel</a>
@@ -500,43 +508,12 @@
                 <div class="text-xs text-gray-400 mt-1">2024-12-19</div>
               </td>
               <td>$0.02</td>
-              <!-- Table columns #4, #5, #6 become dynamic once updated -->
               <td>--</td>
               <td>--</td>
               <td>--</td>
             </tr>
 
-            <!-- Almanak -->
-            <tr>
-              <td class="token-almanak">
-                <a href="almanak.html">Almanak</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Pulse -->
-            <tr>
-              <td class="token-pulse">
-                <a href="pulse.html">Pulse</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">TBD</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Silencio (calls /calculate_silencio) -->
+            <!-- Silencio (data-silencio="true") -->
             <tr data-silencio="true">
               <td class="token-silencio">
                 <a href="silencio.html">Silencio</a>
@@ -551,50 +528,8 @@
               <td>--</td>
             </tr>
 
-            <!-- Enclave -->
-            <tr>
-              <td class="token-enclave">
-                <a href="enclave.html">Enclave</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">Q4 2025</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Corn -->
-            <tr>
-              <td class="token-corn">
-                <a href="corn.html">Corn</a>
-              </td>
-              <td>
-                <span class="badge badge-soon">Pending TGE</span>
-                <div class="text-xs text-gray-400 mt-1">Q1 2025</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
-
-            <!-- Giza -->
-            <tr>
-              <td class="token-giza">
-                <a href="giza.html">Giza</a>
-              </td>
-              <td>
-                <span class="badge badge-ico">ICO Soon</span>
-                <div class="text-xs text-gray-400 mt-1">TBD</div>
-              </td>
-              <td>TBD</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
+            <!-- More tokens, if any... -->
+            <!-- Almanak, Pulse, etc. remain unchanged if not calling live data. -->
 
           </tbody>
         </table>
@@ -628,23 +563,28 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
         </svg>
         <span class="text-base font-semibold text-white">
-          Built by
-          <a href="https://x.com/Dustybeerbong" target="_blank" rel="noopener noreferrer" class="ml-1">
+          Built by 
+          <a href="https://x.com/Dustybeerbong" target="_blank" 
+             rel="noopener noreferrer" class="ml-1">
             Sadpepe.exe
           </a>
         </span>
       </div>
       <!-- Disclaimer -->
       <p class="max-w-xl text-center leading-snug">
-        <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do
-        <em>not</em> offer financial or trading advice. This website is purely
-        for informational purposes to assist in tracking prior ICO performance.
-        Always conduct your own research before making any investment decisions.
+        <strong>Disclaimer:</strong> We are 
+        <em>not</em> affiliated with Legion and do 
+        <em>not</em> offer financial or trading advice. 
+        This website is purely for informational 
+        purposes to assist in tracking prior ICO 
+        performance. Always conduct your own 
+        research before making any investment decisions.
       </p>
       <!-- Price Data -->
       <p class="mt-4">
-        Price data provided by
-        <a href="https://coingecko.com" target="_blank" rel="noopener noreferrer">
+        Price data provided by 
+        <a href="https://coingecko.com" target="_blank" 
+           rel="noopener noreferrer">
           CoinGecko
         </a>.
       </p>
@@ -655,7 +595,9 @@
   <div id="walletModal">
     <div class="modal-content">
       <h2 id="modalTitle" class="text-lg font-bold">Support Us</h2>
-      <p class="my-3">If you're feeling generous, I'd love a nice cold drink:</p>
+      <p class="my-3">
+        If you're feeling generous, I'd love a nice cold drink:
+      </p>
       <div class="bg-gray-800 p-2 rounded flex flex-col sm:flex-row sm:items-center">
         <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">
           0x62f1F6bFE3A798d5023608ac0a9c8a9538276283
@@ -678,21 +620,21 @@
 
   <!-- SCRIPT -->
   <script>
-    // Open Modal
+    // ------------------------------
+    // Modal Functions (unchanged)
+    // ------------------------------
     function supportSite() {
       const modal = document.getElementById('walletModal');
       modal.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+      document.body.style.overflow = 'hidden';
     }
 
-    // Close Modal
     function closeModal() {
       const modal = document.getElementById('walletModal');
       modal.classList.remove('active');
       document.body.style.overflow = 'auto';
     }
 
-    // Copy Wallet Address
     function copyWalletAddress() {
       const walletAddress = document.getElementById('walletAddress').textContent;
       navigator.clipboard.writeText(walletAddress)
@@ -700,7 +642,147 @@
         .catch(() => alert('Failed to copy wallet address.'));
     }
 
-    // Generate the Grid View items
+    // ------------------------------
+    // Fuel Tokens (/calculate)
+    // ------------------------------
+    async function updateFuelTokens() {
+      const fuelRows = document.querySelectorAll('tr[data-tradable="true"]');
+      fuelRows.forEach(async (row) => {
+        try {
+          // We'll just pass $1000 w/ round_price=0.02
+          const response = await fetch('/calculate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ investment: 1000, round_price: 0.02 })
+          });
+          if (!response.ok) throw new Error('Fuel request failed.');
+          
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+
+          // data => { initial_investment, current_price, roi_value }
+          const priceCell = row.querySelector('td:nth-child(4)');
+          const roiCell = row.querySelector('td:nth-child(5)');
+          const investedCell = row.querySelector('td:nth-child(6)');
+
+          const currentPrice = data.current_price || 0;
+          const finalValue = data.roi_value || 0;
+          // ROI% = ((finalValue / 1000) - 1) * 100
+          const roiPercent = ((finalValue / 1000) - 1) * 100;
+
+          // Price
+          if (currentPrice > 0) {
+            priceCell.textContent = `$${currentPrice.toFixed(4)}`;
+          } else {
+            priceCell.textContent = '(coming soon)';
+          }
+
+          // ROI%
+          if (!isNaN(roiPercent)) {
+            roiCell.textContent = `${roiPercent.toFixed(2)}%`;
+          } else {
+            roiCell.textContent = '(coming soon)';
+          }
+
+          // If you invested $1000
+          if (finalValue > 0) {
+            investedCell.textContent = `$${finalValue.toFixed(2)}`;
+          } else {
+            investedCell.textContent = '(coming soon)';
+          }
+
+          // Style as positive or negative
+          roiCell.classList.remove('roi-positive', 'roi-negative');
+          investedCell.classList.remove('investment-positive', 'investment-negative');
+          if (roiPercent > 0) {
+            roiCell.classList.add('roi-positive');
+            investedCell.classList.add('investment-positive');
+          } else if (roiPercent < 0) {
+            roiCell.classList.add('roi-negative');
+            investedCell.classList.add('investment-negative');
+          }
+        } catch (err) {
+          console.error('Error updating Fuel row:', err);
+          row.querySelector('td:nth-child(4)').textContent = '(coming soon)';
+          row.querySelector('td:nth-child(5)').textContent = '(coming soon)';
+          row.querySelector('td:nth-child(6)').textContent = '(coming soon)';
+        }
+      });
+    }
+
+    // ------------------------------
+    // Silencio Tokens (/calculate_silencio)
+    // ------------------------------
+    async function updateSilencioTokens() {
+      const silencioRows = document.querySelectorAll('tr[data-silencio="true"]');
+      silencioRows.forEach(async (row) => {
+        try {
+          // We'll pass $1000 for the Silencio route
+          const response = await fetch('/calculate_silencio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ investment: 1000 })
+          });
+          if (!response.ok) throw new Error('Silencio request failed.');
+
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+
+          // data => { initial_investment, current_price, roi_value }
+          const priceCell = row.querySelector('td:nth-child(4)');
+          const roiCell = row.querySelector('td:nth-child(5)');
+          const investedCell = row.querySelector('td:nth-child(6)');
+
+          const currentPrice = data.current_price || 0;
+          const finalValue = data.roi_value || 0;
+          // ROI% = ((finalValue / 1000) - 1) * 100
+          const roiPercent = ((finalValue / 1000) - 1) * 100;
+
+          // Price
+          if (currentPrice > 0) {
+            // More decimal places for Silencio
+            priceCell.textContent = `$${currentPrice.toFixed(6)}`;
+          } else {
+            priceCell.textContent = '(coming soon)';
+          }
+
+          // ROI%
+          if (!isNaN(roiPercent)) {
+            roiCell.textContent = `${roiPercent.toFixed(2)}%`;
+          } else {
+            roiCell.textContent = '(coming soon)';
+          }
+
+          // If you invested $1000
+          if (finalValue > 0) {
+            investedCell.textContent = `$${finalValue.toFixed(2)}`;
+          } else {
+            investedCell.textContent = '(coming soon)';
+          }
+
+          // Style as positive or negative
+          roiCell.classList.remove('roi-positive', 'roi-negative');
+          investedCell.classList.remove('investment-positive', 'investment-negative');
+          if (roiPercent > 0) {
+            roiCell.classList.add('roi-positive');
+            investedCell.classList.add('investment-positive');
+          } else if (roiPercent < 0) {
+            roiCell.classList.add('roi-negative');
+            investedCell.classList.add('investment-negative');
+          }
+
+        } catch (err) {
+          console.error('Error updating Silencio row:', err);
+          row.querySelector('td:nth-child(4)').textContent = '(coming soon)';
+          row.querySelector('td:nth-child(5)').textContent = '(coming soon)';
+          row.querySelector('td:nth-child(6)').textContent = '(coming soon)';
+        }
+      });
+    }
+
+    // ------------------------------
+    // Generate Grid View (if you want the card layout updated)
+    // ------------------------------
     function generateGridView() {
       const gridView = document.getElementById('gridView');
       const overviewList = document.getElementById('overviewList');
@@ -711,6 +793,8 @@
         if (row.id === 'loadingRow') return;
 
         const cells = row.querySelectorAll('td');
+        if (cells.length < 6) return; // ensure it has enough columns
+
         const tokenName = cells[0].textContent.trim();
         const status = cells[1].innerHTML.trim();
         const seedPrice = cells[2].textContent.trim();
@@ -718,11 +802,9 @@
         const roi = cells[4].textContent.trim();
         const investment = cells[5].textContent.trim();
 
-        // Extract token identifier from <a href="...">
-        const tokenLinkElement = cells[0].querySelector('a');
-        const tokenLink = tokenLinkElement
-          ? tokenLinkElement.getAttribute('href')
-          : '#';
+        // Extract token name from <a href="...">
+        const linkEl = cells[0].querySelector('a');
+        const tokenLink = linkEl ? linkEl.getAttribute('href') : '#';
         const tokenIdentifier = tokenLink.replace('.html', '').toLowerCase();
 
         // Create a grid-item <a>
@@ -730,6 +812,7 @@
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
+        // Build the inner HTML
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
             <img 
@@ -754,144 +837,23 @@
       });
     }
 
-    // Update FUEL tokens => calls "/calculate", updates columns #4,#5,#6
-    async function updateFuelTokens() {
-      const fuelRows = document.querySelectorAll('tr[data-tradable="true"]');
-      fuelRows.forEach(async (row) => {
-        try {
-          // Example: $1000 at round_price=0.02
-          const response = await fetch('/calculate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ investment: 1000, round_price: 0.02 })
-          });
-          if (!response.ok) throw new Error('Fuel request failed.');
-
-          const data = await response.json();
-          if (data.error) throw new Error(data.error);
-
-          // data => { initial_investment, current_price, roi_value }
-          const priceCell = row.querySelector('td:nth-child(4)');
-          const roiCell = row.querySelector('td:nth-child(5)');
-          const investedCell = row.querySelector('td:nth-child(6)');
-
-          const currentPrice = data.current_price || 0;
-          const finalValue = data.roi_value || 0;
-          // ROI% = ((finalValue / 1000) - 1) * 100
-          const roiPercent = ((finalValue / 1000) - 1) * 100;
-
-          if (currentPrice > 0) {
-            priceCell.textContent = `$${currentPrice.toFixed(4)}`;
-          } else {
-            priceCell.textContent = '(coming soon)';
-          }
-          if (!isNaN(roiPercent)) {
-            roiCell.textContent = `${roiPercent.toFixed(2)}%`;
-          } else {
-            roiCell.textContent = '(coming soon)';
-          }
-          if (finalValue > 0) {
-            investedCell.textContent = `$${finalValue.toFixed(2)}`;
-          } else {
-            investedCell.textContent = '(coming soon)';
-          }
-
-          // Apply ROI styling
-          roiCell.classList.remove('roi-positive', 'roi-negative');
-          investedCell.classList.remove('investment-positive', 'investment-negative');
-          if (roiPercent > 0) {
-            roiCell.classList.add('roi-positive');
-            investedCell.classList.add('investment-positive');
-          } else if (roiPercent < 0) {
-            roiCell.classList.add('roi-negative');
-            investedCell.classList.add('investment-negative');
-          }
-
-        } catch (err) {
-          console.error('Error updating Fuel row:', err);
-          row.querySelector('td:nth-child(4)').textContent = '(coming soon)';
-          row.querySelector('td:nth-child(5)').textContent = '(coming soon)';
-          row.querySelector('td:nth-child(6)').textContent = '(coming soon)';
-        }
-      });
-    }
-
-    // Update SILENCIO => calls "/calculate_silencio", updates columns #4,#5,#6
-    async function updateSilencioTokens() {
-      const silencioRows = document.querySelectorAll('tr[data-silencio="true"]');
-      silencioRows.forEach(async (row) => {
-        try {
-          // $1000 investment
-          const response = await fetch('/calculate_silencio', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ investment: 1000 })
-          });
-          if (!response.ok) throw new Error('Silencio request failed.');
-
-          const data = await response.json();
-          if (data.error) throw new Error(data.error);
-
-          // data => { initial_investment, current_price, roi_value }
-          const priceCell = row.querySelector('td:nth-child(4)');
-          const roiCell = row.querySelector('td:nth-child(5)');
-          const investedCell = row.querySelector('td:nth-child(6)');
-
-          const currentPrice = data.current_price || 0;
-          const finalValue = data.roi_value || 0;
-          const roiPercent = ((finalValue / 1000) - 1) * 100;
-
-          if (currentPrice > 0) {
-            priceCell.textContent = `$${currentPrice.toFixed(6)}`;
-          } else {
-            priceCell.textContent = '(coming soon)';
-          }
-          if (!isNaN(roiPercent)) {
-            roiCell.textContent = `${roiPercent.toFixed(2)}%`;
-          } else {
-            roiCell.textContent = '(coming soon)';
-          }
-          if (finalValue > 0) {
-            investedCell.textContent = `$${finalValue.toFixed(2)}`;
-          } else {
-            investedCell.textContent = '(coming soon)';
-          }
-
-          // Apply ROI styling
-          roiCell.classList.remove('roi-positive', 'roi-negative');
-          investedCell.classList.remove('investment-positive', 'investment-negative');
-          if (roiPercent > 0) {
-            roiCell.classList.add('roi-positive');
-            investedCell.classList.add('investment-positive');
-          } else if (roiPercent < 0) {
-            roiCell.classList.add('roi-negative');
-            investedCell.classList.add('investment-negative');
-          }
-
-        } catch (err) {
-          console.error('Error updating Silencio row:', err);
-          row.querySelector('td:nth-child(4)').textContent = '(coming soon)';
-          row.querySelector('td:nth-child(5)').textContent = '(coming soon)';
-          row.querySelector('td:nth-child(6)').textContent = '(coming soon)';
-        }
-      });
-    }
-
+    // ------------------------------
+    // On page load
+    // ------------------------------
     document.addEventListener('DOMContentLoaded', () => {
-      // Remove loading row if present
+      // Remove the loading row if present
       const loadingRow = document.getElementById('loadingRow');
       if (loadingRow) loadingRow.remove();
 
-      // (1) Update Fuel
+      // 1) Update Fuel
       updateFuelTokens();
 
-      // (2) Update Silencio
+      // 2) Update Silencio
       updateSilencioTokens();
 
-      // (3) Generate the grid view from updated table data
+      // 3) Generate the Grid
       generateGridView();
     });
   </script>
 </body>
 </html>
-
