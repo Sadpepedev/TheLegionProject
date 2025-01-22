@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Track Legion ICO Performance</title>
   
   <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    img-src 'self' https://sadpepedev.github.io;
-    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    font-src 'self' https://fonts.gstatic.com;
-    object-src 'none';
-    base-uri 'self';
-    frame-ancestors 'none';
-  ">
-  
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      img-src 'self' https://sadpepedev.github.io;
+      script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      object-src 'none';
+      base-uri 'self';
+      frame-ancestors 'none';
+    "
+  />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <!-- Google Fonts -->
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" 
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
     rel="stylesheet"
-  >
+  />
   
   <!-- Favicon -->
-  <link rel="icon" href="https://sadpepedev.github.io/TheLegionProject/favicon.ico" type="image/x-icon">
+  <link
+    rel="icon"
+    href="https://sadpepedev.github.io/TheLegionProject/favicon.ico"
+    type="image/x-icon"
+  />
 
   <style>
     /* Reset and Base Styles */
@@ -42,7 +48,7 @@
       height: 100%;
     }
     body {
-      background-color: #09131b; 
+      background-color: #09131b;
       color: #cfd0d1;
       font-family: 'Orbitron', sans-serif;
       display: flex;
@@ -58,17 +64,17 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
+      background-image:
         linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 60px 60px; 
+      background-size: 60px 60px;
       pointer-events: none;
       z-index: 1;
     }
 
     /* Content Wrapper */
     .content-wrapper {
-      z-index: 2; 
+      z-index: 2;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -83,7 +89,7 @@
       padding: 2rem;
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      background: rgba(0, 0, 0, 0.3); 
+      background: rgba(0, 0, 0, 0.3);
       position: relative;
     }
     .main-container:hover {
@@ -120,7 +126,8 @@
     .tron-table thead {
       background-color: rgba(0,255,238,0.05);
     }
-    .tron-table th, .tron-table td {
+    .tron-table th,
+    .tron-table td {
       padding: 1rem;
       text-align: left;
       border-bottom: 1px solid rgba(0,255,238,0.2);
@@ -141,7 +148,7 @@
 
     /* ROI Styles */
     .roi-positive {
-      color: #0afc4e; 
+      color: #0afc4e;
       font-weight: bold;
     }
     .roi-negative {
@@ -151,7 +158,7 @@
 
     /* Investment Styles */
     .investment-positive {
-      color: #0afc4e; 
+      color: #0afc4e;
       font-weight: bold;
     }
     .investment-negative {
@@ -183,36 +190,36 @@
     }
 
     /* Token Color Styles with CSS Variables */
-    .token-fuel { 
-      --token-color: rgba(10, 252, 78, 0.9); 
-      color: #0afc4e; 
+    .token-fuel {
+      --token-color: rgba(10, 252, 78, 0.9);
+      color: #0afc4e;
     }
-    .token-almanak { 
-      --token-color: rgba(249, 249, 249, 0.9); 
-      color: #f9f9f9; 
+    .token-almanak {
+      --token-color: rgba(249, 249, 249, 0.9);
+      color: #f9f9f9;
     }
-    .token-pulse { 
-      --token-color: rgba(14, 183, 255, 0.9); 
-      color: #0eb7ff; 
+    .token-pulse {
+      --token-color: rgba(14, 183, 255, 0.9);
+      color: #0eb7ff;
     }
-    .token-silencio { 
-      --token-color: rgba(64, 134, 214, 0.9); 
-      color: #4086d6; 
+    .token-silencio {
+      --token-color: rgba(64, 134, 214, 0.9);
+      color: #4086d6;
     }
-    .token-enclave { 
-      --token-color: rgba(137, 207, 240, 0.9); 
-      color: #89CFF0; 
+    .token-enclave {
+      --token-color: rgba(137, 207, 240, 0.9);
+      color: #89CFF0;
     }
-    .token-corn { 
-      --token-color: rgba(255, 165, 0, 0.9); 
-      color: #FFA500; 
+    .token-corn {
+      --token-color: rgba(255, 165, 0, 0.9);
+      color: #FFA500;
     }
     .token-giza {
-      --token-color: rgba(122, 122, 120, 0.9); 
-      color: #696866; 
+      --token-color: rgba(122, 122, 120, 0.9);
+      color: #696866;
     }
 
-    /* 
+    /*
       Four requested changes to .token-logo & .grid-item:
       1) margin for spacing
       2) unified 0.3s transition
@@ -223,20 +230,20 @@
       margin: 0.5rem;
       transition: transform 0.3s ease;
       border-radius: 50%;
-      width: 50px; 
+      width: 50px;
       height: auto;
       max-width: 100%;
       display: block;
     }
     @media (max-width: 768px) {
       .token-logo {
-        width: 60px; 
-        height: auto; 
+        width: 60px;
+        height: auto;
       }
     }
     @media (max-width: 480px) {
       .token-logo {
-        width: 40px; 
+        width: 40px;
         height: auto;
       }
     }
@@ -251,7 +258,7 @@
       background-color: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      transition: 
+      transition:
         border-color 0.3s ease,
         transform 0.3s ease,
         box-shadow 0.3s ease,
@@ -264,9 +271,7 @@
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
       transform: scale(1.05);
-      box-shadow:
-        0 0 15px var(--token-color),
-        0 0 30px var(--token-color);
+      box-shadow: 0 0 15px var(--token-color), 0 0 30px var(--token-color);
       color: var(--token-color);
     }
     .grid-item a {
@@ -296,10 +301,10 @@
       opacity: 1;
     }
 
-    /* logo-container */
+    /* .logo-container for degion/legion images with fade on hover */
     .logo-container {
       position: relative;
-      width: 150px; 
+      width: 150px;
       height: auto;
       margin: 0 auto 3rem; /* 3rem bottom margin to push <hr> down */
     }
@@ -424,14 +429,13 @@
         display: none;
       }
       .token-logo {
-        width: 60px; 
-        height: auto; 
+        width: 60px;
+        height: auto;
       }
     }
   </style>
 </head>
 <body>
-
   <!-- Tron Grid Overlay -->
   <div class="tron-grid"></div>
 
@@ -441,13 +445,13 @@
       <!-- Use .logo-container with degion + legion images -->
       <div class="logo-container">
         <!-- Degion by default -->
-        <img 
+        <img
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
           alt="Degion Logo"
           class="degion"
         >
         <!-- Legion on hover -->
-        <img 
+        <img
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
           alt="Legion Logo"
           class="legion-hover"
@@ -487,7 +491,6 @@
             </tr>
 
             <!-- Fuel (Tradable) -->
-            <!-- Remains exactly as before, so it can pull live data via /calculate -->
             <tr data-tradable="true">
               <td class="token-fuel">
                 <a href="fuel.html">Fuel</a>
@@ -497,6 +500,7 @@
                 <div class="text-xs text-gray-400 mt-1">2024-12-19</div>
               </td>
               <td>$0.02</td>
+              <!-- Table columns #4, #5, #6 become dynamic once updated -->
               <td>--</td>
               <td>--</td>
               <td>--</td>
@@ -532,8 +536,7 @@
               <td>--</td>
             </tr>
 
-            <!-- Silencio -->
-            <!-- Added data-silencio="true" so we can fetch from /calculate_silencio -->
+            <!-- Silencio (calls /calculate_silencio) -->
             <tr data-silencio="true">
               <td class="token-silencio">
                 <a href="silencio.html">Silencio</a>
@@ -592,7 +595,7 @@
               <td>--</td>
               <td>--</td>
             </tr>
-            
+
           </tbody>
         </table>
       </div>
@@ -615,36 +618,33 @@
     <div class="footer-container">
       <!-- Built By -->
       <div class="mb-4 flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" 
-             viewBox="0 0 24 24" stroke-width="2" 
-             stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" 
-                d="M12 4v16m8-8H4" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
         </svg>
         <span class="text-base font-semibold text-white">
-          Built by 
-          <a href="https://x.com/Dustybeerbong" target="_blank" 
-             rel="noopener noreferrer" 
-             class="ml-1">
+          Built by
+          <a href="https://x.com/Dustybeerbong" target="_blank" rel="noopener noreferrer" class="ml-1">
             Sadpepe.exe
           </a>
         </span>
       </div>
       <!-- Disclaimer -->
       <p class="max-w-xl text-center leading-snug">
-        <strong>Disclaimer:</strong> We are 
-        <em>not</em> affiliated with Legion and do 
-        <em>not</em> offer financial or trading advice. 
-        This website is purely for informational 
-        purposes to assist in tracking prior ICO 
-        performance. Always conduct your own 
-        research before making any investment decisions.
+        <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion and do
+        <em>not</em> offer financial or trading advice. This website is purely
+        for informational purposes to assist in tracking prior ICO performance.
+        Always conduct your own research before making any investment decisions.
       </p>
       <!-- Price Data -->
       <p class="mt-4">
-        Price data provided by 
-        <a href="https://coingecko.com" target="_blank" 
-           rel="noopener noreferrer">
+        Price data provided by
+        <a href="https://coingecko.com" target="_blank" rel="noopener noreferrer">
           CoinGecko
         </a>.
       </p>
@@ -655,18 +655,22 @@
   <div id="walletModal">
     <div class="modal-content">
       <h2 id="modalTitle" class="text-lg font-bold">Support Us</h2>
-      <p class="my-3">
-        If you're feeling generous, I'd love a nice cold drink:
-      </p>
+      <p class="my-3">If you're feeling generous, I'd love a nice cold drink:</p>
       <div class="bg-gray-800 p-2 rounded flex flex-col sm:flex-row sm:items-center">
         <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">
           0x62f1F6bFE3A798d5023608ac0a9c8a9538276283
         </span>
-        <button onclick="copyWalletAddress()" class="px-3 py-1 bg-teal-500 text-white rounded hover:bg-teal-600 focus:outline-none">
+        <button
+          onclick="copyWalletAddress()"
+          class="px-3 py-1 bg-teal-500 text-white rounded hover:bg-teal-600 focus:outline-none"
+        >
           Copy
         </button>
       </div>
-      <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 w-full sm:w-auto mt-4 sm:mt-0 px-4 py-2 rounded focus:outline-none">
+      <button
+        onclick="closeModal()"
+        class="bg-red-500 hover:bg-red-600 w-full sm:w-auto mt-4 sm:mt-0 px-4 py-2 rounded focus:outline-none"
+      >
         Close
       </button>
     </div>
@@ -674,17 +678,21 @@
 
   <!-- SCRIPT -->
   <script>
-    // Modal Functions (unchanged)
+    // Open Modal
     function supportSite() {
       const modal = document.getElementById('walletModal');
       modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
     }
+
+    // Close Modal
     function closeModal() {
       const modal = document.getElementById('walletModal');
       modal.classList.remove('active');
       document.body.style.overflow = 'auto';
     }
+
+    // Copy Wallet Address
     function copyWalletAddress() {
       const walletAddress = document.getElementById('walletAddress').textContent;
       navigator.clipboard.writeText(walletAddress)
@@ -692,7 +700,7 @@
         .catch(() => alert('Failed to copy wallet address.'));
     }
 
-    // Generate the Grid View items (unchanged from your original)
+    // Generate the Grid View items
     function generateGridView() {
       const gridView = document.getElementById('gridView');
       const overviewList = document.getElementById('overviewList');
@@ -710,12 +718,14 @@
         const roi = cells[4].textContent.trim();
         const investment = cells[5].textContent.trim();
 
-        // Extract token identifier from the link
+        // Extract token identifier from <a href="...">
         const tokenLinkElement = cells[0].querySelector('a');
-        const tokenLink = tokenLinkElement ? tokenLinkElement.getAttribute('href') : '#';
+        const tokenLink = tokenLinkElement
+          ? tokenLinkElement.getAttribute('href')
+          : '#';
         const tokenIdentifier = tokenLink.replace('.html', '').toLowerCase();
 
-        // Build a grid-item <a>
+        // Create a grid-item <a>
         const gridItem = document.createElement('a');
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
@@ -724,12 +734,14 @@
           <div class="flex items-center mb-2">
             <img 
               src="https://sadpepedev.github.io/TheLegionProject/images/logos/${tokenIdentifier}.png" 
-              alt="${tokenName} Logo" 
-              class="token-logo mr-2" 
-              loading="lazy" 
+              alt="${tokenName} Logo"
+              class="token-logo mr-2"
+              loading="lazy"
               onerror="this.onerror=null; this.src='https://sadpepedev.github.io/TheLegionProject/images/logos/placeholder.png'"
             >
-            <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">${tokenName}</span>
+            <span class="text-xl font-semibold token-${tokenIdentifier} hover:underline">
+              ${tokenName}
+            </span>
           </div>
           <div class="mb-2">${status}</div>
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
@@ -737,17 +749,17 @@
           <div class="mb-1"><strong>ROI:</strong> ${roi}</div>
           <div><strong>If you invested $1000:</strong> ${investment}</div>
         `;
+
         gridView.appendChild(gridItem);
       });
     }
 
-    // (1) Existing function to update "tradable" tokens (i.e., Fuel)
-    //     Calls /calculate to get live Fuel data.
-    async function updateTradableTokens() {
-      const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
-      tradableRows.forEach(async (row) => {
+    // Update FUEL tokens => calls "/calculate", updates columns #4,#5,#6
+    async function updateFuelTokens() {
+      const fuelRows = document.querySelectorAll('tr[data-tradable="true"]');
+      fuelRows.forEach(async (row) => {
         try {
-          // For Fuel, let's assume $1000 investment at seed price 0.02
+          // Example: $1000 at round_price=0.02
           const response = await fetch('/calculate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -758,31 +770,33 @@
           const data = await response.json();
           if (data.error) throw new Error(data.error);
 
+          // data => { initial_investment, current_price, roi_value }
           const priceCell = row.querySelector('td:nth-child(4)');
           const roiCell = row.querySelector('td:nth-child(5)');
           const investedCell = row.querySelector('td:nth-child(6)');
 
           const currentPrice = data.current_price || 0;
           const finalValue = data.roi_value || 0;
-          // ROI% = ((finalValue/$1000) - 1) * 100
+          // ROI% = ((finalValue / 1000) - 1) * 100
           const roiPercent = ((finalValue / 1000) - 1) * 100;
 
           if (currentPrice > 0) {
             priceCell.textContent = `$${currentPrice.toFixed(4)}`;
           } else {
-            priceCell.textContent = '--';
+            priceCell.textContent = '(coming soon)';
           }
           if (!isNaN(roiPercent)) {
             roiCell.textContent = `${roiPercent.toFixed(2)}%`;
           } else {
-            roiCell.textContent = '--';
+            roiCell.textContent = '(coming soon)';
           }
           if (finalValue > 0) {
             investedCell.textContent = `$${finalValue.toFixed(2)}`;
           } else {
-            investedCell.textContent = '--';
+            investedCell.textContent = '(coming soon)';
           }
 
+          // Apply ROI styling
           roiCell.classList.remove('roi-positive', 'roi-negative');
           investedCell.classList.remove('investment-positive', 'investment-negative');
           if (roiPercent > 0) {
@@ -802,13 +816,12 @@
       });
     }
 
-    // (2) New function to update Silencio data
-    //     Calls /calculate_silencio to get live or "coming soon."
+    // Update SILENCIO => calls "/calculate_silencio", updates columns #4,#5,#6
     async function updateSilencioTokens() {
       const silencioRows = document.querySelectorAll('tr[data-silencio="true"]');
       silencioRows.forEach(async (row) => {
         try {
-          // For Silencio, let's do $1000 as well
+          // $1000 investment
           const response = await fetch('/calculate_silencio', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -819,6 +832,7 @@
           const data = await response.json();
           if (data.error) throw new Error(data.error);
 
+          // data => { initial_investment, current_price, roi_value }
           const priceCell = row.querySelector('td:nth-child(4)');
           const roiCell = row.querySelector('td:nth-child(5)');
           const investedCell = row.querySelector('td:nth-child(6)');
@@ -830,19 +844,20 @@
           if (currentPrice > 0) {
             priceCell.textContent = `$${currentPrice.toFixed(6)}`;
           } else {
-            priceCell.textContent = '--';
+            priceCell.textContent = '(coming soon)';
           }
           if (!isNaN(roiPercent)) {
             roiCell.textContent = `${roiPercent.toFixed(2)}%`;
           } else {
-            roiCell.textContent = '--';
+            roiCell.textContent = '(coming soon)';
           }
           if (finalValue > 0) {
             investedCell.textContent = `$${finalValue.toFixed(2)}`;
           } else {
-            investedCell.textContent = '--';
+            investedCell.textContent = '(coming soon)';
           }
 
+          // Apply ROI styling
           roiCell.classList.remove('roi-positive', 'roi-negative');
           investedCell.classList.remove('investment-positive', 'investment-negative');
           if (roiPercent > 0) {
@@ -867,16 +882,16 @@
       const loadingRow = document.getElementById('loadingRow');
       if (loadingRow) loadingRow.remove();
 
-      // 1) Update Fuel tokens
-      updateTradableTokens();
+      // (1) Update Fuel
+      updateFuelTokens();
 
-      // 2) Update Silencio tokens
+      // (2) Update Silencio
       updateSilencioTokens();
 
-      // 3) Generate the Grid view
+      // (3) Generate the grid view from updated table data
       generateGridView();
     });
   </script>
-
 </body>
 </html>
+
