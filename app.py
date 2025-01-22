@@ -29,20 +29,36 @@ limiter = Limiter(
 )
 limiter.init_app(app)
 
-# CoinGecko API endpoint and token details
+# CoinGecko API endpoint (for your existing token)
 COINGECKO_API_URL = "https://api.coingecko.com/api/v3/simple/token_price/ethereum"
 TOKEN_CONTRACT_ADDRESS = "0x675b68aa4d9c2d3bb3f0397048e62e6b7192079c"
-SEED_ROUND_PRICE = 0.02  # Fixed seed round price in USD
+
+# CoinGecko API endpoint (for Silencio)
+SILENCIO_API_URL = "https://api.coingecko.com/api/v3/simple/price"
+
+# Base (seed) round price for your original token
+SEED_ROUND_PRICE = 0.02  # For Fuel
+
+# Base price for Silencio
+SILENCIO_BASE_PRICE = 0.0006  # This is the “base” you specified
 
 # Environment variables for API Key (if required)
 COINGECKO_API_KEY = os.getenv("COINGECKO_API_KEY")
 
-# Cache variables
+# Cache for the existing token
 cache = {
     "price": None,
     "timestamp": 0
 }
-CACHE_DURATION = 60  # seconds
+
+# Cache for Silencio
+cache_silencio = {
+    "price": None,
+    "timestamp": 0
+}
+
+# Cache duration in seconds
+CACHE_DURATION = 60
 
 # Setup a requests session with retry strategy
 session = requests.Session()
@@ -59,13 +75,13 @@ session.mount('http://', adapter)
 
 def get_token_price():
     """
-    Fetch the current token price from CoinGecko API.
+    Fetch the current token price for Fuel (existing token) from CoinGecko API.
     Implements basic caching to reduce API calls.
     """
     current_time = time.time()
     # If cached price is still valid, return it
     if cache["price"] and (current_time - cache["timestamp"] < CACHE_DURATION):
-        logging.info("Using cached token price.")
+        logging.info("Using cached token price (Fuel).")
         return cache["price"]
 
     params = {
@@ -79,22 +95,63 @@ def get_token_price():
         headers["x-cg-demo-api-key"] = COINGECKO_API_KEY
 
     try:
-        logging.info("Fetching token price from CoinGecko API...")
+        logging.info("Fetching Fuel token price from CoinGecko API...")
         response = session.get(COINGECKO_API_URL, params=params, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
 
         price = data.get(TOKEN_CONTRACT_ADDRESS.lower(), {}).get("usd")
         if price is not None:
-            logging.info(f"Fetched token price: ${price}")
+            logging.info(f"Fetched Fuel token price: ${price}")
             cache["price"] = price
             cache["timestamp"] = current_time
             return price
         else:
-            logging.error("Token price not found in the API response.")
+            logging.error("Fuel token price not found in the API response.")
             return None
     except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching token price: {e}", exc_info=True)
+        logging.error(f"Error fetching token price (Fuel): {e}", exc_info=True)
+        return None
+
+
+def get_silencio_price():
+    """
+    Fetch the current Silencio price from CoinGecko API.
+    Implements basic caching to reduce API calls.
+    """
+    current_time = time.time()
+    # If cached price is still valid, return it
+    if cache_silencio["price"] and (current_time - cache_silencio["timestamp"] < CACHE_DURATION):
+        logging.info("Using cached Silencio token price.")
+        return cache_silencio["price"]
+
+    params = {
+        "ids": "silencio",
+        "vs_currencies": "usd"
+    }
+    headers = {"accept": "application/json"}
+
+    # Include API key if available (not typically required for simple price endpoint, but kept for consistency)
+    if COINGECKO_API_KEY:
+        headers["x-cg-demo-api-key"] = COINGECKO_API_KEY
+
+    try:
+        logging.info("Fetching Silencio price from CoinGecko API...")
+        response = session.get(SILENCIO_API_URL, params=params, headers=headers, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        price = data.get("silencio", {}).get("usd")
+        if price is not None:
+            logging.info(f"Fetched Silencio price: ${price}")
+            cache_silencio["price"] = price
+            cache_silencio["timestamp"] = current_time
+            return price
+        else:
+            logging.error("Silencio price not found in the API response.")
+            return None
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error fetching Silencio price: {e}", exc_info=True)
         return None
 
 
@@ -188,7 +245,7 @@ def calculate():
     Handle ROI calculation based on user input (for the 'Fuel' token).
     """
     try:
-        logging.info("Received request to /calculate")
+        logging.info("Received request to /calculate (Fuel)")
         data = request.get_json()
         investment_input = data.get("investment")
         round_price = data.get("round_price", SEED_ROUND_PRICE)
@@ -212,7 +269,7 @@ def calculate():
         roi_value = tokens_purchased * current_price
 
         logging.info(
-            f"ROI Calculation - Investment: ${initial_investment}, "
+            f"ROI Calculation (Fuel) - Investment: ${initial_investment}, "
             f"Tokens Purchased: {tokens_purchased}, Current Price: ${current_price}, ROI: ${roi_value}"
         )
 
@@ -223,7 +280,52 @@ def calculate():
         })
 
     except Exception as e:
-        logging.error(f"Error in /calculate route: {e}", exc_info=True)
+        logging.error(f"Error in /calculate route (Fuel): {e}", exc_info=True)
+        return jsonify({"error": "An internal error occurred."}), 500
+
+
+@app.route("/calculate_silencio", methods=["POST"])
+@limiter.limit("10 per minute")  # Example rate limit
+def calculate_silencio():
+    """
+    Handle ROI calculation for Silencio, using the Silencio base price (0.0006).
+    """
+    try:
+        logging.info("Received request to /calculate_silencio (Silencio)")
+        data = request.get_json()
+        investment_input = data.get("investment")
+
+        if investment_input is None:
+            return jsonify({"error": "Investment input is missing."}), 400
+
+        try:
+            initial_investment = float(investment_input)
+            if initial_investment <= 0:
+                raise ValueError("Investment must be greater than zero.")
+        except (TypeError, ValueError) as e:
+            return jsonify({"error": str(e)}), 400
+
+        current_price = get_silencio_price()
+        if current_price is None:
+            return jsonify({"error": "Failed to fetch Silencio token price."}), 500
+
+        # Calculate ROI based on Silencio base price
+        tokens_purchased = initial_investment / SILENCIO_BASE_PRICE
+        roi_value = tokens_purchased * current_price
+
+        logging.info(
+            f"ROI Calculation (Silencio) - Investment: ${initial_investment}, "
+            f"Tokens Purchased: {tokens_purchased}, Current Price: ${current_price}, ROI: ${roi_value}"
+        )
+
+        return jsonify({
+            "initial_investment": initial_investment,
+            "current_price": current_price,
+            "roi_value": roi_value
+        })
+
+    except Exception as e:
+        logging.error(f"Error in /calculate_silencio route (Silencio): {e}", exc_info=True)
         return jsonify({"error": "An internal error occurred."}), 500
 
 
