@@ -478,7 +478,7 @@
 
       <!-- Header -->
       <div class="modern-header">
-        <h2></h2>
+        <h2>Legion ICO Overview</h2>
         <hr />
       </div>
 
@@ -796,9 +796,17 @@
         });
       });
 
-      // Separate live from non-live
-      const liveTokens = rowData.filter((d) => d.isLive);
-      const nonLiveTokens = rowData.filter((d) => !d.isLive);
+      // Separate Silencio and others
+      const silencioData = rowData.find(
+        (d) => d.tokenIdentifier === "silencio"
+      );
+      const otherTokens = rowData.filter(
+        (d) => d.tokenIdentifier !== "silencio"
+      );
+
+      // Separate live and non-live tokens from otherTokens
+      const liveTokens = otherTokens.filter((d) => d.isLive);
+      const nonLiveTokens = otherTokens.filter((d) => !d.isLive);
 
       // Sort live tokens descending by numeric price
       liveTokens.sort((a, b) => b.numericPrice - a.numericPrice);
@@ -806,13 +814,18 @@
       // Randomize the non-live tokens
       nonLiveTokens.sort(() => 0.5 - Math.random());
 
-      // Combine
+      // Combine: live tokens, then non-live tokens
       const finalData = [...liveTokens, ...nonLiveTokens];
+
+      // Insert Silencio as the second item if it exists
+      if (silencioData) {
+        finalData.splice(1, 0, silencioData); // Insert at index 1
+      }
 
       // Clear the old grid items
       gridView.innerHTML = "";
 
-      // Now build the grid in sorted/random order
+      // Now build the grid in sorted/random order with Silencio second
       finalData.forEach((data) => {
         const {
           tokenName,
@@ -856,9 +869,7 @@
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
           <div class="mb-1"><strong>ROI:</strong>
-            <span class="${
-              roi.includes("-") ? "text-red-500" : "text-green-500"
-            }">${roi}</span>
+            <span class="${roi.includes("-") ? "text-red-500" : "text-green-500"}">${roi}</span>
           </div>
           <div>
             <strong>If you invested $1000:</strong> 
@@ -964,7 +975,7 @@
       });
     }
 
-    // Fetch Silencio row from CoinGecko, but using "fuel" data as an example
+    // Fetch Silencio from CoinGecko and update table
     async function updateSilencioToken() {
       try {
         // Locate the 'silencio' row via the link
@@ -972,22 +983,22 @@
           .querySelector('#overviewList tr td a[href="silencio.html"]')
           .closest("tr");
 
-        // Fetch from CoinGecko for "fuel" (a live token)
+        // Fetch from CoinGecko for "silencio"
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=fuel&vs_currencies=usd"
+          "https://api.coingecko.com/api/v3/simple/price?ids=silencio&vs_currencies=usd"
         );
-        if (!response.ok) throw new Error("Failed to fetch Fuel price");
+        if (!response.ok) throw new Error("Failed to fetch Silencio price");
 
         const data = await response.json();
-        // If 'fuel' or 'usd' is missing, we treat it as no data
-        if (!data.fuel || !data.fuel.usd) {
+        // If 'silencio' or 'usd' is missing, we treat it as no data
+        if (!data.silencio || !data.silencio.usd) {
           silencioRow.querySelector("td:nth-child(4)").textContent =
             "Coming soon";
           return;
         }
 
         // Extract price
-        const currentPrice = parseFloat(data.fuel.usd);
+        const currentPrice = parseFloat(data.silencio.usd);
 
         // Update table cells (seed price is column 3)
         const seedPriceText = silencioRow
@@ -1039,7 +1050,7 @@
           generateGridView();
         }
       } catch (error) {
-        console.error("Error fetching Fuel price for Silencio row:", error);
+        console.error("Error fetching Silencio price:", error);
         // If there's an error, just put "Coming soon"
         const silencioRow = document
           .querySelector('#overviewList tr td a[href="silencio.html"]')
@@ -1073,7 +1084,7 @@
       // Kick off data fetch for tradable tokens
       updateTradableTokens();
 
-      // For Silencio row, fetch from "fuel" so we see real data
+      // Fetch Silencio price from CoinGecko
       updateSilencioToken();
 
       // Generate grid view on load
