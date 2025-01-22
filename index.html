@@ -1,35 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta 
+    name="viewport" 
+    content="width=device-width,initial-scale=1.0" 
+  />
   <title>Track Legion ICO Performance</title>
-  
+
   <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
     default-src 'self';
+    connect-src 'self' https://api.coingecko.com;
     img-src 'self' https://sadpepedev.github.io;
-    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com;
+    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com https://vercel.live;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     object-src 'none';
     base-uri 'self';
     frame-ancestors 'none';
-  ">
-  
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  "
+  />
 
-  <!-- Tailwind CSS -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+
+  <!-- Tailwind CSS (via CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Google Fonts -->
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" 
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
     rel="stylesheet"
-  >
-  
+  />
+
   <!-- Favicon -->
-  <link rel="icon" href="https://sadpepedev.github.io/TheLegionProject/favicon.ico" type="image/x-icon">
+  <link
+    rel="icon"
+    href="https://sadpepedev.github.io/TheLegionProject/favicon.ico"
+    type="image/x-icon"
+  />
 
   <style>
     /* Reset and Base Styles */
@@ -38,13 +49,14 @@
       padding: 0;
       box-sizing: border-box;
     }
-    html, body {
+    html,
+    body {
       height: 100%;
     }
     body {
-      background-color: #09131b; 
+      background-color: #09131b;
       color: #cfd0d1;
-      font-family: 'Orbitron', sans-serif;
+      font-family: "Orbitron", sans-serif;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -58,17 +70,24 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 60px 60px; 
+      background-image: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px
+        );
+      background-size: 60px 60px;
       pointer-events: none;
       z-index: 1;
     }
 
     /* Content Wrapper */
     .content-wrapper {
-      z-index: 2; 
+      z-index: 2;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -83,7 +102,7 @@
       padding: 2rem;
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      background: rgba(0, 0, 0, 0.3); 
+      background: rgba(0, 0, 0, 0.3);
       position: relative;
     }
     .main-container:hover {
@@ -113,17 +132,18 @@
     .tron-table {
       width: 100%;
       border-collapse: collapse;
-      border: 1px solid rgba(0,255,238,0.2);
+      border: 1px solid rgba(0, 255, 238, 0.2);
       margin-bottom: 2rem;
       font-size: 0.875rem;
     }
     .tron-table thead {
-      background-color: rgba(0,255,238,0.05);
+      background-color: rgba(0, 255, 238, 0.05);
     }
-    .tron-table th, .tron-table td {
+    .tron-table th,
+    .tron-table td {
       padding: 1rem;
       text-align: left;
-      border-bottom: 1px solid rgba(0,255,238,0.2);
+      border-bottom: 1px solid rgba(0, 255, 238, 0.2);
       white-space: nowrap;
     }
     .tron-table th {
@@ -141,7 +161,7 @@
 
     /* ROI Styles */
     .roi-positive {
-      color: #0afc4e; 
+      color: #0afc4e;
       font-weight: bold;
     }
     .roi-negative {
@@ -151,7 +171,7 @@
 
     /* Investment Styles */
     .investment-positive {
-      color: #0afc4e; 
+      color: #0afc4e;
       font-weight: bold;
     }
     .investment-negative {
@@ -183,33 +203,33 @@
     }
 
     /* Token Color Styles with CSS Variables */
-    .token-fuel { 
-      --token-color: rgba(10, 252, 78, 0.9); 
-      color: #0afc4e; 
+    .token-fuel {
+      --token-color: rgba(10, 252, 78, 0.9);
+      color: #0afc4e;
     }
-    .token-almanak { 
-      --token-color: rgba(249, 249, 249, 0.9); 
-      color: #f9f9f9; 
+    .token-almanak {
+      --token-color: rgba(249, 249, 249, 0.9);
+      color: #f9f9f9;
     }
-    .token-pulse { 
-      --token-color: rgba(14, 183, 255, 0.9); 
-      color: #0eb7ff; 
+    .token-pulse {
+      --token-color: rgba(14, 183, 255, 0.9);
+      color: #0eb7ff;
     }
-    .token-silencio { 
-      --token-color: rgba(64, 134, 214, 0.9); 
-      color: #4086d6; 
+    .token-silencio {
+      --token-color: rgba(64, 134, 214, 0.9);
+      color: #4086d6;
     }
-    .token-enclave { 
-      --token-color: rgba(137, 207, 240, 0.9); 
-      color: #89CFF0; 
+    .token-enclave {
+      --token-color: rgba(137, 207, 240, 0.9);
+      color: #89cff0;
     }
-    .token-corn { 
-      --token-color: rgba(255, 165, 0, 0.9); 
-      color: #FFA500; 
+    .token-corn {
+      --token-color: rgba(255, 165, 0, 0.9);
+      color: #ffa500;
     }
     .token-giza {
-      --token-color: rgba(122, 122, 120, 0.9); 
-      color: #696866; 
+      --token-color: rgba(122, 122, 120, 0.9);
+      color: #696866;
     }
 
     /* 
@@ -223,20 +243,20 @@
       margin: 0.5rem;
       transition: transform 0.3s ease;
       border-radius: 50%;
-      width: 50px; 
+      width: 50px;
       height: auto;
       max-width: 100%;
       display: block;
     }
     @media (max-width: 768px) {
       .token-logo {
-        width: 60px; 
-        height: auto; 
+        width: 60px;
+        height: auto;
       }
     }
     @media (max-width: 480px) {
       .token-logo {
-        width: 40px; 
+        width: 40px;
         height: auto;
       }
     }
@@ -251,11 +271,8 @@
       background-color: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(0, 255, 238, 0.2);
       border-radius: 0.5rem;
-      transition: 
-        border-color 0.3s ease,
-        transform 0.3s ease,
-        box-shadow 0.3s ease,
-        color 0.3s ease;
+      transition: border-color 0.3s ease, transform 0.3s ease,
+        box-shadow 0.3s ease, color 0.3s ease;
       position: relative;
       overflow: hidden;
       text-decoration: none;
@@ -264,9 +281,7 @@
     .grid-item:hover {
       border-color: rgba(0, 255, 238, 0.4);
       transform: scale(1.05);
-      box-shadow:
-        0 0 15px var(--token-color),
-        0 0 30px var(--token-color);
+      box-shadow: 0 0 15px var(--token-color), 0 0 30px var(--token-color);
       color: var(--token-color);
     }
     .grid-item a {
@@ -281,13 +296,17 @@
       filter: drop-shadow(0 0 10px #00ffee);
     }
     .grid-item::before {
-      content: '';
+      content: "";
       position: absolute;
       top: -50%;
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(0,255,238,0.3) 0%, rgba(0,255,238,0) 70%);
+      background: radial-gradient(
+        circle,
+        rgba(0, 255, 238, 0.3) 0%,
+        rgba(0, 255, 238, 0) 70%
+      );
       opacity: 0;
       transition: opacity 0.3s ease;
       pointer-events: none;
@@ -303,7 +322,7 @@
     */
     .logo-container {
       position: relative;
-      width: 150px; 
+      width: 150px;
       height: auto;
       margin: 0 auto 3rem; /* 3rem bottom margin to push <hr> down */
     }
@@ -355,7 +374,7 @@
       text-align: center;
       padding: 1rem;
       font-size: 0.75rem;
-      border-top: 1px solid rgba(0,255,238,0.2);
+      border-top: 1px solid rgba(0, 255, 238, 0.2);
     }
     footer .footer-container {
       max-width: 1200px;
@@ -384,7 +403,7 @@
     #walletModal {
       position: fixed;
       inset: 0;
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0, 0, 0, 0.7);
       display: none;
       align-items: center;
       justify-content: center;
@@ -428,14 +447,13 @@
         display: none;
       }
       .token-logo {
-        width: 60px; 
-        height: auto; 
+        width: 60px;
+        height: auto;
       }
     }
   </style>
 </head>
 <body>
-
   <!-- Tron Grid Overlay -->
   <div class="tron-grid"></div>
 
@@ -445,27 +463,30 @@
       <!-- Use .logo-container with degion + legion images -->
       <div class="logo-container">
         <!-- Degion by default -->
-        <img 
+        <img
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/degion.png"
           alt="Degion Logo"
           class="degion"
-        >
+        />
         <!-- Legion on hover -->
-        <img 
+        <img
           src="https://sadpepedev.github.io/TheLegionProject/images/logos/legion.png"
           alt="Legion Logo"
           class="legion-hover"
-        >
+        />
       </div>
 
       <!-- Header -->
       <div class="modern-header">
-        <h2></h2>
-        <hr>
+        <h2>Legion ICO Overview</h2>
+        <hr />
       </div>
 
       <!-- Grid View (Default Visible) -->
-      <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div
+        id="gridView"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+      >
         <!-- Grid items will be dynamically generated -->
       </div>
 
@@ -536,7 +557,7 @@
             </tr>
 
             <!-- Silencio -->
-            <tr>
+            <tr class="token-silencio">
               <td class="token-silencio">
                 <a href="silencio.html">Silencio</a>
               </td>
@@ -594,7 +615,6 @@
               <td>--</td>
               <td>--</td>
             </tr>
-            
           </tbody>
         </table>
       </div>
@@ -617,38 +637,47 @@
     <div class="footer-container">
       <!-- Built By -->
       <div class="mb-4 flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" 
-             viewBox="0 0 24 24" stroke-width="2" 
-             stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" 
-                d="M12 4v16m8-8H4" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 4v16m8-8H4"
+          />
         </svg>
-        <span class="text-base font-semibold text-white">
-          Built by 
-          <a href="https://x.com/Dustybeerbong" target="_blank" 
-             rel="noopener noreferrer" 
-             class="ml-1">
-            Sadpepe.exe
-          </a>
-        </span>
+        <span class="text-base font-semibold text-white"
+          >Built by
+          <a
+            href="https://x.com/Dustybeerbong"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="ml-1"
+            >Sadpepe.exe</a
+          ></span
+        >
       </div>
       <!-- Disclaimer -->
       <p class="max-w-xl text-center leading-snug">
-        <strong>Disclaimer:</strong> We are 
-        <em>not</em> affiliated with Legion and do 
-        <em>not</em> offer financial or trading advice. 
-        This website is purely for informational 
-        purposes to assist in tracking prior ICO 
-        performance. Always conduct your own 
-        research before making any investment decisions.
+        <strong>Disclaimer:</strong> We are <em>not</em> affiliated with Legion
+        and do <em>not</em> offer financial or trading advice. This website is
+        purely for informational purposes to assist in tracking prior ICO
+        performance. Always conduct your own research before making any
+        investment decisions.
       </p>
       <!-- Price Data -->
       <p class="mt-4">
-        Price data provided by 
-        <a href="https://coingecko.com" target="_blank" 
-           rel="noopener noreferrer">
-          CoinGecko
-        </a>.
+        Price data provided by
+        <a
+          href="https://coingecko.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          >CoinGecko</a
+        >.
       </p>
     </div>
   </footer>
@@ -660,15 +689,26 @@
       <p class="my-3">
         If you're feeling generous, I'd love a nice cold drink:
       </p>
-      <div class="bg-gray-800 p-2 rounded flex flex-col sm:flex-row sm:items-center">
-        <span id="walletAddress" class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all">
+      <div
+        class="bg-gray-800 p-2 rounded flex flex-col sm:flex-row sm:items-center"
+      >
+        <span
+          id="walletAddress"
+          class="text-gray-200 mb-2 sm:mb-0 sm:mr-2 break-all"
+        >
           0x62f1F6bFE3A798d5023608ac0a9c8a9538276283
         </span>
-        <button onclick="copyWalletAddress()" class="px-3 py-1 bg-teal-500 text-white rounded hover:bg-teal-600 focus:outline-none">
+        <button
+          onclick="copyWalletAddress()"
+          class="px-3 py-1 bg-teal-500 text-white rounded hover:bg-teal-600 focus:outline-none"
+        >
           Copy
         </button>
       </div>
-      <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 w-full sm:w-auto mt-4 sm:mt-0 px-4 py-2 rounded focus:outline-none">
+      <button
+        onclick="closeModal()"
+        class="bg-red-500 hover:bg-red-600 w-full sm:w-auto mt-4 sm:mt-0 px-4 py-2 rounded focus:outline-none"
+      >
         Close
       </button>
     </div>
@@ -678,37 +718,43 @@
   <script>
     // Open Modal
     function supportSite() {
-      const modal = document.getElementById('walletModal');
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+      const modal = document.getElementById("walletModal");
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden"; // Prevent scrolling behind modal
     }
 
     // Close Modal
     function closeModal() {
-      const modal = document.getElementById('walletModal');
-      modal.classList.remove('active');
-      document.body.style.overflow = 'auto';
+      const modal = document.getElementById("walletModal");
+      modal.classList.remove("active");
+      document.body.style.overflow = "auto";
     }
 
     // Copy Wallet Address
     function copyWalletAddress() {
-      const walletAddress = document.getElementById('walletAddress').textContent;
-      navigator.clipboard.writeText(walletAddress)
-        .then(() => alert('Wallet address copied to clipboard!'))
-        .catch(() => alert('Failed to copy wallet address.'));
+      const walletAddress =
+        document.getElementById("walletAddress").textContent;
+      navigator.clipboard
+        .writeText(walletAddress)
+        .then(() => alert("Wallet address copied to clipboard!"))
+        .catch(() => alert("Failed to copy wallet address."));
     }
 
     // Generate the Grid View items
     function generateGridView() {
-      const gridView = document.getElementById('gridView');
-      const overviewList = document.getElementById('overviewList');
-      gridView.innerHTML = ''; // Clear existing grid items
+      const gridView = document.getElementById("gridView");
+      const overviewList = document.getElementById("overviewList");
 
-      overviewList.querySelectorAll('tr').forEach((row) => {
+      // We'll gather all row data first, then sort live tokens by price, randomize others
+      const rowData = [];
+
+      overviewList.querySelectorAll("tr").forEach((row) => {
         // Skip loading row
-        if (row.id === 'loadingRow') return;
+        if (row.id === "loadingRow") return;
 
-        const cells = row.querySelectorAll('td');
+        const cells = row.querySelectorAll("td");
+        if (cells.length < 6) return;
+
         const tokenName = cells[0].textContent.trim();
         const status = cells[1].innerHTML.trim();
         const seedPrice = cells[2].textContent.trim();
@@ -717,23 +763,97 @@
         const investment = cells[5].textContent.trim();
 
         // Extract token identifier from the link
-        const tokenLinkElement = cells[0].querySelector('a');
-        const tokenLink = tokenLinkElement ? tokenLinkElement.getAttribute('href') : '#';
-        const tokenIdentifier = tokenLink.replace('.html', '').toLowerCase();
+        const tokenLinkElement = cells[0].querySelector("a");
+        const tokenLink = tokenLinkElement
+          ? tokenLinkElement.getAttribute("href")
+          : "#";
+        const tokenIdentifier = tokenLink.replace(".html", "").toLowerCase();
+
+        // Convert tokenPrice to numeric (treat '--', 'Coming soon', 'Error' as 0)
+        let numericPrice = 0;
+        if (tokenPrice.startsWith("$")) {
+          const priceVal = parseFloat(tokenPrice.replace("$", ""));
+          if (!isNaN(priceVal)) {
+            numericPrice = priceVal;
+          }
+        }
+
+        // Mark "isLive" if row has data-tradable = true
+        const isLive = row.getAttribute("data-tradable") === "true";
+
+        // Save all row data for sorting and display
+        rowData.push({
+          tokenName,
+          status,
+          seedPrice,
+          tokenPrice,
+          roi,
+          investment,
+          tokenLink,
+          tokenIdentifier,
+          numericPrice,
+          isLive,
+        });
+      });
+
+      // Separate Silencio and others
+      const silencioData = rowData.find(
+        (d) => d.tokenIdentifier === "silencio"
+      );
+      const otherTokens = rowData.filter(
+        (d) => d.tokenIdentifier !== "silencio"
+      );
+
+      // Separate live and non-live tokens from otherTokens
+      const liveTokens = otherTokens.filter((d) => d.isLive);
+      const nonLiveTokens = otherTokens.filter((d) => !d.isLive);
+
+      // Sort live tokens descending by numeric price
+      liveTokens.sort((a, b) => b.numericPrice - a.numericPrice);
+
+      // Randomize the non-live tokens
+      nonLiveTokens.sort(() => 0.5 - Math.random());
+
+      // Combine: live tokens, then non-live tokens
+      const finalData = [...liveTokens, ...nonLiveTokens];
+
+      // Insert Silencio as the second item if it exists
+      if (silencioData) {
+        finalData.splice(1, 0, silencioData); // Insert at index 1
+      }
+
+      // Clear the old grid items
+      gridView.innerHTML = "";
+
+      // Now build the grid in sorted/random order with Silencio second
+      finalData.forEach((data) => {
+        const {
+          tokenName,
+          status,
+          seedPrice,
+          tokenPrice,
+          roi,
+          investment,
+          tokenLink,
+          tokenIdentifier,
+        } = data;
 
         // Determine investment color
-        let investmentClass = '';
-        if (investment && investment !== '--') {
-          const investmentValue = parseFloat(investment.replace('$', ''));
-          investmentClass = investmentValue > 1000 ? 'investment-positive' : 'investment-negative';
+        let investmentClass = "";
+        if (investment && investment !== "--" && !investment.includes("Error")) {
+          const invVal = parseFloat(investment.replace("$", ""));
+          if (!isNaN(invVal)) {
+            investmentClass =
+              invVal > 1000 ? "investment-positive" : "investment-negative";
+          }
         }
 
         // Create grid item as an <a> tag with token class for CSS
-        const gridItem = document.createElement('a');
+        const gridItem = document.createElement("a");
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
-        // Build the HTML
+        // Build the HTML content for each item
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
             <img 
@@ -749,111 +869,230 @@
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
           <div class="mb-1"><strong>ROI:</strong>
-            <span class="${roi.includes('-') ? 'text-red-500' : 'text-green-500'}">${roi}</span>
+            <span class="${roi.includes("-") ? "text-red-500" : "text-green-500"}">${roi}</span>
           </div>
           <div>
             <strong>If you invested $1000:</strong> 
             <span class="${investmentClass}">${investment}</span>
           </div>
         `;
+
         gridView.appendChild(gridItem);
       });
     }
 
-    // Fetch & Update for Tradable Tokens
+    // Fetch & Update for Tradable Tokens (already existing logic)
     async function updateTradableTokens() {
-      const tradableRows = document.querySelectorAll('tr[data-tradable="true"]');
+      const tradableRows = document.querySelectorAll(
+        'tr[data-tradable="true"]'
+      );
       tradableRows.forEach(async (row) => {
-        const tokenNameCell = row.querySelector('td');
-        const tokenName = tokenNameCell ? tokenNameCell.textContent.trim() : 'Unknown';
-        
+        const tokenNameCell = row.querySelector("td");
+        const tokenName = tokenNameCell
+          ? tokenNameCell.textContent.trim()
+          : "Unknown";
+
         try {
           // Example fetch to "/calculate"
-          const response = await fetch('/calculate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ investment: 1, round_price: 0.02 })
+          const response = await fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ investment: 1, round_price: 0.02 }),
           });
-          if (!response.ok) throw new Error('Network response was not ok');
+          if (!response.ok) throw new Error("Network response was not ok");
 
           const data = await response.json();
-          if (data.error) throw new Error('API error');
+          if (data.error) throw new Error("API error");
 
           const currentPrice = data.current_price;
-          const seedPriceText = row.querySelector('td:nth-child(3)').textContent.replace('$', '');
+          const seedPriceText = row
+            .querySelector("td:nth-child(3)")
+            .textContent.replace("$", "");
           const seedPrice = parseFloat(seedPriceText) || 0;
           const roi = seedPrice > 0 ? (currentPrice / seedPrice) * 100 : 0;
-          const investmentValue = seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
+          const investmentValue =
+            seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update table cells
-          row.querySelector('td:nth-child(4)').textContent = 
-            seedPrice > 0 ? `$${currentPrice.toFixed(4)}` : '--';
-          const roiCell = row.querySelector('td:nth-child(5)');
-          roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : '--';
+          row.querySelector("td:nth-child(4)").textContent =
+            seedPrice > 0 ? `$${currentPrice.toFixed(4)}` : "--";
+          const roiCell = row.querySelector("td:nth-child(5)");
+          roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : "--";
 
           // Positive vs. negative ROI styling
           if (roi > 0) {
-            roiCell.classList.add('roi-positive');
-            roiCell.classList.remove('roi-negative');
+            roiCell.classList.add("roi-positive");
+            roiCell.classList.remove("roi-negative");
           } else if (roi < 0) {
-            roiCell.classList.add('roi-negative');
-            roiCell.classList.remove('roi-positive');
+            roiCell.classList.add("roi-negative");
+            roiCell.classList.remove("roi-positive");
           } else {
-            roiCell.classList.remove('roi-positive', 'roi-negative');
+            roiCell.classList.remove("roi-positive", "roi-negative");
           }
 
-          const investmentCell = row.querySelector('td:nth-child(6)');
-          investmentCell.textContent = 
-            seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : '--';
+          const investmentCell = row.querySelector("td:nth-child(6)");
+          investmentCell.textContent =
+            seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : "--";
 
           // Positive/Negative Investment color
           if (investmentValue > 1000) {
-            investmentCell.classList.add('investment-positive');
-            investmentCell.classList.remove('investment-negative');
+            investmentCell.classList.add("investment-positive");
+            investmentCell.classList.remove("investment-negative");
           } else if (investmentValue < 1000 && investmentValue !== 0) {
-            investmentCell.classList.add('investment-negative');
-            investmentCell.classList.remove('investment-positive');
+            investmentCell.classList.add("investment-negative");
+            investmentCell.classList.remove("investment-positive");
           } else {
-            investmentCell.classList.remove('investment-positive', 'investment-negative');
+            investmentCell.classList.remove(
+              "investment-positive",
+              "investment-negative"
+            );
           }
 
           // Regenerate grid view if it's active
-          const gridView = document.getElementById('gridView');
-          if (!gridView.classList.contains('hidden')) {
+          const gridView = document.getElementById("gridView");
+          if (!gridView.classList.contains("hidden")) {
             generateGridView();
           }
-
         } catch (error) {
           console.error(`Error updating ${tokenName}:`, error);
-          row.querySelector('td:nth-child(4)').textContent = 'Error';
-          const roiCell = row.querySelector('td:nth-child(5)');
-          roiCell.textContent = 'Error';
-          roiCell.classList.remove('roi-positive', 'roi-negative');
-          const investmentCell = row.querySelector('td:nth-child(6)');
-          investmentCell.textContent = 'Error';
-          investmentCell.classList.remove('investment-positive', 'investment-negative');
+          row.querySelector("td:nth-child(4)").textContent = "Error";
+          const roiCell = row.querySelector("td:nth-child(5)");
+          roiCell.textContent = "Error";
+          roiCell.classList.remove("roi-positive", "roi-negative");
+          const investmentCell = row.querySelector("td:nth-child(6)");
+          investmentCell.textContent = "Error";
+          investmentCell.classList.remove(
+            "investment-positive",
+            "investment-negative"
+          );
 
           // If Grid View is visible, regenerate
-          const gridView = document.getElementById('gridView');
-          if (!gridView.classList.contains('hidden')) {
+          const gridView = document.getElementById("gridView");
+          if (!gridView.classList.contains("hidden")) {
             generateGridView();
           }
         }
       });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Fetch Silencio from CoinGecko and update table
+    async function updateSilencioToken() {
+      try {
+        // Locate the 'silencio' row via the class 'token-silencio'
+        const silencioRow = document.querySelector("tr.token-silencio");
+
+        if (!silencioRow) {
+          console.error("Silencio row not found in the table.");
+          return;
+        }
+
+        // Fetch from CoinGecko for "silencio"
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=silencio&vs_currencies=usd"
+        );
+        if (!response.ok) throw new Error("Failed to fetch Silencio price");
+
+        const data = await response.json();
+        // If 'silencio' or 'usd' is missing, we treat it as no data
+        if (!data.silencio || !data.silencio.usd) {
+          silencioRow.querySelector("td:nth-child(4)").textContent =
+            "Coming soon";
+          return;
+        }
+
+        // Extract price
+        const currentPrice = parseFloat(data.silencio.usd);
+
+        // Update table cells (seed price is column 3)
+        const seedPriceText = silencioRow
+          .querySelector("td:nth-child(3)")
+          .textContent.replace("$", "");
+        const seedPrice = parseFloat(seedPriceText) || 0;
+        const priceCell = silencioRow.querySelector("td:nth-child(4)");
+        const roiCell = silencioRow.querySelector("td:nth-child(5)");
+        const investCell = silencioRow.querySelector("td:nth-child(6)");
+
+        priceCell.textContent = `$${currentPrice.toFixed(6)}`;
+
+        // Calculate ROI = (currentPrice / seedPrice) * 100
+        // Investment = (1000 / seedPrice) * currentPrice
+        if (seedPrice > 0) {
+          const roi = (currentPrice / seedPrice) * 100;
+          roiCell.textContent = `${roi.toFixed(2)}%`;
+          if (roi > 0) {
+            roiCell.classList.add("roi-positive");
+            roiCell.classList.remove("roi-negative");
+          } else {
+            roiCell.classList.add("roi-negative");
+            roiCell.classList.remove("roi-positive");
+          }
+
+          const investmentValue = (1000 / seedPrice) * currentPrice;
+          investCell.textContent = `$${investmentValue.toFixed(2)}`;
+
+          if (investmentValue > 1000) {
+            investCell.classList.add("investment-positive");
+            investCell.classList.remove("investment-negative");
+          } else if (investmentValue < 1000) {
+            investCell.classList.add("investment-negative");
+            investCell.classList.remove("investment-positive");
+          } else {
+            investCell.classList.remove(
+              "investment-positive",
+              "investment-negative"
+            );
+          }
+        } else {
+          // If seed price is 0 or invalid, show "Coming soon"
+          priceCell.textContent = "Coming soon";
+        }
+
+        // Regenerate the grid if it's active
+        const gridView = document.getElementById("gridView");
+        if (!gridView.classList.contains("hidden")) {
+          generateGridView();
+        }
+      } catch (error) {
+        console.error("Error fetching Silencio price:", error);
+        // If there's an error, just put "Coming soon"
+        const silencioRow = document.querySelector("tr.token-silencio");
+        if (silencioRow) {
+          silencioRow.querySelector("td:nth-child(4)").textContent =
+            "Coming soon";
+
+          // And remove any ROI/investment styling
+          silencioRow.querySelector("td:nth-child(5)").textContent = "--";
+          silencioRow
+            .querySelector("td:nth-child(5)")
+            .classList.remove("roi-positive", "roi-negative");
+          silencioRow.querySelector("td:nth-child(6)").textContent = "--";
+          silencioRow
+            .querySelector("td:nth-child(6)")
+            .classList.remove("investment-positive", "investment-negative");
+        }
+
+        // If Grid View is visible, regenerate
+        const gridView = document.getElementById("gridView");
+        if (!gridView.classList.contains("hidden")) {
+          generateGridView();
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
       // Remove loading row if present
-      const loadingRow = document.getElementById('loadingRow');
+      const loadingRow = document.getElementById("loadingRow");
       if (loadingRow) loadingRow.remove();
 
-      // Kick off data fetch
+      // Kick off data fetch for tradable tokens
       updateTradableTokens();
+
+      // Fetch Silencio price from CoinGecko
+      updateSilencioToken();
 
       // Generate grid view on load
       generateGridView();
     });
   </script>
-
 </body>
 </html>
