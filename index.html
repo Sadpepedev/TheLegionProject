@@ -557,7 +557,7 @@
             </tr>
 
             <!-- Silencio -->
-            <tr>
+            <tr class="token-silencio">
               <td class="token-silencio">
                 <a href="silencio.html">Silencio</a>
               </td>
@@ -769,7 +769,7 @@
           : "#";
         const tokenIdentifier = tokenLink.replace(".html", "").toLowerCase();
 
-        // Convert tokenPrice to numeric (treat '--', 'Error', 'Coming soon' as 0)
+        // Convert tokenPrice to numeric (treat '--', 'Coming soon', 'Error' as 0)
         let numericPrice = 0;
         if (tokenPrice.startsWith("$")) {
           const priceVal = parseFloat(tokenPrice.replace("$", ""));
@@ -978,10 +978,13 @@
     // Fetch Silencio from CoinGecko and update table
     async function updateSilencioToken() {
       try {
-        // Locate the 'silencio' row via the link
-        const silencioRow = document
-          .querySelector('#overviewList tr td a[href="silencio.html"]')
-          .closest("tr");
+        // Locate the 'silencio' row via the class 'token-silencio'
+        const silencioRow = document.querySelector("tr.token-silencio");
+
+        if (!silencioRow) {
+          console.error("Silencio row not found in the table.");
+          return;
+        }
 
         // Fetch from CoinGecko for "silencio"
         const response = await fetch(
@@ -1052,21 +1055,21 @@
       } catch (error) {
         console.error("Error fetching Silencio price:", error);
         // If there's an error, just put "Coming soon"
-        const silencioRow = document
-          .querySelector('#overviewList tr td a[href="silencio.html"]')
-          .closest("tr");
-        silencioRow.querySelector("td:nth-child(4)").textContent =
-          "Coming soon";
+        const silencioRow = document.querySelector("tr.token-silencio");
+        if (silencioRow) {
+          silencioRow.querySelector("td:nth-child(4)").textContent =
+            "Coming soon";
 
-        // And remove any ROI/investment styling
-        silencioRow.querySelector("td:nth-child(5)").textContent = "--";
-        silencioRow
-          .querySelector("td:nth-child(5)")
-          .classList.remove("roi-positive", "roi-negative");
-        silencioRow.querySelector("td:nth-child(6)").textContent = "--";
-        silencioRow
-          .querySelector("td:nth-child(6)")
-          .classList.remove("investment-positive", "investment-negative");
+          // And remove any ROI/investment styling
+          silencioRow.querySelector("td:nth-child(5)").textContent = "--";
+          silencioRow
+            .querySelector("td:nth-child(5)")
+            .classList.remove("roi-positive", "roi-negative");
+          silencioRow.querySelector("td:nth-child(6)").textContent = "--";
+          silencioRow
+            .querySelector("td:nth-child(6)")
+            .classList.remove("investment-positive", "investment-negative");
+        }
 
         // If Grid View is visible, regenerate
         const gridView = document.getElementById("gridView");
