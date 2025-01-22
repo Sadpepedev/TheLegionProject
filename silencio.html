@@ -8,41 +8,41 @@
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src
-      'self'
-      'unsafe-inline'
-      'unsafe-eval'
-      https://cdn.tailwindcss.com
-      https://fonts.googleapis.com
-      https://fonts.gstatic.com
-      https://s3.tradingview.com
-      https://www.tradingview.com
-      https://api.coingecko.com; /* Added CoinGecko */
-    style-src
-      'self'
-      'unsafe-inline'
+    script-src 
+      'self' 
+      'unsafe-inline' 
+      'unsafe-eval' 
+      https://cdn.tailwindcss.com 
+      https://fonts.googleapis.com 
+      https://fonts.gstatic.com 
+      https://s3.tradingview.com 
+      https://www.tradingview.com 
+      https://api.coingecko.com 
+      https://vercel.live;
+    style-src 
+      'self' 
+      'unsafe-inline' 
       https://fonts.googleapis.com;
-    font-src
-      'self'
+    font-src 
+      'self' 
       https://fonts.gstatic.com;
-    frame-src
-      'self'
-      https://www.tradingview-widget.com
-      https://www.tradingview.com
+    frame-src 
+      'self' 
+      https://www.tradingview-widget.com 
+      https://www.tradingview.com 
       https://s3.tradingview.com;
-    connect-src
-      'self'
-      https://*.tradingview.com
-      https://data.tradingview.com
-      https://www.tradingview-widget.com
-      https://api.coingecko.com; /* Added CoinGecko */
+    connect-src 
+      'self' 
+      https://*.tradingview.com 
+      https://data.tradingview.com 
+      https://www.tradingview-widget.com 
+      https://api.coingecko.com;
     object-src 'none';
     base-uri 'self';
-    frame-ancestors 'none';
   ">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS (Consider using Tailwind CLI for production) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google Fonts -->
@@ -52,9 +52,7 @@
   >
 
   <style>
-    /* --------------------------------------------------
-       Tron-like background and styling
-       -------------------------------------------------- */
+    /* Reset and Base Styles */
     * {
       margin: 0;
       padding: 0;
@@ -73,6 +71,7 @@
       overflow-x: hidden;
     }
 
+    /* Tron Grid Overlay */
     .tron-grid {
       position: absolute;
       top: 0;
@@ -87,6 +86,7 @@
       z-index: 1;
     }
 
+    /* Content Wrapper */
     .content-wrapper {
       z-index: 2;
       flex: 1;
@@ -96,6 +96,7 @@
       padding: 2rem 1rem;
     }
 
+    /* Main Panel */
     .main-panel {
       width: 100%;
       max-width: 900px;
@@ -110,6 +111,7 @@
       border-color: rgba(0,255,238,0.4);
     }
 
+    /* Title & Sale Date */
     .token-title {
       font-size: 2rem;
       font-weight: 700;
@@ -124,6 +126,7 @@
       margin-bottom: 1.5rem;
     }
 
+    /* Sub-panel Styles */
     .sub-panel {
       background-color: rgba(255,255,255,0.03);
       border: 1px solid rgba(0,255,238,0.2);
@@ -142,6 +145,7 @@
       color: #00ffee;
     }
 
+    /* Highlight Class */
     .highlight {
       color: #a4a6a7;
       font-weight: 700;
@@ -149,6 +153,7 @@
       margin-right: 0.25rem;
     }
 
+    /* Chart Container */
     .chart-container {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(0,255,238,0.2);
@@ -171,6 +176,7 @@
       color: #00ffee;
     }
 
+    /* Link Styles */
     a {
       color: #00afff;
       text-decoration: underline;
@@ -179,6 +185,7 @@
       color: #37fffc;
     }
 
+    /* Text Colors */
     .text-green-400 {
       color: #0afc4e !important;
     }
@@ -186,6 +193,7 @@
       color: #ff3860 !important;
     }
 
+    /* Responsive Grid */
     @media (min-width: 768px) {
       .md-grid {
         display: grid;
