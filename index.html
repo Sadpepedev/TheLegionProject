@@ -512,20 +512,19 @@
               <th>Seed Price</th>
               <th>Token Price</th>
               <th>ROI (%)</th>
-              <th>Vesting</th> <!-- New Vesting Column -->
               <th>If you invested $1000</th>
             </tr>
           </thead>
           <tbody id="overviewList">
             <!-- Loading Indicator -->
             <tr id="loadingRow">
-              <td colspan="7" class="text-center text-gray-400">
+              <td colspan="6" class="text-center text-gray-400">
                 Loading...
               </td>
             </tr>
 
             <!-- Fuel (Tradable) -->
-            <tr data-tradable="true" data-vesting-end="2025-12-31T23:59:59">
+            <tr data-tradable="true" data-vesting-end="">
               <td class="token-fuel">
                 <a href="fuel.html">Fuel</a>
               </td>
@@ -536,14 +535,11 @@
               <td>$0.02</td>
               <td>$0.05</td>
               <td class="roi-positive">150.00%</td>
-              <td>
-                <span class="badge vesting-badge" data-end-date="2025-12-31T23:59:59">--</span>
-              </td>
               <td class="investment-positive">$5000.00</td>
             </tr>
 
             <!-- Almanak -->
-            <tr data-vesting-end="">
+            <tr data-vesting-end="TBD">
               <td class="token-almanak">
                 <a href="almanak.html">Almanak</a>
               </td>
@@ -554,14 +550,11 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
               <td>--</td>
             </tr>
 
             <!-- Pulse -->
-            <tr data-vesting-end="">
+            <tr data-vesting-end="TBD">
               <td class="token-pulse">
                 <a href="pulse.html">Pulse</a>
               </td>
@@ -572,14 +565,11 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
               <td>--</td>
             </tr>
 
             <!-- Silencio -->
-            <tr class="token-silencio" data-vesting-end="2025-01-24T23:59:59">
+            <tr class="token-silencio" data-vesting-end="">
               <td class="token-silencio">
                 <a href="silencio.html">Silencio</a>
               </td>
@@ -590,14 +580,11 @@
               <td>$0.0006</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge vesting-badge" data-end-date="2025-01-24T23:59:59">--</span>
-              </td>
               <td>--</td>
             </tr>
 
             <!-- Enclave -->
-            <tr data-vesting-end="">
+            <tr data-vesting-end="TBD">
               <td class="token-enclave">
                 <a href="enclave.html">Enclave</a>
               </td>
@@ -608,14 +595,11 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
               <td>--</td>
             </tr>
 
             <!-- Corn -->
-            <tr data-vesting-end="">
+            <tr data-vesting-end="TBD">
               <td class="token-corn">
                 <a href="corn.html">Corn</a>
               </td>
@@ -626,14 +610,11 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
               <td>--</td>
             </tr>
 
             <!-- Giza -->
-            <tr data-vesting-end="">
+            <tr data-vesting-end="TBD">
               <td class="token-giza">
                 <a href="giza.html">Giza</a>
               </td>
@@ -644,9 +625,6 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
               <td>--</td>
             </tr>
           </tbody>
@@ -751,117 +729,89 @@
   <!-- SCRIPT -->
   <script>
     /**************************************************
-      DISPLAY VESTING COUNTDOWN
+      DISPLAY VESTING COUNTDOWN IN GRID VIEW ONLY
     **************************************************/
-    function displayVestingCountdown() {
-      const vestingBadges = document.querySelectorAll(".vesting-badge");
+    function displayVestingCountdownInGrid(gridItem, endDateStr) {
+      const vestingContainer = document.createElement('div');
+      vestingContainer.classList.add('mt-2'); // Add some top margin
 
-      vestingBadges.forEach(badge => {
-        const endDateStr = badge.getAttribute("data-end-date");
-        if (!endDateStr) {
-          badge.textContent = "None";
-          badge.classList.remove("vesting-badge");
-          badge.classList.add("no-vesting-badge");
-          return;
-        }
+      // Create and append the "Vesting:" label
+      const label = document.createElement('span');
+      label.textContent = 'Vesting: ';
+      label.style.fontWeight = 'bold'; // Optional styling
+      vestingContainer.appendChild(label);
+
+      if (endDateStr && endDateStr.toUpperCase() !== "TBD") {
+        const badge = document.createElement('span');
+        badge.classList.add('badge', 'vesting-badge');
+        badge.textContent = 'Calculating...'; // Initial text
+        vestingContainer.appendChild(badge);
 
         const endDate = new Date(endDateStr).getTime();
 
-        // Initial update
-        updateBadge(badge, endDate);
+        // Function to update the countdown
+        function updateCountdown() {
+          const now = new Date().getTime();
+          const distance = endDate - now;
 
-        // Update the countdown every second
-        const countdownInterval = setInterval(() => {
-          updateBadge(badge, endDate, countdownInterval, badge);
-        }, 1000);
-      });
-    }
+          if (distance < 0) {
+            badge.textContent = "Vesting Complete";
+            badge.classList.remove("vesting-badge");
+            badge.classList.add("no-vesting-badge");
+            clearInterval(countdownInterval);
+            return;
+          }
 
-    function updateBadge(badge, endDate, interval = null, badgeElement = null) {
-      const now = new Date().getTime();
-      const distance = endDate - now;
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      if (distance < 0) {
-        badge.textContent = "Vesting Complete";
-        badge.classList.remove("vesting-badge");
-        badge.classList.add("no-vesting-badge");
-        if (interval && badgeElement) {
-          clearInterval(interval);
+          badge.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
-        return;
+
+        // Initial call
+        updateCountdown();
+
+        // Update every second
+        const countdownInterval = setInterval(updateCountdown, 1000);
+      } else if (endDateStr && endDateStr.toUpperCase() === "TBD") {
+        const badge = document.createElement('span');
+        badge.classList.add('badge', 'vesting-badge');
+        badge.textContent = 'TBD';
+        vestingContainer.appendChild(badge);
+      } else {
+        const badge = document.createElement('span');
+        badge.classList.add('badge', 'no-vesting-badge');
+        badge.textContent = 'None';
+        vestingContainer.appendChild(badge);
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      badge.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    // Initialize vesting countdown after DOM content is loaded
-    document.addEventListener("DOMContentLoaded", () => {
-      displayVestingCountdown();
-      // Kick off data fetch for tradable tokens
-      updateTradableTokens();
-      // Fetch Silencio price from CoinGecko
-      updateSilencioToken();
-      // Generate grid view on load
-      generateGridView();
-    });
-
-    /**************************************************
-      MODAL FUNCTIONALITY
-    **************************************************/
-    // Open Modal
-    function supportSite() {
-      const modal = document.getElementById("walletModal");
-      modal.classList.add("active");
-      document.body.style.overflow = "hidden"; // Prevent scrolling behind modal
-    }
-
-    // Close Modal
-    function closeModal() {
-      const modal = document.getElementById("walletModal");
-      modal.classList.remove("active");
-      document.body.style.overflow = "auto";
-    }
-
-    // Copy Wallet Address
-    function copyWalletAddress() {
-      const walletAddress =
-        document.getElementById("walletAddress").textContent;
-      navigator.clipboard
-        .writeText(walletAddress)
-        .then(() => alert("Wallet address copied to clipboard!"))
-        .catch(() => alert("Failed to copy wallet address."));
+      gridItem.appendChild(vestingContainer);
     }
 
     /**************************************************
-      DYNAMIC GRID VIEW AND TABLE UPDATES
+      GENERATE GRID VIEW WITH VESTING BADGES
     **************************************************/
-    // Generate the Grid View items
     function generateGridView() {
       const gridView = document.getElementById("gridView");
       const overviewList = document.getElementById("overviewList");
-
-      // We'll gather all row data first, then sort live tokens by price, randomize others
-      const rowData = [];
+      gridView.innerHTML = ""; // Clear existing grid items
 
       overviewList.querySelectorAll("tr").forEach((row) => {
-        // Skip loading row
+        // Skip the loading row
         if (row.id === "loadingRow") return;
 
         const cells = row.querySelectorAll("td");
-        if (cells.length < 7) return;
+        if (cells.length < 6) return; // Ensure there are enough cells
 
         const tokenName = cells[0].textContent.trim();
         const status = cells[1].innerHTML.trim();
         const seedPrice = cells[2].textContent.trim();
         const tokenPrice = cells[3].textContent.trim();
         const roi = cells[4].textContent.trim();
-        const vesting = cells[5].textContent.trim();
-        const investment = cells[6].textContent.trim();
+        const investment = cells[5].textContent.trim();
+        const vestingEndDate = row.getAttribute("data-vesting-end");
 
         // Extract token identifier from the link
         const tokenLinkElement = cells[0].querySelector("a");
@@ -870,90 +820,8 @@
           : "#";
         const tokenIdentifier = tokenLink.replace(".html", "").toLowerCase();
 
-        // Convert tokenPrice to numeric (treat '--', 'Coming soon', 'Error' as 0)
-        let numericPrice = 0;
-        if (tokenPrice.startsWith("$")) {
-          const priceVal = parseFloat(tokenPrice.replace("$", ""));
-          if (!isNaN(priceVal)) {
-            numericPrice = priceVal;
-          }
-        }
-
-        // Mark "isLive" if row has data-tradable = true
-        const isLive = row.getAttribute("data-tradable") === "true";
-
-        // Save all row data for sorting and display
-        rowData.push({
-          tokenName,
-          status,
-          seedPrice,
-          tokenPrice,
-          roi,
-          vesting,
-          investment,
-          tokenLink,
-          tokenIdentifier,
-          numericPrice,
-          isLive,
-        });
-      });
-
-      // Separate Silencio and others
-      const silencioData = rowData.find(
-        (d) => d.tokenIdentifier === "silencio"
-      );
-      const otherTokens = rowData.filter(
-        (d) => d.tokenIdentifier !== "silencio"
-      );
-
-      // Separate live and non-live tokens from otherTokens
-      const liveTokens = otherTokens.filter((d) => d.isLive);
-      const nonLiveTokens = otherTokens.filter((d) => !d.isLive);
-
-      // Sort live tokens descending by numeric price
-      liveTokens.sort((a, b) => b.numericPrice - a.numericPrice);
-
-      // Randomize the non-live tokens
-      nonLiveTokens.sort(() => 0.5 - Math.random());
-
-      // Combine: live tokens, then non-live tokens
-      const finalData = [...liveTokens, ...nonLiveTokens];
-
-      // Insert Silencio as the second item if it exists
-      if (silencioData) {
-        finalData.splice(1, 0, silencioData); // Insert at index 1
-      }
-
-      // Clear the old grid items
-      gridView.innerHTML = "";
-
-      // Now build the grid in sorted/random order with Silencio second
-      finalData.forEach((data) => {
-        const {
-          tokenName,
-          status,
-          seedPrice,
-          tokenPrice,
-          roi,
-          vesting,
-          investment,
-          tokenLink,
-          tokenIdentifier,
-        } = data;
-
-        // Determine investment color
-        let investmentClass = "";
-        if (investment && investment !== "--" && !investment.includes("Error")) {
-          const invVal = parseFloat(investment.replace("$", ""));
-          if (!isNaN(invVal)) {
-            investmentClass =
-              invVal > 1000 ? "investment-positive" : "investment-negative";
-          }
-        }
-
-        // Create grid item as an <a> tag with token class for CSS
-        const gridItem = document.createElement("a");
-        gridItem.href = tokenLink;
+        // Create grid item
+        const gridItem = document.createElement("div");
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
         // Build the HTML content for each item
@@ -974,22 +842,27 @@
           <div class="mb-1"><strong>ROI:</strong>
             <span class="${roi.includes("-") ? "text-red-500" : "text-green-500"}">${roi}</span>
           </div>
-          <div>
-            <strong>If you invested $1000:</strong> 
-            <span class="${investmentClass}">${investment}</span>
+          <div class="mb-1"><strong>If you invested $1000:</strong> 
+            <span class="${investment.includes("-") ? "investment-negative" : "investment-positive"}">${investment}</span>
           </div>
         `;
 
+        // Add Vesting Badge with Label "Vesting:"
+        displayVestingCountdownInGrid(gridItem, vestingEndDate);
+
+        // Append grid item to grid view
         gridView.appendChild(gridItem);
       });
     }
 
-    // Fetch & Update for Tradable Tokens (already existing logic)
+    /**************************************************
+      UPDATE TRADABLE TOKENS FOR LIVE TRACKING
+    **************************************************/
     async function updateTradableTokens() {
       const tradableRows = document.querySelectorAll(
         'tr[data-tradable="true"]'
       );
-      tradableRows.forEach(async (row) => {
+      for (let row of tradableRows) {
         const tokenNameCell = row.querySelector("td");
         const tokenName = tokenNameCell
           ? tokenNameCell.textContent.trim()
@@ -1033,7 +906,7 @@
             roiCell.classList.remove("roi-positive", "roi-negative");
           }
 
-          const investmentCell = row.querySelector("td:nth-child(7)");
+          const investmentCell = row.querySelector("td:nth-child(6)");
           investmentCell.textContent =
             seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : "--";
 
@@ -1051,34 +924,28 @@
             );
           }
 
-          // Regenerate grid view if it's active
-          const gridView = document.getElementById("gridView");
-          if (!gridView.classList.contains("hidden")) {
-            generateGridView();
-          }
         } catch (error) {
           console.error(`Error updating ${tokenName}:`, error);
           row.querySelector("td:nth-child(4)").textContent = "Error";
           const roiCell = row.querySelector("td:nth-child(5)");
           roiCell.textContent = "Error";
           roiCell.classList.remove("roi-positive", "roi-negative");
-          const investmentCell = row.querySelector("td:nth-child(7)");
+          const investmentCell = row.querySelector("td:nth-child(6)");
           investmentCell.textContent = "Error";
           investmentCell.classList.remove(
             "investment-positive",
             "investment-negative"
           );
-
-          // If Grid View is visible, regenerate
-          const gridView = document.getElementById("gridView");
-          if (!gridView.classList.contains("hidden")) {
-            generateGridView();
-          }
         }
-      });
+      }
+
+      // After updating table, regenerate grid view to reflect changes
+      generateGridView();
     }
 
-    // Fetch Silencio from CoinGecko and update table
+    /**************************************************
+      FETCH SILENCIO TOKEN DATA FROM COINGECKO
+    **************************************************/
     async function updateSilencioToken() {
       try {
         // Locate the 'silencio' row via the class 'token-silencio'
@@ -1100,6 +967,8 @@
         if (!data.silencio || !data.silencio.usd) {
           silencioRow.querySelector("td:nth-child(4)").textContent =
             "Coming soon";
+          silencioRow.querySelector("td:nth-child(5)").textContent = "--";
+          silencioRow.querySelector("td:nth-child(6)").textContent = "--";
           return;
         }
 
@@ -1113,7 +982,7 @@
         const seedPrice = parseFloat(seedPriceText) || 0;
         const priceCell = silencioRow.querySelector("td:nth-child(4)");
         const roiCell = silencioRow.querySelector("td:nth-child(5)");
-        const investCell = silencioRow.querySelector("td:nth-child(7)");
+        const investCell = silencioRow.querySelector("td:nth-child(6)");
 
         priceCell.textContent = `$${currentPrice.toFixed(6)}`;
 
@@ -1148,13 +1017,12 @@
         } else {
           // If seed price is 0 or invalid, show "Coming soon"
           priceCell.textContent = "Coming soon";
+          roiCell.textContent = "--";
+          investCell.textContent = "--";
         }
 
-        // Regenerate the grid if it's active
-        const gridView = document.getElementById("gridView");
-        if (!gridView.classList.contains("hidden")) {
-          generateGridView();
-        }
+        // After updating table, regenerate grid view to reflect changes
+        generateGridView();
       } catch (error) {
         console.error("Error fetching Silencio price:", error);
         // If there's an error, just put "Coming soon"
@@ -1162,25 +1030,58 @@
         if (silencioRow) {
           silencioRow.querySelector("td:nth-child(4)").textContent =
             "Coming soon";
-
-          // And remove any ROI/investment styling
           silencioRow.querySelector("td:nth-child(5)").textContent = "--";
-          silencioRow
-            .querySelector("td:nth-child(5)")
-            .classList.remove("roi-positive", "roi-negative");
-          silencioRow.querySelector("td:nth-child(7)").textContent = "--";
-          silencioRow
-            .querySelector("td:nth-child(7)")
-            .classList.remove("investment-positive", "investment-negative");
+          silencioRow.querySelector("td:nth-child(6)").textContent = "--";
         }
 
-        // If Grid View is visible, regenerate
-        const gridView = document.getElementById("gridView");
-        if (!gridView.classList.contains("hidden")) {
-          generateGridView();
-        }
+        // Regenerate grid view to reflect changes
+        generateGridView();
       }
     }
+
+    /**************************************************
+      OPEN AND CLOSE MODAL FUNCTIONALITY
+    **************************************************/
+    // Open Modal
+    function supportSite() {
+      const modal = document.getElementById("walletModal");
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden"; // Prevent scrolling behind modal
+    }
+
+    // Close Modal
+    function closeModal() {
+      const modal = document.getElementById("walletModal");
+      modal.classList.remove("active");
+      document.body.style.overflow = "auto";
+    }
+
+    // Copy Wallet Address
+    function copyWalletAddress() {
+      const walletAddress =
+        document.getElementById("walletAddress").textContent;
+      navigator.clipboard
+        .writeText(walletAddress)
+        .then(() => alert("Wallet address copied to clipboard!"))
+        .catch(() => alert("Failed to copy wallet address."));
+    }
+
+    /**************************************************
+      INITIALIZE EVERYTHING AFTER DOM CONTENT LOADED
+    **************************************************/
+    document.addEventListener("DOMContentLoaded", () => {
+      // Define an async function to handle initialization
+      async function initialize() {
+        // Kick off data fetch for tradable tokens
+        await updateTradableTokens();
+        // Fetch Silencio price from CoinGecko
+        await updateSilencioToken();
+        // Generate grid view after data fetch to show updated state
+        generateGridView();
+      }
+      // Call the initialize function
+      initialize();
+    });
   </script>
 </body>
 </html>
