@@ -207,11 +207,19 @@
     .vesting-badge {
       background-color: #FFD700; /* Gold color */
       color: #09131b;            /* Dark text */
+      font-weight: bold;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
     }
 
     .no-vesting-badge {
       background-color: #6B7280; /* Gray color */
       color: #FFFFFF;            /* White text */
+      font-weight: bold;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
     }
 
     /* Token Color Styles with CSS Variables */
@@ -490,7 +498,7 @@
 
       <!-- Header -->
       <div class="modern-header">
-        <h2> </h2>
+        <h2>ICO Performance Tracker</h2>
         <hr />
       </div>
 
@@ -512,14 +520,14 @@
               <th>Seed Price</th>
               <th>Token Price</th>
               <th>ROI (%)</th>
-              <th>Vesting</th> <!-- New Vesting Column -->
+              <!-- Removed Vesting Column from Table -->
               <th>If you invested $1000</th>
             </tr>
           </thead>
           <tbody id="overviewList">
             <!-- Loading Indicator -->
             <tr id="loadingRow">
-              <td colspan="7" class="text-center text-gray-400">
+              <td colspan="6" class="text-center text-gray-400">
                 Loading...
               </td>
             </tr>
@@ -536,9 +544,7 @@
               <td>$0.02</td>
               <td>$0.05</td>
               <td class="roi-positive">150.00%</td>
-              <td>
-                <span class="badge vesting-badge" data-end-date="2025-12-31T23:59:59">--</span>
-              </td>
+              <!-- Removed Vesting Cell from Table -->
               <td class="investment-positive">$5000.00</td>
             </tr>
 
@@ -554,9 +560,7 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
+              <!-- Removed Vesting Cell from Table -->
               <td>--</td>
             </tr>
 
@@ -572,9 +576,7 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
+              <!-- Removed Vesting Cell from Table -->
               <td>--</td>
             </tr>
 
@@ -590,9 +592,7 @@
               <td>$0.0006</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge vesting-badge" data-end-date="2025-01-24T23:59:59">--</span>
-              </td>
+              <!-- Removed Vesting Cell from Table -->
               <td>--</td>
             </tr>
 
@@ -608,9 +608,7 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
+              <!-- Removed Vesting Cell from Table -->
               <td>--</td>
             </tr>
 
@@ -626,9 +624,7 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
+              <!-- Removed Vesting Cell from Table -->
               <td>--</td>
             </tr>
 
@@ -644,9 +640,7 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
-              <td>
-                <span class="badge no-vesting-badge">None</span>
-              </td>
+              <!-- Removed Vesting Cell from Table -->
               <td>--</td>
             </tr>
           </tbody>
@@ -751,41 +745,40 @@
   <!-- SCRIPT -->
   <script>
     /**************************************************
-      DISPLAY VESTING COUNTDOWN
+      DISPLAY VESTING COUNTDOWN IN GRID VIEW
     **************************************************/
     function displayVestingCountdown() {
-      const vestingBadges = document.querySelectorAll(".vesting-badge");
+      const vestingElements = document.querySelectorAll(".vesting-info");
 
-      vestingBadges.forEach(badge => {
-        const endDateStr = badge.getAttribute("data-end-date");
+      vestingElements.forEach(element => {
+        const endDateStr = element.getAttribute("data-end-date");
         if (!endDateStr) {
-          badge.textContent = "None";
-          badge.classList.remove("vesting-badge");
-          badge.classList.add("no-vesting-badge");
+          element.textContent = "None";
+          element.classList.add("no-vesting-badge");
           return;
         }
 
         const endDate = new Date(endDateStr).getTime();
 
         // Initial update
-        updateBadge(badge, endDate);
+        updateVesting(element, endDate);
 
         // Update the countdown every second
         const countdownInterval = setInterval(() => {
-          updateBadge(badge, endDate, countdownInterval, badge);
+          updateVesting(element, endDate, countdownInterval);
         }, 1000);
       });
     }
 
-    function updateBadge(badge, endDate, interval = null, badgeElement = null) {
+    function updateVesting(element, endDate, interval = null) {
       const now = new Date().getTime();
       const distance = endDate - now;
 
       if (distance < 0) {
-        badge.textContent = "Vesting Complete";
-        badge.classList.remove("vesting-badge");
-        badge.classList.add("no-vesting-badge");
-        if (interval && badgeElement) {
+        element.textContent = "Vesting Complete";
+        element.classList.remove("vesting-badge");
+        element.classList.add("no-vesting-badge");
+        if (interval) {
           clearInterval(interval);
         }
         return;
@@ -796,45 +789,7 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      badge.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    // Initialize vesting countdown after DOM content is loaded
-    document.addEventListener("DOMContentLoaded", () => {
-      displayVestingCountdown();
-      // Kick off data fetch for tradable tokens
-      updateTradableTokens();
-      // Fetch Silencio price from CoinGecko
-      updateSilencioToken();
-      // Generate grid view on load
-      generateGridView();
-    });
-
-    /**************************************************
-      MODAL FUNCTIONALITY
-    **************************************************/
-    // Open Modal
-    function supportSite() {
-      const modal = document.getElementById("walletModal");
-      modal.classList.add("active");
-      document.body.style.overflow = "hidden"; // Prevent scrolling behind modal
-    }
-
-    // Close Modal
-    function closeModal() {
-      const modal = document.getElementById("walletModal");
-      modal.classList.remove("active");
-      document.body.style.overflow = "auto";
-    }
-
-    // Copy Wallet Address
-    function copyWalletAddress() {
-      const walletAddress =
-        document.getElementById("walletAddress").textContent;
-      navigator.clipboard
-        .writeText(walletAddress)
-        .then(() => alert("Wallet address copied to clipboard!"))
-        .catch(() => alert("Failed to copy wallet address."));
+      element.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
 
     /**************************************************
@@ -845,23 +800,25 @@
       const gridView = document.getElementById("gridView");
       const overviewList = document.getElementById("overviewList");
 
-      // We'll gather all row data first, then sort live tokens by price, randomize others
+      // Remove loading row if present
+      const loadingRow = document.getElementById("loadingRow");
+      if (loadingRow) loadingRow.remove();
+
       const rowData = [];
 
       overviewList.querySelectorAll("tr").forEach((row) => {
-        // Skip loading row
-        if (row.id === "loadingRow") return;
+        // Skip any rows without data-tradable attribute
+        if (!row.hasAttribute("data-tradable")) return;
 
         const cells = row.querySelectorAll("td");
-        if (cells.length < 7) return;
+        if (cells.length < 6) return; // Adjusted for 6 columns
 
         const tokenName = cells[0].textContent.trim();
         const status = cells[1].innerHTML.trim();
         const seedPrice = cells[2].textContent.trim();
         const tokenPrice = cells[3].textContent.trim();
         const roi = cells[4].textContent.trim();
-        const vesting = cells[5].textContent.trim();
-        const investment = cells[6].textContent.trim();
+        const investment = cells[5].textContent.trim();
 
         // Extract token identifier from the link
         const tokenLinkElement = cells[0].querySelector("a");
@@ -869,6 +826,9 @@
           ? tokenLinkElement.getAttribute("href")
           : "#";
         const tokenIdentifier = tokenLink.replace(".html", "").toLowerCase();
+
+        // Get vesting end date from row's data attribute
+        const vestingEndDate = row.getAttribute("data-vesting-end");
 
         // Convert tokenPrice to numeric (treat '--', 'Coming soon', 'Error' as 0)
         let numericPrice = 0;
@@ -889,12 +849,12 @@
           seedPrice,
           tokenPrice,
           roi,
-          vesting,
           investment,
           tokenLink,
           tokenIdentifier,
           numericPrice,
           isLive,
+          vestingEndDate,
         });
       });
 
@@ -935,10 +895,10 @@
           seedPrice,
           tokenPrice,
           roi,
-          vesting,
           investment,
           tokenLink,
           tokenIdentifier,
+          vestingEndDate,
         } = data;
 
         // Determine investment color
@@ -974,6 +934,9 @@
           <div class="mb-1"><strong>ROI:</strong>
             <span class="${roi.includes("-") ? "text-red-500" : "text-green-500"}">${roi}</span>
           </div>
+          <div class="mb-1"><strong>Vesting:</strong> 
+            ${vestingEndDate ? `<span class="vesting-info" data-end-date="${vestingEndDate}">Loading...</span>` : `<span class="no-vesting-badge">None</span>`}
+          </div>
           <div>
             <strong>If you invested $1000:</strong> 
             <span class="${investmentClass}">${investment}</span>
@@ -982,6 +945,9 @@
 
         gridView.appendChild(gridItem);
       });
+
+      // After injecting grid items, initialize vesting countdowns
+      displayVestingCountdown();
     }
 
     // Fetch & Update for Tradable Tokens (already existing logic)
@@ -1033,7 +999,7 @@
             roiCell.classList.remove("roi-positive", "roi-negative");
           }
 
-          const investmentCell = row.querySelector("td:nth-child(7)");
+          const investmentCell = row.querySelector("td:nth-child(6)");
           investmentCell.textContent =
             seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : "--";
 
@@ -1062,7 +1028,7 @@
           const roiCell = row.querySelector("td:nth-child(5)");
           roiCell.textContent = "Error";
           roiCell.classList.remove("roi-positive", "roi-negative");
-          const investmentCell = row.querySelector("td:nth-child(7)");
+          const investmentCell = row.querySelector("td:nth-child(6)");
           investmentCell.textContent = "Error";
           investmentCell.classList.remove(
             "investment-positive",
@@ -1113,7 +1079,7 @@
         const seedPrice = parseFloat(seedPriceText) || 0;
         const priceCell = silencioRow.querySelector("td:nth-child(4)");
         const roiCell = silencioRow.querySelector("td:nth-child(5)");
-        const investCell = silencioRow.querySelector("td:nth-child(7)");
+        const investCell = silencioRow.querySelector("td:nth-child(6)");
 
         priceCell.textContent = `$${currentPrice.toFixed(6)}`;
 
@@ -1168,9 +1134,9 @@
           silencioRow
             .querySelector("td:nth-child(5)")
             .classList.remove("roi-positive", "roi-negative");
-          silencioRow.querySelector("td:nth-child(7)").textContent = "--";
+          silencioRow.querySelector("td:nth-child(6)").textContent = "--";
           silencioRow
-            .querySelector("td:nth-child(7)")
+            .querySelector("td:nth-child(6)")
             .classList.remove("investment-positive", "investment-negative");
         }
 
@@ -1181,6 +1147,11 @@
         }
       }
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Initialize vesting countdown after grid is generated
+      generateGridView();
+    });
   </script>
 </body>
 </html>
