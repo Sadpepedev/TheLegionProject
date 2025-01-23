@@ -296,6 +296,7 @@
       box-shadow: 0 0 15px var(--token-color), 0 0 30px var(--token-color);
       color: var(--token-color);
     }
+    /* Remove pointer cursor and text decoration from nested links */
     .grid-item a {
       color: inherit;
       text-decoration: none;
@@ -490,7 +491,7 @@
 
       <!-- Header -->
       <div class="modern-header">
-        <h2> </h2>
+        <h2>ICO Performance Tracker</h2>
         <hr />
       </div>
 
@@ -524,7 +525,7 @@
             </tr>
 
             <!-- Fuel (Tradable) -->
-            <tr data-tradable="true" data-vesting-end="">
+            <tr data-tradable="true" data-vesting-end="2025-12-31T23:59:59">
               <td class="token-fuel">
                 <a href="fuel.html">Fuel</a>
               </td>
@@ -820,8 +821,9 @@
           : "#";
         const tokenIdentifier = tokenLink.replace(".html", "").toLowerCase();
 
-        // Create grid item
-        const gridItem = document.createElement("div");
+        // Create grid item as an <a> to make it clickable
+        const gridItem = document.createElement("a");
+        gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
         // Build the HTML content for each item
