@@ -12,16 +12,16 @@
   <meta
     http-equiv="Content-Security-Policy"
     content="
-    default-src 'self';
-    connect-src 'self' https://api.coingecko.com;
-    img-src 'self' https://sadpepedev.github.io;
-    script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com https://vercel.live;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    font-src 'self' https://fonts.gstatic.com;
-    object-src 'none';
-    base-uri 'self';
-    frame-ancestors 'none';
-  "
+      default-src 'self';
+      connect-src 'self' https://api.coingecko.com;
+      img-src 'self' https://sadpepedev.github.io;
+      script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com https://s3.tradingview.com https://vercel.live;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      object-src 'none';
+      base-uri 'self';
+      frame-ancestors 'none';
+    "
   />
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -188,6 +188,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .badge-live {
       background-color: #0afc4e;
@@ -200,6 +201,17 @@
     .badge-ico {
       background-color: #008ffc;
       color: #09131b;
+    }
+
+    /* Vesting Badge Styles */
+    .vesting-badge {
+      background-color: #FFD700; /* Gold color */
+      color: #09131b;            /* Dark text */
+    }
+
+    .no-vesting-badge {
+      background-color: #6B7280; /* Gray color */
+      color: #FFFFFF;            /* White text */
     }
 
     /* Token Color Styles with CSS Variables */
@@ -478,7 +490,7 @@
 
       <!-- Header -->
       <div class="modern-header">
-        <h2> </h2>
+        <h2>ICO Performance Tracker</h2>
         <hr />
       </div>
 
@@ -500,19 +512,20 @@
               <th>Seed Price</th>
               <th>Token Price</th>
               <th>ROI (%)</th>
+              <th>Vesting</th> <!-- New Vesting Column -->
               <th>If you invested $1000</th>
             </tr>
           </thead>
           <tbody id="overviewList">
             <!-- Loading Indicator -->
             <tr id="loadingRow">
-              <td colspan="6" class="text-center text-gray-400">
+              <td colspan="7" class="text-center text-gray-400">
                 Loading...
               </td>
             </tr>
 
             <!-- Fuel (Tradable) -->
-            <tr data-tradable="true">
+            <tr data-tradable="true" data-vesting-end="2025-12-31T23:59:59">
               <td class="token-fuel">
                 <a href="fuel.html">Fuel</a>
               </td>
@@ -523,11 +536,14 @@
               <td>$0.02</td>
               <td>$0.05</td>
               <td class="roi-positive">150.00%</td>
+              <td>
+                <span class="badge vesting-badge" data-end-date="2025-12-31T23:59:59">--</span>
+              </td>
               <td class="investment-positive">$5000.00</td>
             </tr>
 
             <!-- Almanak -->
-            <tr>
+            <tr data-vesting-end="">
               <td class="token-almanak">
                 <a href="almanak.html">Almanak</a>
               </td>
@@ -538,11 +554,14 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
+              <td>
+                <span class="badge no-vesting-badge">None</span>
+              </td>
               <td>--</td>
             </tr>
 
             <!-- Pulse -->
-            <tr>
+            <tr data-vesting-end="">
               <td class="token-pulse">
                 <a href="pulse.html">Pulse</a>
               </td>
@@ -553,11 +572,14 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
+              <td>
+                <span class="badge no-vesting-badge">None</span>
+              </td>
               <td>--</td>
             </tr>
 
             <!-- Silencio -->
-            <tr class="token-silencio">
+            <tr class="token-silencio" data-vesting-end="2025-01-24T23:59:59">
               <td class="token-silencio">
                 <a href="silencio.html">Silencio</a>
               </td>
@@ -568,11 +590,14 @@
               <td>$0.0006</td>
               <td>--</td>
               <td>--</td>
+              <td>
+                <span class="badge vesting-badge" data-end-date="2025-01-24T23:59:59">--</span>
+              </td>
               <td>--</td>
             </tr>
 
             <!-- Enclave -->
-            <tr>
+            <tr data-vesting-end="">
               <td class="token-enclave">
                 <a href="enclave.html">Enclave</a>
               </td>
@@ -583,11 +608,14 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
+              <td>
+                <span class="badge no-vesting-badge">None</span>
+              </td>
               <td>--</td>
             </tr>
 
             <!-- Corn -->
-            <tr>
+            <tr data-vesting-end="">
               <td class="token-corn">
                 <a href="corn.html">Corn</a>
               </td>
@@ -598,11 +626,14 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
+              <td>
+                <span class="badge no-vesting-badge">None</span>
+              </td>
               <td>--</td>
             </tr>
 
             <!-- Giza -->
-            <tr>
+            <tr data-vesting-end="">
               <td class="token-giza">
                 <a href="giza.html">Giza</a>
               </td>
@@ -613,6 +644,9 @@
               <td>TBD</td>
               <td>--</td>
               <td>--</td>
+              <td>
+                <span class="badge no-vesting-badge">None</span>
+              </td>
               <td>--</td>
             </tr>
           </tbody>
@@ -716,6 +750,266 @@
 
   <!-- SCRIPT -->
   <script>
+    /**************************************************
+      1. CONFIGURE YOUR TOKENS HERE
+    **************************************************/
+    const tokens = [
+      {
+        name: "Fuel",
+        status: "Live", // Possible values: "Live", "Pending TGE", "Coming Soon"
+        buyPrice: 0.02,  // Example buy price in USD
+        vestingEndDate: "2025-12-31T23:59:59", // ISO format; set to null or empty string if no vesting
+        website: "fuel.html",
+        twitter: "https://twitter.com/fuel"
+      },
+      {
+        name: "Almanak",
+        status: "Pending TGE",
+        buyPrice: null, // If TGE is pending, buyPrice might be undefined or null
+        vestingEndDate: null, // No vesting
+        website: "almanak.html",
+        twitter: "https://twitter.com/almanak"
+      },
+      {
+        name: "Pulse",
+        status: "Pending TGE",
+        buyPrice: null,
+        vestingEndDate: null,
+        website: "pulse.html",
+        twitter: "https://twitter.com/pulse"
+      },
+      {
+        name: "Silencio",
+        status: "Pending TGE",
+        buyPrice: 0.0006,
+        vestingEndDate: "2025-01-24T23:59:59",
+        website: "silencio.html",
+        twitter: "https://x.com/silencioNetwork"
+      },
+      {
+        name: "Enclave",
+        status: "Pending TGE",
+        buyPrice: null,
+        vestingEndDate: null,
+        website: "enclave.html",
+        twitter: "https://twitter.com/enclave"
+      },
+      {
+        name: "Corn",
+        status: "Pending TGE",
+        buyPrice: null,
+        vestingEndDate: null,
+        website: "corn.html",
+        twitter: "https://twitter.com/corn"
+      },
+      {
+        name: "Giza",
+        status: "ICO Soon",
+        buyPrice: null,
+        vestingEndDate: null,
+        website: "giza.html",
+        twitter: "https://twitter.com/giza"
+      }
+      // Add more tokens as needed
+    ];
+
+    /**************************************************
+      2. DYNAMICALLY UPDATE THE PAGE
+    **************************************************/
+    document.addEventListener("DOMContentLoaded", () => {
+      const tableBody = document.getElementById("overviewList");
+
+      // Remove loading row if present
+      const loadingRow = document.getElementById("loadingRow");
+      if (loadingRow) loadingRow.remove();
+
+      tokens.forEach(token => {
+        const row = document.createElement("tr");
+        row.setAttribute("data-tradable", token.status === "Live" ? "true" : "false");
+        if (token.vestingEndDate) {
+          row.setAttribute("data-vesting-end", token.vestingEndDate);
+        } else {
+          row.setAttribute("data-vesting-end", "");
+        }
+
+        // Token Name
+        const nameCell = document.createElement("td");
+        nameCell.classList.add(`token-${token.name.toLowerCase()}`);
+        nameCell.innerHTML = `<a href="${token.website}">${token.name}</a>`;
+        row.appendChild(nameCell);
+
+        // Status
+        const statusCell = document.createElement("td");
+        statusCell.innerHTML = `
+          <span class="badge ${getStatusBadgeClass(token.status)}">${token.status}</span>
+          <div class="text-xs text-gray-400 mt-1">${token.statusDate || "TBD"}</div>
+        `;
+        row.appendChild(statusCell);
+
+        // Seed Price
+        const seedPriceCell = document.createElement("td");
+        seedPriceCell.textContent = token.buyPrice !== null ? `$${token.buyPrice.toFixed(2)}` : "TBD";
+        row.appendChild(seedPriceCell);
+
+        // Token Price
+        const tokenPriceCell = document.createElement("td");
+        tokenPriceCell.textContent = "--";
+        row.appendChild(tokenPriceCell);
+
+        // ROI (%)
+        const roiCell = document.createElement("td");
+        roiCell.classList.add("roi-positive");
+        roiCell.textContent = "--";
+        row.appendChild(roiCell);
+
+        // Vesting
+        const vestingCell = document.createElement("td");
+        if (token.vestingEndDate) {
+          vestingCell.innerHTML = `<span class="badge vesting-badge" data-end-date="${token.vestingEndDate}">--</span>`;
+        } else {
+          vestingCell.innerHTML = `<span class="badge no-vesting-badge">None</span>`;
+        }
+        row.appendChild(vestingCell);
+
+        // Investment
+        const investmentCell = document.createElement("td");
+        investmentCell.classList.add("investment-positive");
+        investmentCell.textContent = "--";
+        row.appendChild(investmentCell);
+
+        // Append row to table
+        tableBody.appendChild(row);
+      });
+
+      // After injecting rows, fetch current prices and calculate ROI & Investment
+      fetchAllTokenData();
+    });
+
+    // Function to assign CSS classes based on status
+    function getStatusBadgeClass(status) {
+      switch(status) {
+        case "Live":
+          return "badge-live";
+        case "Pending TGE":
+          return "badge-soon";
+        case "ICO Soon":
+          return "badge-ico";
+        default:
+          return "";
+      }
+    }
+
+    /**************************************************
+      3. FETCH ALL TOKEN DATA
+    **************************************************/
+    async function fetchAllTokenData() {
+      const tableRows = document.querySelectorAll("#overviewList tr");
+      for (let row of tableRows) {
+        const isTradable = row.getAttribute("data-tradable") === "true";
+        const vestingEndDate = row.getAttribute("data-vesting-end");
+
+        // Fetch current price if tradable
+        if (isTradable) {
+          const tokenName = row.querySelector("td").textContent.trim();
+          try {
+            const coingeckoId = tokenName.toLowerCase();
+            const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(coingeckoId)}&vs_currencies=usd`);
+            if (!response.ok) throw new Error("Network response was not ok");
+            const data = await response.json();
+
+            if (data[coingeckoId] && data[coingeckoId].usd) {
+              const currentPrice = parseFloat(data[coingeckoId].usd);
+              // Update Token Price
+              row.querySelector("td:nth-child(4)").textContent = `$${currentPrice.toFixed(2)}`;
+              
+              // Calculate ROI
+              const seedPriceText = row.querySelector("td:nth-child(3)").textContent.replace("$", "");
+              const seedPrice = parseFloat(seedPriceText) || 0;
+              if (seedPrice > 0) {
+                const roi = ((currentPrice - seedPrice) / seedPrice) * 100;
+                const roiCell = row.querySelector("td:nth-child(5)");
+                roiCell.textContent = `${roi.toFixed(2)}%`;
+                roiCell.classList.remove("roi-positive", "roi-negative");
+                if (roi >= 0) {
+                  roiCell.classList.add("roi-positive");
+                } else {
+                  roiCell.classList.add("roi-negative");
+                }
+
+                // Calculate Investment
+                const investmentValue = (1000 / seedPrice) * currentPrice;
+                const investmentCell = row.querySelector("td:nth-child(7)");
+                investmentCell.textContent = `$${investmentValue.toFixed(2)}`;
+                investmentCell.classList.remove("investment-positive", "investment-negative");
+                if (investmentValue >= 1000) {
+                  investmentCell.classList.add("investment-positive");
+                } else {
+                  investmentCell.classList.add("investment-negative");
+                }
+              }
+            } else {
+              // Token not found on CoinGecko
+              row.querySelector("td:nth-child(4)").textContent = "Coming soon";
+            }
+          } catch (error) {
+            console.error(`Error fetching data for token: ${row.querySelector("td").textContent.trim()}`, error);
+            // Display error state
+            row.querySelector("td:nth-child(4)").textContent = "Error";
+            row.querySelector("td:nth-child(5)").textContent = "Error";
+            row.querySelector("td:nth-child(5)").classList.remove("roi-positive", "roi-negative");
+            row.querySelector("td:nth-child(5)").classList.add("roi-negative");
+            row.querySelector("td:nth-child(7)").textContent = "Error";
+            row.querySelector("td:nth-child(7)").classList.remove("investment-positive", "investment-negative");
+            row.querySelector("td:nth-child(7)").classList.add("investment-negative");
+          }
+        }
+
+        // Initialize Vesting Countdown if applicable
+        if (vestingEndDate) {
+          const vestingBadge = row.querySelector(".vesting-badge");
+          if (vestingBadge) {
+            initializeVestingCountdown(vestingBadge);
+          }
+        }
+      }
+    }
+
+    /**************************************************
+      4. INITIALIZE VESTING COUNTDOWN
+    **************************************************/
+    function initializeVestingCountdown(vestingBadge) {
+      const endDateStr = vestingBadge.getAttribute("data-end-date");
+      if (!endDateStr) {
+        vestingBadge.textContent = "None";
+        vestingBadge.classList.remove("vesting-badge");
+        vestingBadge.classList.add("no-vesting-badge");
+        return;
+      }
+
+      const endDate = new Date(endDateStr).getTime();
+
+      // Update the countdown every second
+      const countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = endDate - now;
+
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          vestingBadge.textContent = "Vesting Complete";
+          vestingBadge.classList.remove("vesting-badge");
+          vestingBadge.classList.add("no-vesting-badge");
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        vestingBadge.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }, 1000);
+    }
+
     // Open Modal
     function supportSite() {
       const modal = document.getElementById("walletModal");
@@ -749,18 +1043,19 @@
       const rowData = [];
 
       overviewList.querySelectorAll("tr").forEach((row) => {
-        // Skip loading row
-        if (row.id === "loadingRow") return;
+        // Skip any rows without data-tradable attribute
+        if (!row.hasAttribute("data-tradable")) return;
 
         const cells = row.querySelectorAll("td");
-        if (cells.length < 6) return;
+        if (cells.length < 7) return;
 
         const tokenName = cells[0].textContent.trim();
         const status = cells[1].innerHTML.trim();
         const seedPrice = cells[2].textContent.trim();
         const tokenPrice = cells[3].textContent.trim();
         const roi = cells[4].textContent.trim();
-        const investment = cells[5].textContent.trim();
+        const vesting = cells[5].textContent.trim();
+        const investment = cells[6].textContent.trim();
 
         // Extract token identifier from the link
         const tokenLinkElement = cells[0].querySelector("a");
@@ -788,6 +1083,7 @@
           seedPrice,
           tokenPrice,
           roi,
+          vesting,
           investment,
           tokenLink,
           tokenIdentifier,
@@ -833,6 +1129,7 @@
           seedPrice,
           tokenPrice,
           roi,
+          vesting,
           investment,
           tokenLink,
           tokenIdentifier,
@@ -930,7 +1227,7 @@
             roiCell.classList.remove("roi-positive", "roi-negative");
           }
 
-          const investmentCell = row.querySelector("td:nth-child(6)");
+          const investmentCell = row.querySelector("td:nth-child(7)");
           investmentCell.textContent =
             seedPrice > 0 ? `$${investmentValue.toFixed(2)}` : "--";
 
@@ -959,7 +1256,7 @@
           const roiCell = row.querySelector("td:nth-child(5)");
           roiCell.textContent = "Error";
           roiCell.classList.remove("roi-positive", "roi-negative");
-          const investmentCell = row.querySelector("td:nth-child(6)");
+          const investmentCell = row.querySelector("td:nth-child(7)");
           investmentCell.textContent = "Error";
           investmentCell.classList.remove(
             "investment-positive",
@@ -1010,7 +1307,7 @@
         const seedPrice = parseFloat(seedPriceText) || 0;
         const priceCell = silencioRow.querySelector("td:nth-child(4)");
         const roiCell = silencioRow.querySelector("td:nth-child(5)");
-        const investCell = silencioRow.querySelector("td:nth-child(6)");
+        const investCell = silencioRow.querySelector("td:nth-child(7)");
 
         priceCell.textContent = `$${currentPrice.toFixed(6)}`;
 
@@ -1065,9 +1362,9 @@
           silencioRow
             .querySelector("td:nth-child(5)")
             .classList.remove("roi-positive", "roi-negative");
-          silencioRow.querySelector("td:nth-child(6)").textContent = "--";
+          silencioRow.querySelector("td:nth-child(7)").textContent = "--";
           silencioRow
-            .querySelector("td:nth-child(6)")
+            .querySelector("td:nth-child(7)")
             .classList.remove("investment-positive", "investment-negative");
         }
 
@@ -1080,10 +1377,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Remove loading row if present
-      const loadingRow = document.getElementById("loadingRow");
-      if (loadingRow) loadingRow.remove();
-
       // Kick off data fetch for tradable tokens
       updateTradableTokens();
 
@@ -1092,6 +1385,51 @@
 
       // Generate grid view on load
       generateGridView();
+    });
+
+    /**************************************************
+      5. DISPLAY VESTING COUNTDOWN
+    **************************************************/
+    function displayVestingCountdown() {
+      const vestingBadges = document.querySelectorAll(".vesting-badge");
+
+      vestingBadges.forEach(badge => {
+        const endDateStr = badge.getAttribute("data-end-date");
+        if (!endDateStr) {
+          badge.textContent = "None";
+          badge.classList.remove("vesting-badge");
+          badge.classList.add("no-vesting-badge");
+          return;
+        }
+
+        const endDate = new Date(endDateStr).getTime();
+
+        // Update the countdown every second
+        const countdownInterval = setInterval(() => {
+          const now = new Date().getTime();
+          const distance = endDate - now;
+
+          if (distance < 0) {
+            clearInterval(countdownInterval);
+            badge.textContent = "Vesting Complete";
+            badge.classList.remove("vesting-badge");
+            badge.classList.add("no-vesting-badge");
+            return;
+          }
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          badge.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }, 1000);
+      });
+    }
+
+    // Initialize vesting countdown after DOM content is loaded
+    document.addEventListener("DOMContentLoaded", () => {
+      displayVestingCountdown();
     });
   </script>
 </body>
