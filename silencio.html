@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -244,6 +245,12 @@
       color: #09131b;
     }
 
+    /* Gold Badge Styling for Vesting */
+    .gold-badge {
+      background-color: #FFD700; /* Gold color */
+      color: #09131b;           /* Text color */
+    }
+
     /* Blurb Styling */
     .blurb {
       background-color: rgba(255,255,255,0.03);
@@ -284,7 +291,7 @@
       <!-- Title & Sale Date -->
       <div class="text-center mb-8">
         <h1 id="tokenTitle" class="token-title">Silencio</h1>
-        <div id="saleDate" class="sale-date">Launch Date: 2025-01-24</div>
+        <div id="saleDate" class="sale-date">Launch Date: Q1 2025</div>
       </div>
 
       <!-- ICO Details & Blurb & Links (Responsive Layout) -->
@@ -316,6 +323,12 @@
           <p class="mb-2">
             <span class="highlight">Current ROI:</span> 
             <span id="currentROI">--</span>
+          </p>
+
+          <!-- Vesting Badge -->
+          <p class="mb-2">
+            <span class="highlight">Vesting:</span> 
+            <span id="vestingBadge" class="badge gold-badge">--</span>
           </p>
 
           <!-- Voting Buttons -->
@@ -390,13 +403,14 @@
     **************************************************/
     const config = {
       tokenName: "Silencio",
-      launchDate: "2025-01-24",
+      launchDate: "Q1 2025",
       buyPrice: 0.0006,   // Example buy price, adjust as needed
-      pendingTGE: false, // <== KEY FLAG
+      pendingTGE: true, // <== KEY FLAG
       tradingViewSymbol: "BINANCE:SILENCIOUSDT",
       websiteLink: "https://www.silencio.network/",
       twitterLink: "https://x.com/silencioNetwork",
-      isHidden: false     // Toggle flag based on status
+      isHidden: true,    // Toggle flag based on status
+      vestingEndDate: "2025-06-30T23:59:59" // ISO format: YYYY-MM-DDTHH:MM:SS
     };
 
     /**************************************************
@@ -423,6 +437,7 @@
         initializeTradingView(false);
         fetchTokenData();
         fetchDailySentiment();
+        displayVestingCountdown(); // Initialize vesting countdown
       }
 
       // Voting buttons
@@ -446,6 +461,10 @@
       // Replace Daily Sentiment with "No data yet"
       const todaySentEl = document.getElementById("todaySentiment");
       todaySentEl.innerHTML = `<span class="badge">No data yet</span>`;
+
+      // Replace Vesting with "Vesting not started"
+      const vestingBadge = document.getElementById("vestingBadge");
+      vestingBadge.innerHTML = `<span class="badge">Vesting not started</span>`;
     }
 
     /**************************************************
@@ -599,7 +618,39 @@
         console.error("Error posting sentiment:", err);
       }
     }
+
+    /**************************************************
+      9. DISPLAY VESTING COUNTDOWN
+    **************************************************/
+    function displayVestingCountdown() {
+      const vestingBadge = document.getElementById("vestingBadge");
+      if (!vestingBadge) return;
+
+      const endDate = new Date(config.vestingEndDate).getTime();
+
+      // Update the countdown every second
+      const countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = endDate - now;
+
+        // Time calculations for days, hours, minutes, and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the vesting badge
+        vestingBadge.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+        // If the count down is over, write some text 
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          vestingBadge.textContent = "Vesting Complete";
+          vestingBadge.classList.remove("bg-yellow-500", "gold-badge");
+          vestingBadge.classList.add("bg-green-500", "text-white"); // Optional: Change color to green
+        }
+      }, 1000);
+    }
   </script>
 </body>
 </html>
-
