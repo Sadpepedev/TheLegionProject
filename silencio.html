@@ -10,8 +10,8 @@
     default-src 'self';
     script-src 
       'self' 
-      'unsafe-inline' 
-      'unsafe-eval' 
+      'unsafe-inline'
+      'unsafe-eval'
       https://cdn.tailwindcss.com 
       https://fonts.googleapis.com 
       https://fonts.gstatic.com 
@@ -21,7 +21,7 @@
       https://vercel.live;
     style-src 
       'self' 
-      'unsafe-inline' 
+      'unsafe-inline'
       https://fonts.googleapis.com;
     font-src 
       'self' 
@@ -42,7 +42,7 @@
   ">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
-  <!-- Tailwind CSS (Consider using Tailwind CLI for production) -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google Fonts -->
@@ -52,7 +52,7 @@
   >
 
   <style>
-    /* Reset and Base Styles */
+    /* Base reset */
     * {
       margin: 0;
       padding: 0;
@@ -71,7 +71,7 @@
       overflow-x: hidden;
     }
 
-    /* Tron Grid Overlay */
+    /* Tron grid overlay */
     .tron-grid {
       position: absolute;
       top: 0;
@@ -86,7 +86,7 @@
       z-index: 1;
     }
 
-    /* Content Wrapper */
+    /* Content wrapper */
     .content-wrapper {
       z-index: 2;
       flex: 1;
@@ -96,7 +96,6 @@
       padding: 2rem 1rem;
     }
 
-    /* Main Panel */
     .main-panel {
       width: 100%;
       max-width: 900px;
@@ -104,14 +103,14 @@
       padding: 2rem;
       border: 1px solid rgba(0,255,238,0.2);
       border-radius: 0.5rem;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0,0,0,0.3);
       transition: border-color 0.3s ease;
     }
     .main-panel:hover {
       border-color: rgba(0,255,238,0.4);
     }
 
-    /* Title & Sale Date */
+    /* Titles & text */
     .token-title {
       font-size: 2rem;
       font-weight: 700;
@@ -125,8 +124,14 @@
       color: #a2a4a5;
       margin-bottom: 1.5rem;
     }
+    .highlight {
+      color: #a4a6a7;
+      font-weight: 700;
+      display: inline-block;
+      margin-right: 0.25rem;
+    }
 
-    /* Sub-panel Styles */
+    /* Panels */
     .sub-panel {
       background-color: rgba(255,255,255,0.03);
       border: 1px solid rgba(0,255,238,0.2);
@@ -145,23 +150,15 @@
       color: #00ffee;
     }
 
-    /* Highlight Class */
-    .highlight {
-      color: #a4a6a7;
-      font-weight: 700;
-      display: inline-block;
-      margin-right: 0.25rem;
-    }
-
-    /* Chart Container */
+    /* Chart container: 800px tall, hidden overflow keeps it neat */
     .chart-container {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(0,255,238,0.2);
       border-radius: 0.5rem;
       margin-top: 2rem;
       width: 100%;
-      min-height: 600px; 
-      overflow: hidden;
+      height: 800px;       /* Force 800px tall */
+      overflow: hidden;    /* Keep chart inside the panel */
       transition: background-color 0.3s ease;
     }
     .chart-container:hover {
@@ -176,36 +173,37 @@
       color: #00ffee;
     }
 
-    /* Link Styles */
-    a {
-      color: #00afff;
-      text-decoration: underline;
-    }
-    a:hover {
-      color: #37fffc;
-    }
-
-    /* Text Colors */
-    .text-green-400 {
-      color: #0afc4e !important;
-    }
-    .text-red-400 {
-      color: #ff3860 !important;
+    /* Badge styling */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background-color: #ffae00;
+      color: #09131b;
     }
 
-    /* Responsive Grid */
-    @media (min-width: 768px) {
-      .md-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.5rem;
-      }
-      .md-col-span-2 {
-        grid-column: span 2 / span 2;
-      }
+    /* Blurb styling */
+    .blurb {
+      background-color: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,238,0.2);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+    .blurb:hover {
+      background-color: rgba(255,255,255,0.06);
     }
 
-    /* Return-to-home Tron button */
+    /* Utility text colors */
+    .text-green-400 { color: #0afc4e !important; }
+    .text-red-400   { color: #ff3860 !important; }
+
+    /* Return to Home Link */
     .return-home {
       position: absolute;
       top: 1rem;
@@ -231,35 +229,25 @@
       color: #37fffc;
     }
 
-    /* Badge styling for "Pending TGE" */
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      background-color: #ffae00; /* Matches 'badge-soon' from your landing page */
-      color: #09131b;
+    /* Links */
+    a {
+      color: #00afff;
+      text-decoration: underline;
+    }
+    a:hover {
+      color: #37fffc;
     }
 
-    /* Blurb Styling */
-    .blurb {
-      background-color: rgba(255,255,255,0.03);
-      border: 1px solid rgba(0,255,238,0.2);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      transition: background-color 0.3s ease;
-    }
-    .blurb:hover {
-      background-color: rgba(255,255,255,0.06);
-    }
-    .blurb p {
-      color: #cfd0d1;
-      font-size: 1rem;
-      line-height: 1.5;
+    /* Responsive layout for sub-panels */
+    @media (min-width: 768px) {
+      .md-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+      .md-col-span-2 {
+        grid-column: span 2 / span 2;
+      }
     }
   </style>
 </head>
@@ -269,10 +257,7 @@
 
   <!-- Return to Home Link -->
   <div class="return-home">
-    <a 
-      href="https://degion.xyz/" 
-      rel="noopener noreferrer"
-    >
+    <a href="https://degion.xyz/" rel="noopener noreferrer">
       Return to Home
     </a>
   </div>
@@ -281,19 +266,17 @@
   <div class="content-wrapper">
     <!-- Main Panel -->
     <div class="main-panel">
-      <!-- Title & Sale Date -->
       <div class="text-center mb-8">
-        <h1 id="tokenTitle" class="token-title">Silencio</h1>
-        <div id="saleDate" class="sale-date">Launch Date: 2025-01-24</div>
+        <h1 class="token-title">Silencio</h1>
+        <div class="sale-date">Launch Date: 2025-01-24</div>
       </div>
 
-      <!-- ICO Details & Blurb & Links (Responsive Layout) -->
+      <!-- ICO Details & Links -->
       <div class="md-grid">
         <!-- ICO Details -->
         <div class="sub-panel md-col-span-2 mb-6 md:mb-0">
           <h3>ICO Details</h3>
 
-          <!-- Blurb -->
           <div class="blurb">
             <p>
               Silencio is a DePIN that uses Web3 technology to create the world's most comprehensive noise data network.
@@ -301,24 +284,24 @@
           </div>
 
           <!-- Buy Price -->
-          <p class="mb-2 mt-4">
+          <p class="mt-4">
             <span class="highlight">Buy Price:</span> 
-            <span id="buyPriceText">--</span>
+            <span id="buyPriceText">$0.0006</span>
           </p>
 
           <!-- Current Price -->
-          <p class="mb-2">
-            <span class="highlight">Current Price:</span> 
+          <p>
+            <span class="highlight">Current Price:</span>
             <span id="currentPrice">--</span>
           </p>
 
           <!-- Current ROI -->
-          <p class="mb-2">
-            <span class="highlight">Current ROI:</span> 
+          <p>
+            <span class="highlight">Current ROI:</span>
             <span id="currentROI">--</span>
           </p>
 
-          <!-- Voting Buttons -->
+          <!-- Voting -->
           <div class="flex items-center space-x-4 my-4 mt-6">
             <button 
               id="rocketButton" 
@@ -327,7 +310,6 @@
             >
               &#128640;
             </button>
-
             <button 
               id="poopButton" 
               class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
@@ -337,8 +319,8 @@
             </button>
           </div>
 
-          <!-- Daily Sentiment -->
-          <p class="mb-2">
+          <!-- Sentiment -->
+          <p>
             <span class="highlight">Today's Sentiment:</span>
             <span id="todaySentiment">--</span>
           </p>
@@ -349,22 +331,12 @@
           <h3>Links</h3>
           <ul class="space-y-2 list-none">
             <li>
-              <a 
-                id="websiteLink"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://www.silencio.network/" target="_blank" rel="noopener noreferrer">
                 Website
               </a>
             </li>
             <li>
-              <a 
-                id="twitterLink"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://x.com/silencioNetwork" target="_blank" rel="noopener noreferrer">
                 Twitter
               </a>
             </li>
@@ -372,220 +344,108 @@
         </div>
       </div>
 
-      <!-- Price History Section -->
+      <!-- Price History (STATIC embedded script) -->
       <div class="chart-container mt-6">
         <div class="chart-title">Price History</div>
         <div class="tradingview-widget-container" style="width: 100%; height: 100%;">
           <div class="tradingview-widget-container__widget"></div>
-          <!-- TradingView widget will be injected here by JavaScript -->
+          <!-- Embedded TradingView widget with fixed width/height -->
+          <script 
+            type="text/javascript" 
+            src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" 
+            async
+          >
+          {
+            "width": "100%",
+            "height": "800",
+            "symbol": "KUCOIN:SLCUSDT",
+            "interval": "240",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "allow_symbol_change": true,
+            "calendar": false,
+            "autosize": false,
+            "support_host": "https://www.tradingview.com"
+          }
+          </script>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Minimal Scripts (Price + Sentiment) -->
   <script>
-    /**************************************************
-      1. CONFIGURE YOUR TOKEN HERE
-    **************************************************/
-    const config = {
-      tokenName: "Silencio",
-      launchDate: "2025-01-24",
-      buyPrice: 0.0006,   // Example buy price, adjust as needed
-      pendingTGE: false, // <== KEY FLAG
-      tradingViewSymbol: "KUCOIN:SLCUSDT",
-      websiteLink: "https://www.silencio.network/",
-      twitterLink: "https://x.com/silencioNetwork",
-      isHidden: false     // Toggle flag based on status
-    };
+    // Hard-coded initial buy price to match text
+    const buyPrice = 0.0006;
 
-    /**************************************************
-      2. DYNAMICALLY UPDATE THE PAGE
-    **************************************************/
-    document.addEventListener("DOMContentLoaded", () => {
-      // Set <title>
-      document.title = `${config.tokenName} ICO`;
-      // Title & Launch Date
-      document.getElementById("tokenTitle").textContent = config.tokenName;
-      document.getElementById("saleDate").textContent = "Launch Date: " + config.launchDate;
-
-      // Links
-      document.getElementById("websiteLink").href = config.websiteLink;
-      document.getElementById("twitterLink").href = config.twitterLink;
-
-      // Handle Display Based on Status
-      if (config.isHidden) {
-        showPendingStatus();
-        // Initialize TradingView with a default or hidden state if desired
-        initializeTradingView(true);
-      } else {
-        setBuyPrice();
-        initializeTradingView(false);
-        fetchTokenData();
-        fetchDailySentiment();
-      }
-
-      // Voting buttons
-      document.getElementById("rocketButton").addEventListener("click", () => {
-        postDailySentiment("rocket");
-      });
-      document.getElementById("poopButton").addEventListener("click", () => {
-        postDailySentiment("poop");
-      });
-    });
-
-    /**************************************************
-      3. SHOW PENDING STATUS
-    **************************************************/
-    function showPendingStatus() {
-      // Replace Buy Price, Current Price, and ROI with Pending TGE badge
-      document.getElementById("buyPriceText").innerHTML = `<span class="badge">Pending TGE</span>`;
-      document.getElementById("currentPrice").innerHTML = `<span class="badge">Pending TGE</span>`;
-      document.getElementById("currentROI").innerHTML = `<span class="badge">Pending TGE</span>`;
-
-      // Replace Daily Sentiment with "No data yet"
-      const todaySentEl = document.getElementById("todaySentiment");
-      todaySentEl.innerHTML = `<span class="badge">No data yet</span>`;
-    }
-
-    /**************************************************
-      4. SET BUY PRICE TEXT
-    **************************************************/
-    function setBuyPrice() {
-      const buyPriceEl = document.getElementById("buyPriceText");
-      if (typeof config.buyPrice === "number") {
-        buyPriceEl.textContent = `$${config.buyPrice.toFixed(6)}`;
-      } else if (config.buyPrice === "TBD") {
-        buyPriceEl.textContent = "TBD";
-      } else {
-        buyPriceEl.textContent = "--";
-      }
-    }
-
-    /**************************************************
-      5. INITIALIZE TRADINGVIEW WIDGET
-    **************************************************/
-    function initializeTradingView(isPending) {
-      const widgetContainer = document.querySelector('.tradingview-widget-container__widget');
-      
-      if (isPending) {
-        // Optionally, you can display a message or leave the chart empty
-        widgetContainer.innerHTML = `<div class="badge">Trading Data Coming Soon</div>`;
-        widgetContainer.style.display = 'flex';
-        widgetContainer.style.justifyContent = 'center';
-        widgetContainer.style.alignItems = 'center';
-        widgetContainer.style.height = '100%';
-        widgetContainer.style.fontSize = '1.25rem';
-      } else {
-        // Clear any existing content
-        widgetContainer.innerHTML = '';
-
-        // Create a new script element for the TradingView widget
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-        script.async = true;
-        script.innerHTML = `
-        {
-          "autosize": true,
-          "symbol": "${config.tradingViewSymbol}",
-          "interval": "240",
-          "timezone": "Etc/UTC",
-          "theme": "dark",
-          "style": "1",
-          "locale": "en",
-          "allow_symbol_change": true,
-          "calendar": false,
-          "support_host": "https://www.tradingview.com"
-        }
-        `;
-        widgetContainer.appendChild(script);
-      }
-    }
-
-    /**************************************************
-      6. FETCH TOKEN DATA (Price & ROI)
-    **************************************************/
-    async function fetchTokenData() {
+    // Sample: Fetch Silencio's current price from CoinGecko
+    async function fetchPrice() {
       try {
-        // Fetch Silencio's current price from CoinGecko
-        const response = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=silencio&vs_currencies=usd"
-        );
-
-        if (!response.ok) throw new Error("Network response was not ok");
-
+        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=silencio&vs_currencies=usd");
+        if (!response.ok) throw new Error("Network response not ok");
         const data = await response.json();
+        
+        const currentPriceEl = document.getElementById("currentPrice");
+        const currentROIEl = document.getElementById("currentROI");
 
-        // Check if Silencio data exists
+        // If not listed, show "Coming soon"
         if (!data.silencio || !data.silencio.usd) {
-          // If Silencio isn't listed yet, show "Coming soon"
-          document.getElementById("currentPrice").innerHTML = `<span class="badge">Coming soon</span>`;
-          document.getElementById("currentROI").innerHTML = `<span class="badge">Coming soon</span>`;
+          currentPriceEl.innerHTML = '<span class="badge">Coming soon</span>';
+          currentROIEl.innerHTML = '<span class="badge">Coming soon</span>';
           return;
         }
 
-        // Extract current price
-        const currentPrice = parseFloat(data.silencio.usd);
-        const currentPriceFormatted = `$${currentPrice.toFixed(6)}`;
+        // Update price
+        const priceUsd = parseFloat(data.silencio.usd);
+        currentPriceEl.textContent = `$${priceUsd.toFixed(6)}`;
 
-        // Update Current Price
-        const currentPriceEl = document.getElementById("currentPrice");
-        currentPriceEl.textContent = currentPriceFormatted;
-
-        // Determine price color based on buy price
+        // Color the price
         currentPriceEl.classList.remove("text-green-400", "text-red-400");
-        if (currentPrice >= config.buyPrice) {
+        if (priceUsd >= buyPrice) {
           currentPriceEl.classList.add("text-green-400");
         } else {
           currentPriceEl.classList.add("text-red-400");
         }
 
-        // Calculate ROI
-        const roiPercentage = ((currentPrice - config.buyPrice) / config.buyPrice) * 100;
-        const roiFormatted = `${roiPercentage.toFixed(2)}%`;
+        // ROI
+        const roiPercent = ((priceUsd - buyPrice) / buyPrice) * 100;
+        currentROIEl.textContent = roiPercent.toFixed(2) + "%";
 
-        // Update ROI
-        const currentROIEl = document.getElementById("currentROI");
-        currentROIEl.textContent = roiFormatted;
-
-        // Determine ROI color
         currentROIEl.classList.remove("text-green-400", "text-red-400");
-        if (roiPercentage >= 0) {
+        if (roiPercent >= 0) {
           currentROIEl.classList.add("text-green-400");
         } else {
           currentROIEl.classList.add("text-red-400");
         }
 
-      } catch (error) {
-        console.error("Error fetching token data:", error);
+      } catch (err) {
+        console.error("Error fetching price:", err);
         document.getElementById("currentPrice").textContent = "Error";
         document.getElementById("currentROI").textContent = "Error";
       }
     }
 
-    /**************************************************
-      7. FETCH DAILY SENTIMENT
-    **************************************************/
+    // Sample: Fetch daily sentiment
     async function fetchDailySentiment() {
+      // This call depends on your backend route /sentiment
       try {
         const res = await fetch("/sentiment");
         const data = await res.json();
         const todaySentEl = document.getElementById("todaySentiment");
         if (data && data.today) {
-          todaySentEl.textContent =
+          todaySentEl.textContent = 
             `${data.today.rocketPercentage}% 🚀 / ${data.today.poopPercentage}% 💩`;
         } else {
           todaySentEl.textContent = "No data yet.";
         }
       } catch (err) {
-        console.error("Error fetching daily sentiment:", err);
+        console.error("Error fetching sentiment:", err);
       }
     }
 
-    /**************************************************
-      8. POST A NEW VOTE (ROCKET / POOP)
-    **************************************************/
+    // Sample: Post a new sentiment vote
     async function postDailySentiment(type) {
       try {
         await fetch("/sentiment", {
@@ -599,7 +459,18 @@
         console.error("Error posting sentiment:", err);
       }
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchPrice();
+      fetchDailySentiment();
+
+      document.getElementById("rocketButton").addEventListener("click", () => {
+        postDailySentiment("rocket");
+      });
+      document.getElementById("poopButton").addEventListener("click", () => {
+        postDailySentiment("poop");
+      });
+    });
   </script>
 </body>
 </html>
-
