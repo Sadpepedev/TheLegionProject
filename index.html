@@ -991,7 +991,7 @@
         // Calculate ROI = (currentPrice / seedPrice) * 100
         // Investment = (1000 / seedPrice) * currentPrice
         if (seedPrice > 0) {
-          const roi = (currentPrice / seedPrice) * 100;
+          const roi = ((currentPrice - seedPrice) / seedPrice) * 100 : 0;
           roiCell.textContent = `${roi.toFixed(2)}%`;
           if (roi > 0) {
             roiCell.classList.add("roi-positive");
@@ -1041,9 +1041,6 @@
       }
     }
 
-    /**************************************************
-      OPEN AND CLOSE MODAL FUNCTIONALITY
-    **************************************************/
     // Open Modal
     function supportSite() {
       const modal = document.getElementById("walletModal");
@@ -1068,9 +1065,6 @@
         .catch(() => alert("Failed to copy wallet address."));
     }
 
-    /**************************************************
-      INITIALIZE EVERYTHING AFTER DOM CONTENT LOADED
-    **************************************************/
     document.addEventListener("DOMContentLoaded", () => {
       // Define an async function to handle initialization
       async function initialize() {
