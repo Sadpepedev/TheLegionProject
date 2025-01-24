@@ -23,7 +23,6 @@
       frame-ancestors 'none';
     "
   />
-
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
   <!-- Tailwind CSS (via CDN) -->
@@ -539,7 +538,7 @@
               <td class="investment-positive">$5000.00</td>
             </tr>
 
-              <!-- Silencio -->
+            <!-- Silencio -->
             <tr class="token-silencio" data-vesting-end="">
               <td class="token-silencio">
                 <a href="silencio.html">Silencio</a>
@@ -826,6 +825,24 @@
         gridItem.href = tokenLink;
         gridItem.className = `grid-item token-${tokenIdentifier}`;
 
+        /***********************************************
+         * NEW: Parse numeric values for ROI and Invest
+         ***********************************************/
+        let roiNum = parseFloat(roi);
+        // If ROI is not a number (e.g. "--" or "Error"), skip styling
+        let roiColorClass = "";
+        if (!isNaN(roiNum)) {
+          roiColorClass = roiNum < 0 ? "text-red-500" : "text-green-500";
+        }
+
+        let investNum = parseFloat(investment.replace(/\$/g, ""));
+        // If investNum is not numeric, skip color
+        let investColorClass = "";
+        if (!isNaN(investNum)) {
+          investColorClass =
+            investNum < 1000 ? "investment-negative" : "investment-positive";
+        }
+
         // Build the HTML content for each item
         gridItem.innerHTML = `
           <div class="flex items-center mb-2">
@@ -842,10 +859,10 @@
           <div class="mb-1"><strong>Seed Price:</strong> ${seedPrice}</div>
           <div class="mb-1"><strong>Token Price:</strong> ${tokenPrice}</div>
           <div class="mb-1"><strong>ROI:</strong>
-            <span class="${roi.includes("-") ? "text-red-500" : "text-green-500"}">${roi}</span>
+            <span class="${roiColorClass}">${roi}</span>
           </div>
-          <div class="mb-1"><strong>If you invested $1000:</strong> 
-            <span class="${investment.includes("-") ? "investment-negative" : "investment-positive"}">${investment}</span>
+          <div class="mb-1"><strong>If you invested $1000:</strong>
+            <span class="${investColorClass}">${investment}</span>
           </div>
         `;
 
@@ -871,7 +888,8 @@
           : "Unknown";
 
         try {
-          // Example fetch to "/calculate"
+          // Example fetch to "/calculate" or another API:
+          // (This is just placeholder logic as an example.)
           const response = await fetch("/calculate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -883,17 +901,25 @@
           if (data.error) throw new Error("API error");
 
           const currentPrice = data.current_price;
+          // seedPrice is in 3rd column
           const seedPriceText = row
             .querySelector("td:nth-child(3)")
             .textContent.replace("$", "");
           const seedPrice = parseFloat(seedPriceText) || 0;
-          const roi = seedPrice > 0 ? (currentPrice / seedPrice) * 100 : 0;
+
+          // 1) NEW ROI FORMULA
+          const roi = seedPrice > 0
+            ? ((currentPrice - seedPrice) / seedPrice) * 100
+            : 0;
+
+          // 2) If you invested $1000
           const investmentValue =
             seedPrice > 0 ? (1000 / seedPrice) * currentPrice : 0;
 
           // Update table cells
           row.querySelector("td:nth-child(4)").textContent =
             seedPrice > 0 ? `$${currentPrice.toFixed(4)}` : "--";
+
           const roiCell = row.querySelector("td:nth-child(5)");
           roiCell.textContent = seedPrice > 0 ? `${roi.toFixed(2)}%` : "--";
 
@@ -950,22 +976,22 @@
     **************************************************/
     async function updateSilencioToken() {
       try {
-        // Locate the 'silencio' row via the class 'token-silencio'
+        // Locate the 'silencio' row
         const silencioRow = document.querySelector("tr.token-silencio");
-
         if (!silencioRow) {
           console.error("Silencio row not found in the table.");
           return;
         }
 
-        // Fetch from CoinGecko for "silencio"
+        // Example call to CoinGecko:
         const response = await fetch(
           "https://api.coingecko.com/api/v3/simple/price?ids=silencio&vs_currencies=usd"
         );
         if (!response.ok) throw new Error("Failed to fetch Silencio price");
 
         const data = await response.json();
-        // If 'silencio' or 'usd' is missing, we treat it as no data
+
+        // If 'silencio' or 'usd' is missing, treat as no data
         if (!data.silencio || !data.silencio.usd) {
           silencioRow.querySelector("td:nth-child(4)").textContent =
             "Coming soon";
@@ -988,11 +1014,11 @@
 
         priceCell.textContent = `$${currentPrice.toFixed(6)}`;
 
-        // Calculate ROI = (currentPrice / seedPrice) * 100
-        // Investment = (1000 / seedPrice) * currentPrice
         if (seedPrice > 0) {
-         const roi = ((currentPrice - seedPrice) / seedPrice) * 100;
+          // NEW ROI FORMULA
+          const roi = ((currentPrice - seedPrice) / seedPrice) * 100;
           roiCell.textContent = `${roi.toFixed(2)}%`;
+
           if (roi > 0) {
             roiCell.classList.add("roi-positive");
             roiCell.classList.remove("roi-negative");
@@ -1004,6 +1030,7 @@
           const investmentValue = (1000 / seedPrice) * currentPrice;
           investCell.textContent = `$${investmentValue.toFixed(2)}`;
 
+          // Positive/Negative
           if (investmentValue > 1000) {
             investCell.classList.add("investment-positive");
             investCell.classList.remove("investment-negative");
@@ -1023,11 +1050,10 @@
           investCell.textContent = "--";
         }
 
-        // After updating table, regenerate grid view to reflect changes
+        // After updating table, regenerate grid view
         generateGridView();
       } catch (error) {
         console.error("Error fetching Silencio price:", error);
-        // If there's an error, just put "Coming soon"
         const silencioRow = document.querySelector("tr.token-silencio");
         if (silencioRow) {
           silencioRow.querySelector("td:nth-child(4)").textContent =
@@ -1035,8 +1061,6 @@
           silencioRow.querySelector("td:nth-child(5)").textContent = "--";
           silencioRow.querySelector("td:nth-child(6)").textContent = "--";
         }
-
-        // Regenerate grid view to reflect changes
         generateGridView();
       }
     }
@@ -1074,11 +1098,11 @@
     document.addEventListener("DOMContentLoaded", () => {
       // Define an async function to handle initialization
       async function initialize() {
-        // Kick off data fetch for tradable tokens
+        // 1) Update any tradable tokens
         await updateTradableTokens();
-        // Fetch Silencio price from CoinGecko
+        // 2) Fetch Silencio price from CoinGecko
         await updateSilencioToken();
-        // Generate grid view after data fetch to show updated state
+        // 3) Generate grid view after data fetch
         generateGridView();
       }
       // Call the initialize function
