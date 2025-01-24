@@ -991,7 +991,7 @@
         // Calculate ROI = (currentPrice / seedPrice) * 100
         // Investment = (1000 / seedPrice) * currentPrice
         if (seedPrice > 0) {
-          const roi = (currentPrice / seedPrice) * 100;
+         const roi = ((currentPrice - seedPrice) / seedPrice) * 100;
           roiCell.textContent = `${roi.toFixed(2)}%`;
           if (roi > 0) {
             roiCell.classList.add("roi-positive");
