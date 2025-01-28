@@ -242,17 +242,17 @@
       --token-color: rgba(122, 122, 120, 0.9);
       color: #696866;
     }
-        .token-=nil; {
-      --token-color: rgba(122, 122, 120, 0.9);
-      color: #696866;
+        .token-nil {
+      --token-color: rgba(206, 206, 206, 0.9);
+      color: #c0c0c0;
     }
         .token-eoracle {
-      --token-color: rgba(122, 122, 120, 0.9);
-      color: #696866;
+      --token-color: rgba(26, 138, 101, 0.9);
+      color: #1f855e;
     }
         .token-hyperlane {
-      --token-color: rgba(122, 122, 120, 0.9);
-      color: #696866;
+      --token-color: rgba(231, 80, 186, 0.9);
+      color: #ee599f;
     }
 
     /* 
@@ -787,9 +787,7 @@
 
   <!-- SCRIPT -->
   <script>
-    /**************************************************
-      DISPLAY VESTING COUNTDOWN IN GRID VIEW ONLY
-    **************************************************/
+
     function displayVestingCountdownInGrid(gridItem, endDateStr) {
       const vestingContainer = document.createElement('div');
       vestingContainer.classList.add('mt-2'); // Add some top margin
@@ -849,9 +847,7 @@
       gridItem.appendChild(vestingContainer);
     }
 
-    /**************************************************
-      GENERATE GRID VIEW WITH VESTING BADGES
-    **************************************************/
+
     function generateGridView() {
       const gridView = document.getElementById("gridView");
       const overviewList = document.getElementById("overviewList");
@@ -933,9 +929,7 @@
       });
     }
 
-    /**************************************************
-      UPDATE TRADABLE TOKENS FOR LIVE TRACKING
-    **************************************************/
+
     async function updateTradableTokens() {
       const tradableRows = document.querySelectorAll(
         'tr[data-tradable="true"]'
@@ -1030,9 +1024,7 @@
       generateGridView();
     }
 
-    /**************************************************
-      FETCH SILENCIO TOKEN DATA FROM COINGECKO
-    **************************************************/
+
     async function updateSilencioToken() {
       try {
         // Locate the 'silencio' row
