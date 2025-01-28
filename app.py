@@ -224,6 +224,26 @@ def serve_giza():
     except FileNotFoundError:
         return "giza.html not found.", 404
 
+@app.route("/nil.html")
+def serve_nil():
+    try:
+        return send_from_directory(".", "nil.html")
+    except FileNotFoundError:
+        return "nil.html not found.", 404
+
+@app.route("/eoracle.html")
+def serve_eoracle():
+    try:
+        return send_from_directory(".", "eoracle.html")
+    except FileNotFoundError:
+        return "eoracle.html not found.", 404
+
+@app.route("/hyperlane.html")
+def serve_hyperlane():
+    try:
+        return send_from_directory(".", "hyperlane.html")
+    except FileNotFoundError:
+        return "hyperlane.html not found.", 404
 
 # ----------------------------------------------------------------
 # OPTION B (alternative): A single catch-all route for *any* file
